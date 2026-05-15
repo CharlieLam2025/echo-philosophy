@@ -1175,6 +1175,21 @@ body::after {
 }
 .deep-read-body p:last-child { margin-bottom: 0; }
 
+/* Critique block — slightly different to signal "another voice" */
+.deep-read-block.critique-block {
+  margin-top: 36px;
+  padding: 18px 0 0;
+  border-top: 1px solid rgba(245,241,232,0.05);
+}
+.critique-block .deep-read-label {
+  color: rgba(245,241,232,0.4);
+  font-style: italic;
+}
+.critique-block .deep-read-body {
+  opacity: 0.65;
+  font-style: italic;
+}
+
 /* ── Cross-philosopher echo ── */
 .cross-echo {
   margin-top: 36px;
@@ -1823,6 +1838,74 @@ const DEEP_READS = {
     misread: '以为是乌托邦的变种。异托邦不是理想空间——它是真实存在的"另一种空间"，比如墓地、剧场、监狱、博物馆、邮轮。',
     apply: '识别你生活中的"异托邦"——夜晚的便利店、失眠的微信对话、深夜大排档——这些缝隙时刻是你呼吸的地方。',
   },
+};
+
+// ═══ 批判与反思 ═══
+const CRITIQUES = {
+  // ── Nietzsche
+  'god-is-dead': '尼采的诊断主要是欧洲的——在世界许多地方宗教依然兴盛。更关键的是：杀死大叙事并不自动让你自由——你可能只是换了一个更小的"上帝"（事业、国家、AI、科学），同样在替你回答"为什么活"。',
+  'perspectivism': '如果一切都是视角，那"视角主义"本身就是另一个视角——自我反驳的逻辑陷阱。实践中这种立场也容易被滥用：气候否认、阴谋论都自称"另一个视角"。',
+  'truth-as-fiction': '说"真理是虚构"仍然预设了"有用的虚构"和"无用的虚构"的区别——也就是说，仍然有一种东西比另一种更"真"。这个观点容易滑向自我欺骗的合理化。',
+  'ressentiment': '尼采的"怨恨"分析有一个致命问题：弱者有时是真的被冤枉了。民权运动、女性主义在掌权者眼中也像怨恨。这个框架被用来打压合法的不满，已是常态。',
+  'slave-morality': '基督教——尼采主要攻击的对象——也创造了医院、废除了奴隶制、护佑了弱者。"奴隶道德"也是道德成就，不只是怨恨的发明。把它一概贬低，是单向的阅读。',
+  'master-morality': '尼采的"高贵"很容易滑向"贵族式"或"冷酷"。他对力量的赞美被法西斯轻易盗用过——自我肯定和野蛮之间的界限，比他承认的要薄得多。',
+  'will-to-power': '"权力意志"解释一切——母性、友谊、沉思全部归约为"自我扩张"——因此什么也没解释。还有滑向生物决定论的风险。',
+  'apollonian-dionysian': '这是一个可能并不真实存在的二元——多数艺术是混乱的混合。尼采后期自己也抛弃了这个框架。它还容易浪漫化狄奥尼索斯式的暴力。',
+  'three-metamorphoses': '线性的阶段模型本身就值得怀疑——人可能在不同领域同时是骆驼、狮子、孩子。也并非"必须"达到孩子才算成功——许多有意义的人生停在狮子。',
+  'free-spirit': '自我立法需要资源——时间、教育、社会安全。"自由精神"往往是"特权精神"。纯粹的自我立法也可能滑向唯我论。',
+  'amor-fati': '"爱你的命运"——如果你的命运是种族灭绝、被奴役、被虐待呢？在哪个点上 amor fati 变成了斯德哥尔摩综合征？这个区分尼采没有给出。',
+  'ubermensch': '被误用最多的概念。被纳粹盗用的历史不能简单归为"误读"——尼采对"高贵种族"的某些写法确实留下了空间。"超出"之"超出"也不清楚——超向哪里？',
+  'last-man': '尼采对舒适与安全的鄙夷有时近乎残忍。许多"只想要安全和愉悦"的人，是经过真实苦难赚来的平静。"末人"可以成为知识分子势利的侮辱。',
+  'herd-animal': '人本来就是社会动物。"群居"有时就是"社群"——而社群常常是生存必需。极端个人主义有它自己的病理。',
+  'pity-danger': '现代研究表明：同情（而非可怜）实际上让给予者和接受者都变强。尼采的框架可以为冷酷开脱。讽刺的是，他自己最后崩溃时正是抱着一匹被鞭打的马哭。',
+  'eternal-return': '这个思想实验问的是不可能的事——你没法真的"评价无限重复"，因为你从来不在那个视角。即使你能，这个测试也未必衡量真正重要的东西。',
+  'nihilism': '"主动虚无主义"——创造新价值——面临一个问题：用什么标准创造？你没法把自己从靴带提起来。新价值可能和旧的一样任意。',
+  'bad-conscience': '把所有内疚归为内化的攻击性是简化的——有些内疚是真实的道德反馈。完全没有内疚，就是反社会人格。',
+  'ascetic-ideal': '有些苦修是真的解放（佛教、修道传统）。不是所有自我否定都是隐藏的自我憎恨。尼采的全盘怀疑可能错过苦修传统里的真智慧。',
+  'genealogy': '"它从哪来"很容易滑向谬误——"X 起源不好所以 X 不好"。起源不决定当前价值。谱系学还可能导向虚无：什么都没有"真"意义，因为什么都从别的地方来。',
+  'revaluation': '你没法真的从零开始——所有"新价值"都继承上下文。重估的工程很激进，但尼采自己也没完成——他的"新价值"大多停留在姿态。',
+  'pathos-of-distance': '容易退化成精英主义、势利、孤立。"自信"和"鄙视他人"之间的细线，很难维持。',
+  'gay-science': '"轻盈对待知识"可以堕落成知识分子可爱化或半瓶子。有些东西就是沉重的，不能也不应被弄轻。',
+  'creator-solitude': '纯粹孤独造不出好作品——最好的工作来自与他人的深度接触。创造者孤独的理想化，可能浪漫化孤独、忽视真实的心理需求。',
+  'abyss': '"别久看深渊"被用来劝退困难的研究——"你会变成你研究的"。但有些人必须研究黑暗（记者、心理治疗师等），他们没有变成深渊。',
+
+  // ── Stoic
+  'dichotomy-of-control': '许多事情介于"可控"和"不可控"之间——部分可控、努力可以扩大控制范围。这个框架还可能让人放弃集体行动——个人控制不了，但集体可以。',
+  'logos': '现代科学并不支持"宇宙理性"——宇宙看上去主要是漠然和混沌的。相信 Logos 可能是"用虚构求安慰"。',
+  'virtue-as-sole-good': '对特权者来说舒服（马可·奥勒留是皇帝）。对真正赤贫的人，"美德足矣"是残忍的。物质条件对道德生活有关键性影响。',
+  'apatheia': 'Apatheia 可能滑向情绪压抑。现代心理学指出：感受并处理情绪比维持持续平静更健康。有些情绪（对不公的愤怒、对失去的悲伤）是恰当的。',
+  'premeditatio-malorum': '对焦虑症患者来说，这个练习可能加重反刍思维而不是减轻它。有证据表明"消极想象"有时会增加痛苦。',
+  'memento-mori': '持续的死亡意识可能让一些人瘫痪或陷入虚无。"你会死所以做重要的事"前提是你知道什么重要——许多人不知道。',
+  'present-moment': '纯粹的"当下专注"可能忽视长期规划、投资、需要延迟满足的关系。',
+  'amor-fati-stoic': '和尼采版同样的问题——可能成为顺从不义的合理化。"宇宙的安排"在历史上多次被用来正当化奴隶制、种姓制度。',
+  'inner-citadel': '"内在堡垒"假设有一个稳定的自我可以被守护。现代心理学说自我比这更多孔、更情境性。严重创伤也可能让"堡垒"感觉不可能。',
+  'cosmopolitan': '对全球流动的精英（学者、外派）容易，对扎根于地方的人困难。"世界公民"可以变成"无根之人"——脱离具体义务。',
+  'obstacle-is-way': '有时候障碍就是障碍——浪费你的时间，不是"道路"。这个框架可以合理化留在糟糕的处境里。',
+  'voluntary-discomfort': '证据基础有限。许多"自愿受苦"的实践并不真正建立韧性——可能变成表演甚至自虐。斯多葛实践得不好，看起来就像自我惩罚。',
+
+  // ── Camus
+  'absurd': '加缪的"荒诞"依赖于"人必然寻找意义"这一假设。许多文化/传统并不预设这一点。"荒诞"也可能浪漫化绝望。',
+  'philosophical-suicide': '加缪把所有"答案"都贬为哲学自杀，可能过于苛刻。一些"答案"（爱人、工作、正义）提供的是真实的、身体化的意义——不是信念的飞跃。',
+  'lucidity': '持续清醒是疲惫的，可能在心理上不可持续。有些"否认"对日常运作是功能性必需的。',
+  'revolt': '"反抗"作为姿态可以变得和"对立者"无法区分。没有方向的反抗，可能只是不停的"反"——这未必更接近真实。',
+  'sisyphus': '加缪对荒诞的回应（在荒诞任务中找快乐）可能对那些任务真正贬低人格的人不适用。"想象奴隶是幸福的"——这种修辞在什么点上变成了剥削苦难？',
+  'indifference-of-world': '近代宇宙学和物理学复杂化了"世界是冷漠的"。它不是恶意，但也不是简单的冷漠——它是产生你的介质，包括冷漠在内。',
+  'freedom-without-hope': '大多数心理学研究表明：希望对心理健康是必需的。"无望的自由"听起来解放，但可能不可持续。',
+  'passion-quantity': '体验的数量不等于丰富。两百次浅薄的体验可以少于一次深入的。加缪的框架可能鼓励广度而牺牲深度。',
+  'creation-absurd': '如果创造不为留下，它可能变得和玩耍或分心无法区分。有些创造之所以更有意义，恰恰因为它打算长存。',
+  'solidarity': '萨特批判过加缪的"我反抗故我们存在"——团结需要的不只是共同处境，还需要对具体的人、具体事业的承诺。',
+
+  // ── Foucault
+  'discourse': '如果话语"生产现实"，那么语言和现实的区别是什么？这个框架可能滑向相对主义——实验室还需要测试材料吗，不管话语怎么说？',
+  'power-knowledge': '如果所有知识都是权力-知识，那么科学共识和宣传有什么区别？福柯的框架风险在于：它解构了批判权力本身所需要的工具。',
+  'archaeology': '福柯自己后来都放弃了"考古学"，转向"谱系学"。它声称"无判断地描述知识构型"——这个声明本身很难维持。',
+  'normalization': '一些"规范化"是真的有益的——疫苗、基本识字、社会稳定。对规范的全盘怀疑可能导向对功能失调的浪漫化。',
+  'panopticon': '福柯的隐喻基于一个从未被广泛建造的监狱设计。把它扩展到"整个现代社会"是修辞，不是分析。它还让抵抗看起来不可能。',
+  'biopower': '福柯有时把概念抹得太宽。不是所有健康干预都是阴险意义上的"生命权力"——有时候疫苗就只是疫苗。',
+  'governmentality': '"一切都是治理"陷入同样的全有或全无的问题。如果自律 App 是治理术，那么好的育儿、友谊也是——这个词就失去了意义。',
+  'technologies-of-self': '如果每一种自我提升都只是另一种屈服形式，"解放"还意味着什么？福柯晚期不得不发明"自我的关照"作为反向——但难以说清"好的"和"坏的"自我技术。',
+  'parrhesia': '福柯的"对权力说真话"假设有一个稳定的位置可以说话。但权力无处不在——包括直言者自己。没有干净的"外面"。',
+  'heterotopia': '异托邦把墓地、妓院、博物馆都归为一类——分析上很滑。批评者认为这更像诗意暗示，不是严谨的概念。',
 };
 
 // ═══ Cross-philosopher echoes ═══
@@ -2665,22 +2748,34 @@ function openStory(conceptId) {
     scroll.appendChild(linksSection);
   }
 
-  // Deep read (misreading + modern application)
+  // Deep read (misreading + modern application + critique)
   const deepRead = DEEP_READS[conceptId];
-  if (deepRead) {
+  const critique = CRITIQUES[conceptId];
+  if (deepRead || critique) {
     const dr = document.createElement('div');
     dr.className = 'deep-read';
-    dr.innerHTML = `
-      <div class="deep-read-divider">深 读</div>
-      <div class="deep-read-block">
-        <div class="deep-read-label">常见误读</div>
-        <div class="deep-read-body">${escapeHtml(deepRead.misread)}</div>
-      </div>
-      <div class="deep-read-block">
-        <div class="deep-read-label">现代应用</div>
-        <div class="deep-read-body">${escapeHtml(deepRead.apply).replace(/\n\n/g, '</p><p>').replace(/^/, '<p>').replace(/$/, '</p>')}</div>
-      </div>
-    `;
+    let html = `<div class="deep-read-divider">深 读</div>`;
+    if (deepRead) {
+      html += `
+        <div class="deep-read-block">
+          <div class="deep-read-label">常见误读</div>
+          <div class="deep-read-body">${escapeHtml(deepRead.misread)}</div>
+        </div>
+        <div class="deep-read-block">
+          <div class="deep-read-label">现代应用</div>
+          <div class="deep-read-body">${escapeHtml(deepRead.apply).replace(/\n\n/g, '</p><p>').replace(/^/, '<p>').replace(/$/, '</p>')}</div>
+        </div>
+      `;
+    }
+    if (critique) {
+      html += `
+        <div class="deep-read-block critique-block">
+          <div class="deep-read-label">批判与反思</div>
+          <div class="deep-read-body">${escapeHtml(critique)}</div>
+        </div>
+      `;
+    }
+    dr.innerHTML = html;
     scroll.appendChild(dr);
   }
 
