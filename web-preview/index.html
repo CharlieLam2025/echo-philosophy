@@ -721,6 +721,241 @@ body::after {
   transform: translateX(-50%) translateY(0);
 }
 
+/* ── Mind card (home) ── */
+.mind-card {
+  margin: 0 28px 32px;
+  padding: 22px 24px;
+  border: 1px solid rgba(245,241,232,0.06);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s, border-color 0.3s;
+}
+.mind-card:hover { background: rgba(245,241,232,0.02); border-color: rgba(245,241,232,0.12); }
+.mind-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 16px;
+}
+.mind-card-label {
+  font-size: 10px;
+  opacity: 0.35;
+  letter-spacing: 0.25em;
+}
+.mind-card-total {
+  font-size: 13px;
+  opacity: 0.5;
+}
+.mind-card-radar {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.mind-card-radar svg { flex-shrink: 0; }
+.mind-card-bars {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.mini-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+}
+.mini-bar-label { width: 42px; opacity: 0.5; }
+.mini-bar-track {
+  flex: 1;
+  height: 3px;
+  background: rgba(245,241,232,0.06);
+  border-radius: 1.5px;
+  overflow: hidden;
+}
+.mini-bar-fill {
+  height: 100%;
+  background: rgba(245,241,232,0.4);
+  transition: width 0.6s ease;
+}
+.mini-bar-val {
+  width: 24px;
+  text-align: right;
+  opacity: 0.4;
+  font-size: 10px;
+}
+
+/* ── Mind screen ── */
+.mind-scroll {
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 100px;
+  max-width: 560px;
+  margin: 0 auto;
+}
+.mind-title {
+  font-size: 24px;
+  opacity: 0.85;
+  margin-bottom: 4px;
+}
+.mind-subtitle {
+  font-size: 12px;
+  opacity: 0.3;
+  margin-bottom: 36px;
+  letter-spacing: 0.1em;
+}
+.mind-radar-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 40px;
+}
+.mind-radar { display: block; }
+.dim-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 24px;
+}
+.dim-row {
+  position: relative;
+}
+.dim-row-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.dim-row-symbol {
+  font-size: 14px;
+  opacity: 0.5;
+}
+.dim-row-name {
+  font-size: 17px;
+  opacity: 0.9;
+}
+.dim-row-sub {
+  font-size: 12px;
+  opacity: 0.3;
+  margin-left: auto;
+  font-style: italic;
+}
+.dim-row-track {
+  height: 4px;
+  background: rgba(245,241,232,0.06);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.dim-row-fill {
+  height: 100%;
+  background: rgba(245,241,232,0.45);
+  transition: width 1s cubic-bezier(0.16,1,0.3,1);
+}
+.dim-row-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  opacity: 0.4;
+}
+.dim-level { letter-spacing: 0.1em; }
+.dim-score { font-feature-settings: 'tnum'; }
+.mind-total {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(245,241,232,0.06);
+  text-align: center;
+  font-size: 13px;
+  opacity: 0.4;
+  letter-spacing: 0.15em;
+}
+
+/* ── Stat gain animation overlay ── */
+.stat-gain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 110;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  opacity: 0;
+}
+.stat-gain.show {
+  animation: statGainFlow 2.5s ease-out forwards;
+}
+@keyframes statGainFlow {
+  0%   { opacity: 0; transform: translateY(20px); }
+  20%  { opacity: 1; transform: translateY(0); }
+  70%  { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-30px); }
+}
+.stat-gain-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 17px;
+  background: rgba(0,0,0,0.85);
+  padding: 10px 22px;
+  border: 1px solid var(--accent);
+  border-radius: 24px;
+  opacity: 0.95;
+}
+.stat-gain-symbol { opacity: 0.7; }
+.stat-gain-name { opacity: 0.85; }
+.stat-gain-delta {
+  color: var(--accent-strong);
+  font-weight: 600;
+  font-feature-settings: 'tnum';
+}
+
+/* ── Level-up overlay ── */
+.level-up {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 160;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px;
+  opacity: 0;
+  animation: fadeIn 0.6s ease-out forwards;
+}
+.level-up-label {
+  font-size: 11px;
+  opacity: 0.4;
+  letter-spacing: 0.35em;
+  margin-bottom: 24px;
+}
+.level-up-symbol {
+  font-size: 48px;
+  opacity: 0.7;
+  margin-bottom: 16px;
+  color: #f5f1e8;
+}
+.level-up-text {
+  font-size: 26px;
+  line-height: 1.6;
+  opacity: 0.85;
+  margin-bottom: 36px;
+}
+.level-up-dim {
+  font-size: 14px;
+  opacity: 0.45;
+  letter-spacing: 0.1em;
+}
+
+/* ── Concept card dimension hint ── */
+.concept-dim-hint {
+  display: inline-flex;
+  gap: 4px;
+  margin-top: 6px;
+  font-size: 10px;
+  opacity: 0.3;
+  letter-spacing: 0.15em;
+}
+
 /* ── Onboarding ── */
 .onboarding {
   position: fixed;
@@ -1058,6 +1293,7 @@ body::after {
   <div class="home-subtitle">哲学概念的故事化学习</div>
   <div class="home-quote" id="home-quote"></div>
   <div id="continue-card" class="continue-card" style="display:none;"></div>
+  <div id="mind-card" class="mind-card" style="display:none;"></div>
   <div class="philosopher-list stagger" id="philosopher-list"></div>
   <div id="daily-wisdom" class="daily-wisdom" style="display:none;"></div>
   <div style="padding:0 28px 80px;">
@@ -1085,6 +1321,15 @@ body::after {
     <span class="story-concept-label" id="story-concept-label"></span>
   </div>
   <div class="story-scroll" id="story-scroll"></div>
+</div>
+
+<!-- ═══ Mind Screen ═══ -->
+<div id="mind-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="mind-back-btn">←</button>
+    <span class="story-concept-label">心智</span>
+  </div>
+  <div class="mind-scroll" id="mind-scroll"></div>
 </div>
 
 <!-- ═══ Journal Screen ═══ -->
@@ -1173,6 +1418,108 @@ const EPIGRAPHS = {
   'biopower': { text: '一种致力于让生命增殖的权力。', source: '《性史》第一卷' },
   'parrhesia': { text: '直言是一种风险——讲真话之人冒着一切风险讲出这种真理。', source: '《说真话的勇气》' },
 };
+
+// ═══ Brain stats dimensions ═══
+const DIMENSIONS = [
+  { id: 'awareness',   name: '觉察力', symbol: '🜂', subtitle: '看见而非接受' },
+  { id: 'criticality', name: '思辨力', symbol: '🜍', subtitle: '拆解而非吞下' },
+  { id: 'composure',   name: '定力',   symbol: '✦', subtitle: '不被情绪带走' },
+  { id: 'autonomy',    name: '自由度', symbol: '○', subtitle: '为自己立法'   },
+  { id: 'action',      name: '行动力', symbol: '◆', subtitle: '在虚无前依然动' },
+];
+
+const CONCEPT_DIMENSIONS = {
+  'god-is-dead':         { awareness: 3, criticality: 2 },
+  'perspectivism':       { awareness: 3, criticality: 2 },
+  'truth-as-fiction':    { awareness: 2, criticality: 3 },
+  'ressentiment':        { awareness: 2, criticality: 3 },
+  'slave-morality':      { criticality: 3, autonomy: 2 },
+  'master-morality':     { autonomy: 3, action: 2 },
+  'will-to-power':       { action: 3, autonomy: 2 },
+  'apollonian-dionysian':{ awareness: 2, action: 2, composure: 1 },
+  'three-metamorphoses': { autonomy: 3, action: 2 },
+  'free-spirit':         { autonomy: 3, criticality: 2 },
+  'amor-fati':           { composure: 3, action: 2 },
+  'ubermensch':          { autonomy: 2, action: 3 },
+  'last-man':            { awareness: 2, autonomy: 2, criticality: 1 },
+  'herd-animal':         { awareness: 2, autonomy: 3 },
+  'pity-danger':         { criticality: 2, action: 2, awareness: 1 },
+  'eternal-return':      { composure: 3, action: 2 },
+  'nihilism':            { awareness: 3, composure: 1 },
+  'bad-conscience':      { awareness: 2, criticality: 2 },
+  'ascetic-ideal':       { criticality: 3, awareness: 2 },
+  'genealogy':           { criticality: 3, awareness: 2 },
+  'revaluation':         { criticality: 3, autonomy: 2 },
+  'pathos-of-distance':  { autonomy: 3, action: 1 },
+  'gay-science':         { autonomy: 2, action: 2 },
+  'creator-solitude':    { autonomy: 2, action: 3 },
+  'abyss':               { composure: 2, awareness: 2, action: 1 },
+  'dichotomy-of-control':{ composure: 3, action: 2 },
+  'logos':               { awareness: 2, composure: 2 },
+  'virtue-as-sole-good': { autonomy: 2, composure: 2 },
+  'apatheia':            { composure: 4 },
+  'premeditatio-malorum':{ composure: 3, awareness: 1 },
+  'memento-mori':        { composure: 2, action: 3 },
+  'present-moment':      { composure: 3, awareness: 1 },
+  'amor-fati-stoic':     { composure: 4 },
+  'inner-citadel':       { composure: 3, autonomy: 2 },
+  'cosmopolitan':        { awareness: 2, action: 1 },
+  'obstacle-is-way':     { action: 3, composure: 2 },
+  'voluntary-discomfort':{ action: 3, composure: 2 },
+  'absurd':              { awareness: 3, criticality: 1 },
+  'philosophical-suicide':{criticality: 3, autonomy: 1 },
+  'lucidity':            { awareness: 3, composure: 1 },
+  'revolt':              { action: 3, autonomy: 2 },
+  'sisyphus':            { composure: 2, action: 3 },
+  'indifference-of-world':{awareness: 2, composure: 2 },
+  'freedom-without-hope':{ autonomy: 3, composure: 1 },
+  'passion-quantity':    { action: 3, awareness: 1 },
+  'creation-absurd':     { action: 3, autonomy: 2 },
+  'solidarity':          { action: 2, awareness: 2 },
+  'discourse':           { awareness: 3, criticality: 2 },
+  'power-knowledge':     { criticality: 3, awareness: 2 },
+  'archaeology':         { criticality: 3, awareness: 1 },
+  'normalization':       { awareness: 3, autonomy: 1 },
+  'panopticon':          { awareness: 3, autonomy: 2 },
+  'biopower':            { awareness: 2, criticality: 2 },
+  'governmentality':     { criticality: 2, autonomy: 2 },
+  'technologies-of-self':{ autonomy: 2, action: 2 },
+  'parrhesia':           { action: 3, autonomy: 2 },
+  'heterotopia':         { autonomy: 2, awareness: 2 },
+};
+
+const LEVEL_THRESHOLDS = [
+  { min: 0,   name: '初见', symbol: '·' },
+  { min: 6,   name: '浮现', symbol: '◌' },
+  { min: 16,  name: '凝聚', symbol: '◐' },
+  { min: 31,  name: '稳固', symbol: '●' },
+  { min: 51,  name: '通透', symbol: '✦' },
+];
+function getLevel(score) {
+  let lvl = LEVEL_THRESHOLDS[0];
+  for (const l of LEVEL_THRESHOLDS) if (score >= l.min) lvl = l;
+  return lvl;
+}
+
+function calculateBrainStats() {
+  const stats = { awareness: 0, criticality: 0, composure: 0, autonomy: 0, action: 0 };
+  PHILOSOPHERS.forEach(p => {
+    try {
+      const prog = JSON.parse(localStorage.getItem(storageKey(p.id, 'progress'))) || {};
+      Object.keys(prog).forEach(conceptId => {
+        if (!prog[conceptId]) return;
+        const contrib = CONCEPT_DIMENSIONS[conceptId];
+        if (!contrib) return;
+        Object.entries(contrib).forEach(([dim, val]) => { stats[dim] += val; });
+      });
+    } catch {}
+  });
+  return stats;
+}
+
+function totalBrainScore(stats) {
+  return Object.values(stats).reduce((a, b) => a + b, 0);
+}
 
 // ═══ Cross-philosopher echoes ═══
 const CROSS_ECHOES = {
@@ -1301,6 +1648,9 @@ function renderHome() {
   // Continue card
   renderContinueCard();
 
+  // Mind card
+  renderMindCardHome();
+
   // Daily wisdom
   renderDailyWisdom();
 
@@ -1335,6 +1685,137 @@ function renderHome() {
     });
     list.appendChild(card);
   });
+}
+
+// ═══ Radar chart ═══
+function buildRadarSVG(stats, size = 200) {
+  const cx = size / 2, cy = size / 2;
+  const radius = size * 0.38;
+  const n = DIMENSIONS.length;
+  const maxScore = 60; // visual cap
+
+  // Points on each axis (vertex top, going clockwise)
+  function pt(idx, factor) {
+    const angle = -Math.PI / 2 + (Math.PI * 2 * idx) / n;
+    return [cx + Math.cos(angle) * radius * factor, cy + Math.sin(angle) * radius * factor];
+  }
+
+  // Background polygons at 25/50/75/100%
+  const bgPolys = [0.25, 0.5, 0.75, 1].map(f => {
+    const pts = DIMENSIONS.map((_, i) => pt(i, f).join(',')).join(' ');
+    return `<polygon points="${pts}" fill="none" stroke="rgba(245,241,232,0.06)" stroke-width="1"/>`;
+  }).join('');
+
+  // Axis lines
+  const axes = DIMENSIONS.map((_, i) => {
+    const [x, y] = pt(i, 1);
+    return `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="rgba(245,241,232,0.06)" stroke-width="1"/>`;
+  }).join('');
+
+  // Actual stat polygon
+  const statPts = DIMENSIONS.map((d, i) => {
+    const score = stats[d.id] || 0;
+    const f = Math.min(1, score / maxScore);
+    return pt(i, f).join(',');
+  }).join(' ');
+  const statPoly = `<polygon points="${statPts}" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/>`;
+
+  // Dots at each point
+  const dots = DIMENSIONS.map((d, i) => {
+    const score = stats[d.id] || 0;
+    const f = Math.min(1, score / maxScore);
+    const [x, y] = pt(i, f);
+    return `<circle cx="${x}" cy="${y}" r="2.5" fill="var(--accent-strong)"/>`;
+  }).join('');
+
+  // Labels at vertices
+  const labels = DIMENSIONS.map((d, i) => {
+    const [x, y] = pt(i, 1.22);
+    return `<text x="${x}" y="${y}" fill="rgba(245,241,232,0.5)" font-size="11" text-anchor="middle" dominant-baseline="middle" font-family="inherit">${d.name}</text>`;
+  }).join('');
+
+  return `<svg class="mind-radar" width="${size}" height="${size + 20}" viewBox="0 -10 ${size} ${size + 20}">${bgPolys}${axes}${statPoly}${dots}${labels}</svg>`;
+}
+
+function renderMindCardHome() {
+  const card = document.getElementById('mind-card');
+  const stats = calculateBrainStats();
+  const total = totalBrainScore(stats);
+  if (total === 0) { card.style.display = 'none'; return; }
+
+  const radar = buildRadarSVG(stats, 120);
+  const bars = DIMENSIONS.map(d => {
+    const score = stats[d.id] || 0;
+    const pct = Math.min(100, (score / 60) * 100);
+    return `<div class="mini-bar-row">
+      <span class="mini-bar-label">${d.name}</span>
+      <div class="mini-bar-track"><div class="mini-bar-fill" style="width:${pct}%"></div></div>
+      <span class="mini-bar-val">${score}</span>
+    </div>`;
+  }).join('');
+
+  card.innerHTML = `
+    <div class="mind-card-header">
+      <span class="mind-card-label">心 智</span>
+      <span class="mind-card-total">总分 ${total}</span>
+    </div>
+    <div class="mind-card-radar">
+      ${radar}
+      <div class="mind-card-bars">${bars}</div>
+    </div>
+  `;
+  card.style.display = 'block';
+  card.onclick = () => {
+    haptic('light');
+    renderMind();
+    showScreen('mind');
+  };
+}
+
+function renderMind() {
+  const stats = calculateBrainStats();
+  const total = totalBrainScore(stats);
+  const scroll = document.getElementById('mind-scroll');
+
+  if (total === 0) {
+    scroll.innerHTML = `
+      <div class="mind-title">心智</div>
+      <div class="mind-subtitle">读概念，长心智</div>
+      <div style="font-size:14px; opacity:0.3; line-height:1.8; margin-top:60px;">
+        还没有读任何概念。<br><br>
+        每读完一个概念，会在五个维度上获得相应的成长。<br>
+        读得越多，你的心智轮廓越完整。
+      </div>
+    `;
+    return;
+  }
+
+  const radar = buildRadarSVG(stats, 240);
+  const rows = DIMENSIONS.map(d => {
+    const score = stats[d.id] || 0;
+    const level = getLevel(score);
+    const pct = Math.min(100, (score / 60) * 100);
+    return `<div class="dim-row">
+      <div class="dim-row-head">
+        <span class="dim-row-symbol">${d.symbol}</span>
+        <span class="dim-row-name">${d.name}</span>
+        <span class="dim-row-sub">${d.subtitle}</span>
+      </div>
+      <div class="dim-row-track"><div class="dim-row-fill" style="width:${pct}%"></div></div>
+      <div class="dim-row-meta">
+        <span class="dim-level">${level.symbol} ${level.name}</span>
+        <span class="dim-score">${score}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  scroll.innerHTML = `
+    <div class="mind-title">心智</div>
+    <div class="mind-subtitle">五维度成长 · 总分 ${total}</div>
+    <div class="mind-radar-wrapper">${radar}</div>
+    <div class="dim-list">${rows}</div>
+    <div class="mind-total">每一个读过的概念<br>都成为了你的一部分</div>
+  `;
 }
 
 function renderContinueCard() {
@@ -1492,11 +1973,30 @@ function renderMap() {
       + (read ? ' read' : '')
       + (justUnlocked ? ' just-unlocked' : '');
 
+    // Dimension hint (only for unlocked, unread)
+    let dimHint = '';
+    if (unlocked && !read) {
+      const dims = CONCEPT_DIMENSIONS[concept.id];
+      if (dims) {
+        const symbols = Object.entries(dims)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 2)
+          .map(([id]) => {
+            const meta = DIMENSIONS.find(d => d.id === id);
+            return meta ? meta.symbol : '';
+          })
+          .filter(Boolean)
+          .join(' ');
+        if (symbols) dimHint = `<div class="concept-dim-hint">${symbols}</div>`;
+      }
+    }
+
     card.innerHTML = `
       <div class="concept-name">
         <span class="concept-dot"></span>${concept.name}${concept.original ? '<span class="concept-orig">' + concept.original + '</span>' : ''}
       </div>
       <div class="concept-brief">${concept.brief}</div>
+      ${dimHint}
     `;
 
     if (unlocked) {
@@ -1549,6 +2049,71 @@ function renderMap() {
       setTimeout(() => showCelebration(currentPhilosopher), 300);
     }
   }
+}
+
+function showStatGain(conceptId, oldStats, newStats) {
+  const contrib = CONCEPT_DIMENSIONS[conceptId];
+  if (!contrib) return;
+
+  // Build overlay
+  const overlay = document.createElement('div');
+  overlay.className = 'stat-gain';
+  const rows = Object.entries(contrib).map(([dim, val]) => {
+    const meta = DIMENSIONS.find(d => d.id === dim);
+    if (!meta) return '';
+    return `<div class="stat-gain-row">
+      <span class="stat-gain-symbol">${meta.symbol}</span>
+      <span class="stat-gain-name">${meta.name}</span>
+      <span class="stat-gain-delta">+${val}</span>
+    </div>`;
+  }).join('');
+  overlay.innerHTML = rows;
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => {
+    overlay.classList.add('show');
+    haptic('success');
+  });
+  setTimeout(() => overlay.remove(), 2700);
+
+  // Check for level-ups
+  setTimeout(() => {
+    const levelUps = [];
+    Object.keys(contrib).forEach(dim => {
+      const oldLvl = getLevel(oldStats[dim] || 0);
+      const newLvl = getLevel(newStats[dim] || 0);
+      if (oldLvl.name !== newLvl.name) {
+        levelUps.push({ dim, oldLvl, newLvl });
+      }
+    });
+    if (levelUps.length > 0) showLevelUp(levelUps[0]);
+  }, 1800);
+}
+
+function showLevelUp({ dim, newLvl }) {
+  const meta = DIMENSIONS.find(d => d.id === dim);
+  if (!meta) return;
+  const overlay = document.createElement('div');
+  overlay.className = 'level-up';
+  overlay.innerHTML = `
+    <div class="level-up-label">LEVEL UP</div>
+    <div class="level-up-symbol">${newLvl.symbol}</div>
+    <div class="level-up-text">${meta.name} · ${newLvl.name}</div>
+    <div class="level-up-dim">${meta.subtitle}</div>
+  `;
+  overlay.addEventListener('click', () => {
+    overlay.style.transition = 'opacity 0.5s';
+    overlay.style.opacity = '0';
+    setTimeout(() => overlay.remove(), 500);
+  });
+  document.body.appendChild(overlay);
+  haptic('success');
+  setTimeout(() => {
+    if (overlay.parentNode) {
+      overlay.style.transition = 'opacity 0.6s';
+      overlay.style.opacity = '0';
+      setTimeout(() => overlay.remove(), 600);
+    }
+  }, 3500);
 }
 
 function showEchoAftertaste(conceptId, concept) {
@@ -1792,12 +2357,17 @@ function openStory(conceptId) {
   reflectSkip.style.opacity = '0.25';
   reflectSkip.addEventListener('click', () => {
     const wasUnread = !progress[conceptId];
+    const oldStats = calculateBrainStats();
     progress[conceptId] = true;
     saveProgress();
     document.getElementById('reading-progress').style.width = '0%';
     showScreen('map');
     renderMap();
-    if (wasUnread) showEchoAftertaste(conceptId, concept);
+    if (wasUnread) {
+      const newStats = calculateBrainStats();
+      showStatGain(conceptId, oldStats, newStats);
+      setTimeout(() => showEchoAftertaste(conceptId, concept), 2800);
+    }
   });
   btnRow.appendChild(reflectSkip);
 
@@ -1807,6 +2377,7 @@ function openStory(conceptId) {
   reflectSave.addEventListener('click', () => {
     const text = reflectInput.value.trim();
     const wasUnread = !progress[conceptId];
+    const oldStats = calculateBrainStats();
     if (text) {
       reflections[conceptId] = {
         text: text,
@@ -1822,7 +2393,11 @@ function openStory(conceptId) {
     document.getElementById('reading-progress').style.width = '0%';
     showScreen('map');
     renderMap();
-    if (wasUnread) showEchoAftertaste(conceptId, concept);
+    if (wasUnread) {
+      const newStats = calculateBrainStats();
+      showStatGain(conceptId, oldStats, newStats);
+      setTimeout(() => showEchoAftertaste(conceptId, concept), 2800);
+    }
   });
   btnRow.appendChild(reflectSave);
 
@@ -2098,6 +2673,11 @@ document.getElementById('nav-global-journal').addEventListener('click', () => {
   journalGlobal = true;
   renderJournal();
   showScreen('journal');
+});
+
+document.getElementById('mind-back-btn').addEventListener('click', () => {
+  renderHome();
+  showScreen('home');
 });
 
 document.getElementById('journal-back-btn').addEventListener('click', () => {
