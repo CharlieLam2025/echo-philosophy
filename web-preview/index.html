@@ -23,44 +23,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── Grain texture overlay ── */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 256px 256px;
-  pointer-events: none;
-  z-index: 9999;
-}
-
-/* ── Screens with transitions ── */
-.screen { display: none; min-height: 100vh; opacity: 0; }
-.screen.active { display: block; animation: screenIn 0.5s ease-out forwards; }
-.screen.screen-exit { animation: screenOut 0.3s ease-in forwards; }
-@keyframes screenIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes screenOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
-
-/* Story slides in from right */
-#story-screen.active { animation: slideInRight 0.45s cubic-bezier(0.16,1,0.3,1) forwards; }
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(40px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-/* Journal slides up */
-#journal-screen.active { animation: slideInUp 0.45s cubic-bezier(0.16,1,0.3,1) forwards; }
-@keyframes slideInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+/* ── Screens ── */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: block; }
 
 /* ── Map (concept list) ── */
 .map-header {
@@ -141,42 +106,6 @@ body::after {
 .concept-card.depth-3 { padding-left: 76px; }
 .concept-card.depth-4 { padding-left: 92px; }
 
-/* Scroll-reveal: cards start invisible, JS adds .revealed */
-.concept-card {
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 0.5s ease, transform 0.5s ease, background 0.6s ease;
-}
-.concept-card.revealed {
-  transform: translateY(0);
-}
-.concept-card.revealed:not(.locked) { opacity: 1; }
-.concept-card.revealed.locked { opacity: 0.2; }
-.concept-card.revealed.read { opacity: 0.5; }
-
-/* Newly-unlocked glow */
-.concept-card.just-unlocked {
-  background: rgba(245,241,232,0.04);
-  animation: unlockPulse 1.5s ease-out forwards;
-}
-@keyframes unlockPulse {
-  0% { background: rgba(245,241,232,0.08); }
-  100% { background: transparent; }
-}
-
-/* Tap ripple */
-.concept-card:not(.locked)::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at var(--tap-x,50%) var(--tap-y,50%), rgba(245,241,232,0.06) 0%, transparent 60%);
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
-}
-.concept-card:not(.locked):active::after { opacity: 1; }
-.concept-card { position: relative; overflow: hidden; }
-
 /* ── Story reader ── */
 .story-back {
   position: fixed;
@@ -229,33 +158,6 @@ body::after {
   word-break: break-word;
 }
 .story-body p { margin-bottom: 1.2em; }
-.story-body p:first-child::first-letter {
-  font-size: 3.2em;
-  float: left;
-  line-height: 0.8;
-  margin: 6px 10px 0 -2px;
-  opacity: 0.85;
-  font-weight: 400;
-}
-
-/* ── Reading progress bar ── */
-.reading-progress {
-  position: fixed;
-  top: 0; left: 0;
-  width: 0%;
-  height: 2px;
-  background: rgba(245,241,232,0.2);
-  z-index: 50;
-  transition: width 0.15s linear;
-  pointer-events: none;
-}
-
-/* ── Reading time estimate ── */
-.story-reading-time {
-  font-size: 11px;
-  opacity: 0.15;
-  margin-top: 4px;
-}
 
 /* ── Layers ── */
 .layers-section {
@@ -420,30 +322,15 @@ body::after {
 
 /* ── Home screen ── */
 .home-header {
-  padding: calc(72px + env(safe-area-inset-top, 32px)) 28px 8px;
-  font-size: 11px;
-  opacity: 0.2;
-  letter-spacing: 0.35em;
-}
-.home-title {
-  padding: 0 28px 6px;
-  font-size: 28px;
-  line-height: 1.4;
-  opacity: 0.85;
+  padding: calc(60px + env(safe-area-inset-top, 32px)) 28px 16px;
+  font-size: 13px;
+  opacity: 0.35;
+  letter-spacing: 0.15em;
 }
 .home-subtitle {
-  padding: 0 28px 12px;
+  padding: 0 28px 48px;
   font-size: 12px;
   opacity: 0.12;
-}
-.home-quote {
-  padding: 0 28px 48px;
-  font-size: 13px;
-  line-height: 1.7;
-  opacity: 0.18;
-  font-style: italic;
-  max-width: 320px;
-  transition: opacity 0.8s ease;
 }
 .philosopher-list { padding: 0 0 80px; }
 .philosopher-card {
@@ -457,12 +344,10 @@ body::after {
   font-family: inherit;
   text-align: left;
   cursor: pointer;
-  transition: opacity 0.2s, transform 0.2s, background 0.3s;
-  position: relative;
+  transition: opacity 0.2s;
 }
 .philosopher-card:focus { outline: none; }
-.philosopher-card:active { opacity: 0.85; transform: scale(0.985); }
-.philosopher-card:hover { background: rgba(245,241,232,0.02); }
+.philosopher-card:active { opacity: 0.7; }
 .philosopher-name {
   font-size: 22px;
   line-height: 1.5;
@@ -603,83 +488,6 @@ body::after {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
-/* Staggered fade-in for child elements */
-.stagger > :nth-child(1) { animation-delay: 0s; }
-.stagger > :nth-child(2) { animation-delay: 0.08s; }
-.stagger > :nth-child(3) { animation-delay: 0.16s; }
-.stagger > :nth-child(4) { animation-delay: 0.24s; }
-.stagger > :nth-child(5) { animation-delay: 0.32s; }
-.stagger > * { animation-fill-mode: backwards; }
-
-/* ── Swipe hint on story screen ── */
-.swipe-indicator {
-  position: fixed;
-  left: 0; top: 50%;
-  width: 4px; height: 48px;
-  margin-top: -24px;
-  background: rgba(245,241,232,0.08);
-  border-radius: 0 4px 4px 0;
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
-  z-index: 11;
-}
-.swipe-indicator.visible { opacity: 1; }
-
-/* ── Toast notification ── */
-.toast {
-  position: fixed;
-  bottom: calc(40px + env(safe-area-inset-bottom, 0px));
-  left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  background: rgba(245,241,232,0.08);
-  color: #f5f1e8;
-  font-family: inherit;
-  font-size: 13px;
-  padding: 10px 24px;
-  border-radius: 20px;
-  opacity: 0;
-  transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
-  pointer-events: none;
-  z-index: 200;
-  white-space: nowrap;
-}
-.toast.show {
-  opacity: 0.7;
-  transform: translateX(-50%) translateY(0);
-}
-
-/* ── Completion celebration ── */
-.celebration {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #000;
-  z-index: 150;
-  opacity: 0;
-  animation: celebIn 1s ease-out forwards;
-}
-@keyframes celebIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-.celebration-text {
-  font-size: 24px;
-  line-height: 1.6;
-  text-align: center;
-  opacity: 0.7;
-  padding: 0 40px;
-}
-.celebration-sub {
-  font-size: 13px;
-  opacity: 0.2;
-  margin-top: 16px;
-  letter-spacing: 0.1em;
-}
 </style>
 </head>
 <body>
@@ -689,22 +497,11 @@ body::after {
   <div class="loading-dots">···</div>
 </div>
 
-<!-- ═══ Reading progress bar ═══ -->
-<div id="reading-progress" class="reading-progress"></div>
-
-<!-- ═══ Swipe indicator ═══ -->
-<div id="swipe-indicator" class="swipe-indicator"></div>
-
-<!-- ═══ Toast ═══ -->
-<div id="toast" class="toast"></div>
-
 <!-- ═══ Home Screen ═══ -->
 <div id="home-screen" class="screen active">
   <div class="home-header">ECHO</div>
-  <div class="home-title">回声</div>
-  <div class="home-subtitle">哲学概念的故事化学习</div>
-  <div class="home-quote" id="home-quote"></div>
-  <div class="philosopher-list stagger" id="philosopher-list"></div>
+  <div class="home-subtitle">哲学的回声</div>
+  <div class="philosopher-list" id="philosopher-list"></div>
   <div style="padding:0 28px 80px;">
     <button class="nav-btn" id="nav-global-journal" style="font-size:13px;">全部思考记录 →</button>
   </div>
@@ -794,38 +591,6 @@ let storyMap = new Map();
 let progress = {};
 let reflections = {};
 let currentConceptId = null;
-let previouslyUnlocked = new Set(); // Track unlock states for glow effect
-
-// ═══ Quotes ═══
-const HOME_QUOTES = [
-  '那不能杀死我的，使我更强大。',
-  '你要搞清楚自己人生的剧本——不是你父母的续集，不是你子女的前传。',
-  '人是一根系在动物与超人之间的绳索。',
-  '当你凝视深渊时，深渊也在凝视你。',
-  '世界的温柔，是迟到的正义和最初的自由。',
-  '生命中真正重要的不是你遭遇了什么，而是你记住了哪些事，又是如何铭记的。',
-  '必须想象西西弗斯是幸福的。',
-  '人最终在乎的，不是自由本身，而是寻找自由的那条路。',
-];
-
-// ═══ Haptic feedback ═══
-function haptic(style = 'light') {
-  if (navigator.vibrate) {
-    if (style === 'light') navigator.vibrate(10);
-    else if (style === 'medium') navigator.vibrate(20);
-    else if (style === 'success') navigator.vibrate([10, 50, 10]);
-  }
-}
-
-// ═══ Toast ═══
-let toastTimer = null;
-function showToast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2000);
-}
 
 function storageKey(philosopher, type) {
   return `echo/${philosopher}/${type}`;
@@ -879,38 +644,27 @@ function showScreen(name) {
 const CONCEPT_COUNTS = { nietzsche: 25, stoic: 12, camus: 10, foucault: 10 };
 
 function renderHome() {
-  // Rotating quote
-  const quoteEl = document.getElementById('home-quote');
-  quoteEl.textContent = HOME_QUOTES[Math.floor(Math.random() * HOME_QUOTES.length)];
-
   const list = document.getElementById('philosopher-list');
   list.innerHTML = '';
-  PHILOSOPHERS.forEach((p, idx) => {
+  PHILOSOPHERS.forEach(p => {
     const card = document.createElement('button');
-    card.className = 'philosopher-card fade-in';
-    card.style.animationDelay = (idx * 0.08) + 's';
-    card.style.animationFillMode = 'backwards';
+    card.className = 'philosopher-card';
     let readCount = 0;
     const total = CONCEPT_COUNTS[p.id] || 0;
     try {
       const prog = JSON.parse(localStorage.getItem(storageKey(p.id, 'progress'))) || {};
       readCount = Object.keys(prog).filter(k => prog[k]).length;
     } catch {}
+    const progressText = readCount > 0 ? `${readCount} / ${total}` : '';
     const pct = total > 0 ? Math.round((readCount / total) * 100) : 0;
-    const progressLabel = readCount > 0
-      ? (pct === 100 ? '已完成' : `${readCount} / ${total}`)
-      : '开始探索';
     card.innerHTML = `
       <div class="philosopher-name">${p.name}<span class="philosopher-orig">${p.orig}</span></div>
       <div class="philosopher-dates">${p.dates}</div>
       <div class="philosopher-question">${p.question}</div>
-      <div class="philosopher-progress">${progressLabel}</div>
+      <div class="philosopher-progress">${progressText}</div>
       ${total > 0 ? `<div class="philosopher-bar"><div class="philosopher-bar-fill" style="width:${pct}%"></div></div>` : ''}
     `;
-    card.addEventListener('click', () => {
-      haptic('light');
-      enterPhilosopher(p);
-    });
+    card.addEventListener('click', () => enterPhilosopher(p));
     list.appendChild(card);
   });
 }
@@ -974,28 +728,16 @@ function renderMap() {
   const pct = concepts.length > 0 ? Math.round((readCount / concepts.length) * 100) : 0;
   document.getElementById('map-bar-fill').style.width = pct + '%';
 
-  // Track currently unlocked set
-  const currentUnlocked = new Set();
-
   const order = topologicalSort(concepts);
   const depthMap = getDepthMap(concepts);
 
-  order.forEach((concept, idx) => {
+  order.forEach(concept => {
     const card = document.createElement('button');
     const unlocked = isUnlocked(concept.id);
     const read = !!progress[concept.id];
     const depth = Math.min(depthMap.get(concept.id) || 0, 4);
 
-    if (unlocked) currentUnlocked.add(concept.id);
-
-    // Was this concept just unlocked? (wasn't in previous set)
-    const justUnlocked = unlocked && !read && previouslyUnlocked.size > 0 && !previouslyUnlocked.has(concept.id);
-
-    card.className = 'concept-card depth-' + depth
-      + (unlocked ? '' : ' locked')
-      + (read ? ' read' : '')
-      + (justUnlocked ? ' just-unlocked' : '');
-
+    card.className = 'concept-card depth-' + depth + (unlocked ? '' : ' locked') + (read ? ' read' : '');
     card.innerHTML = `
       <div class="concept-name">
         <span class="concept-dot"></span>${concept.name}${concept.original ? '<span class="concept-orig">' + concept.original + '</span>' : ''}
@@ -1004,65 +746,11 @@ function renderMap() {
     `;
 
     if (unlocked) {
-      card.addEventListener('click', () => {
-        haptic('light');
-        openStory(concept.id);
-      });
+      card.addEventListener('click', () => openStory(concept.id));
     }
 
     list.appendChild(card);
   });
-
-  // Update previously unlocked set
-  previouslyUnlocked = currentUnlocked;
-
-  // Scroll-reveal with IntersectionObserver
-  requestAnimationFrame(() => {
-    const cards = list.querySelectorAll('.concept-card');
-    if ('IntersectionObserver' in window) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('revealed');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
-      cards.forEach(c => observer.observe(c));
-    } else {
-      cards.forEach(c => c.classList.add('revealed'));
-    }
-  });
-
-  // Check for philosopher completion
-  if (readCount === concepts.length && concepts.length > 0) {
-    const celebKey = `echo/${currentPhilosopher.id}/celebrated`;
-    if (!localStorage.getItem(celebKey)) {
-      localStorage.setItem(celebKey, 'true');
-      setTimeout(() => showCelebration(currentPhilosopher), 300);
-    }
-  }
-}
-
-function showCelebration(philosopher) {
-  haptic('success');
-  const overlay = document.createElement('div');
-  overlay.className = 'celebration';
-  overlay.innerHTML = `
-    <div class="celebration-text">${philosopher.name}的全部概念<br>已经走完</div>
-    <div class="celebration-sub">你听到了回声</div>
-  `;
-  overlay.addEventListener('click', () => {
-    overlay.style.transition = 'opacity 0.5s';
-    overlay.style.opacity = '0';
-    setTimeout(() => overlay.remove(), 500);
-  });
-  document.body.appendChild(overlay);
-  setTimeout(() => {
-    overlay.style.transition = 'opacity 0.5s';
-    overlay.style.opacity = '0';
-    setTimeout(() => overlay.remove(), 500);
-  }, 4000);
 }
 
 function topologicalSort(nodes) {
@@ -1092,9 +780,6 @@ function openStory(conceptId) {
   const concept = concepts.find(c => c.id === conceptId);
   document.getElementById('story-concept-label').textContent = concept ? concept.name : '';
 
-  // Reset reading progress
-  document.getElementById('reading-progress').style.width = '0%';
-
   const scroll = document.getElementById('story-scroll');
   scroll.innerHTML = '';
 
@@ -1104,13 +789,10 @@ function openStory(conceptId) {
   title.textContent = story.title;
   scroll.appendChild(title);
 
-  // Meta + reading time
-  const charCount = (story.body || '').length;
-  const readingMin = Math.max(1, Math.round(charCount / 500));
+  // Meta
   const meta = document.createElement('div');
   meta.className = 'story-meta fade-in';
-  meta.innerHTML = `${story.protagonist.name}，${story.protagonist.age}岁，${story.protagonist.occupation}`
-    + `<div class="story-reading-time">约 ${readingMin} 分钟</div>`;
+  meta.textContent = `${story.protagonist.name}，${story.protagonist.age}岁，${story.protagonist.occupation}`;
   scroll.appendChild(meta);
 
   // Body
@@ -1239,13 +921,9 @@ function openStory(conceptId) {
         conceptName: concept ? concept.name : conceptId,
       };
       saveReflections();
-      haptic('success');
-      showToast('已记录');
     }
     progress[conceptId] = true;
     saveProgress();
-    // Hide reading progress bar
-    document.getElementById('reading-progress').style.width = '0%';
     showScreen('map');
     renderMap();
   });
@@ -1407,7 +1085,6 @@ function escapeHtml(s) {
 
 // ═══ Navigation ═══
 document.getElementById('back-btn').addEventListener('click', () => {
-  document.getElementById('reading-progress').style.width = '0%';
   showScreen('map');
   renderMap();
 });
@@ -1449,60 +1126,6 @@ document.addEventListener('keydown', (e) => {
       else { showScreen('map'); renderMap(); }
     }
     else if (active?.id === 'map-screen') { currentPhilosopher = null; renderHome(); showScreen('home'); }
-  }
-});
-
-// ═══ Reading progress bar ═══
-window.addEventListener('scroll', () => {
-  const active = document.querySelector('.screen.active');
-  if (active?.id !== 'story-screen') return;
-  const scrollTop = window.scrollY;
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  const pct = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
-  document.getElementById('reading-progress').style.width = pct + '%';
-}, { passive: true });
-
-// ═══ Swipe-back gesture ═══
-let touchStartX = 0;
-let touchStartY = 0;
-let swiping = false;
-const swipeIndicator = document.getElementById('swipe-indicator');
-
-document.addEventListener('touchstart', (e) => {
-  const active = document.querySelector('.screen.active');
-  if (active?.id !== 'story-screen' && active?.id !== 'journal-screen') return;
-  const touch = e.touches[0];
-  if (touch.clientX < 30) { // Left edge
-    touchStartX = touch.clientX;
-    touchStartY = touch.clientY;
-    swiping = true;
-    swipeIndicator.classList.add('visible');
-  }
-}, { passive: true });
-
-document.addEventListener('touchmove', (e) => {
-  if (!swiping) return;
-  const dx = e.touches[0].clientX - touchStartX;
-  const dy = Math.abs(e.touches[0].clientY - touchStartY);
-  if (dy > dx) { swiping = false; swipeIndicator.classList.remove('visible'); }
-}, { passive: true });
-
-document.addEventListener('touchend', (e) => {
-  if (!swiping) return;
-  swipeIndicator.classList.remove('visible');
-  const dx = e.changedTouches[0].clientX - touchStartX;
-  swiping = false;
-  if (dx > 80) {
-    haptic('light');
-    const active = document.querySelector('.screen.active');
-    if (active?.id === 'story-screen') {
-      document.getElementById('reading-progress').style.width = '0%';
-      showScreen('map');
-      renderMap();
-    } else if (active?.id === 'journal-screen') {
-      if (journalGlobal) { renderHome(); showScreen('home'); }
-      else { showScreen('map'); renderMap(); }
-    }
   }
 });
 
