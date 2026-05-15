@@ -956,6 +956,111 @@ body::after {
   letter-spacing: 0.15em;
 }
 
+/* ── Dialogues list screen ── */
+.dialogues-scroll {
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.dialogues-title {
+  font-size: 28px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.dialogues-subtitle {
+  font-size: 12px;
+  opacity: 0.35;
+  font-style: italic;
+  margin-bottom: 40px;
+}
+.dialogue-card {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(245,241,232,0.05);
+  color: #f5f1e8;
+  font-family: inherit;
+  text-align: left;
+  padding: 22px 0;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.dialogue-card:active { opacity: 0.7; transform: translateX(3px); }
+.dialogue-card:focus { outline: none; }
+.dialogue-card-pair {
+  font-size: 13px;
+  opacity: 0.4;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+.dialogue-card-title {
+  font-size: 18px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.dialogue-card-summary {
+  font-size: 13px;
+  opacity: 0.55;
+  line-height: 1.7;
+  font-style: italic;
+}
+
+/* ── Dialogue detail screen ── */
+.dialogue-detail-scroll {
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.dd-title {
+  font-size: 26px;
+  opacity: 0.9;
+  margin-bottom: 4px;
+}
+.dd-pair {
+  font-size: 13px;
+  opacity: 0.45;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+.dd-summary {
+  font-size: 14px;
+  opacity: 0.55;
+  font-style: italic;
+  line-height: 1.7;
+  padding: 16px 0 20px;
+  border-top: 1px solid rgba(245,241,232,0.06);
+  border-bottom: 1px solid rgba(245,241,232,0.06);
+  margin-bottom: 32px;
+}
+.dd-turn {
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  border-left: 2px solid;
+  border-radius: 0 4px 4px 0;
+  font-size: 15px;
+  line-height: 1.85;
+}
+.dd-turn-a {
+  background: rgba(245,241,232,0.015);
+  margin-right: 30px;
+}
+.dd-turn-b {
+  background: rgba(245,241,232,0.025);
+  margin-left: 30px;
+}
+.dd-turn-name {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  opacity: 0.55;
+  margin-bottom: 6px;
+}
+.dd-turn-text { opacity: 0.85; }
+.dd-turn[data-color="nietzsche"] { border-left-color: rgba(196,164,105,0.6); }
+.dd-turn[data-color="stoic"]     { border-left-color: rgba(150,170,180,0.6); }
+.dd-turn[data-color="camus"]     { border-left-color: rgba(200,130,100,0.6); }
+.dd-turn[data-color="foucault"]  { border-left-color: rgba(165,140,185,0.6); }
+
 /* ── Events list screen ── */
 .events-scroll {
   padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
@@ -1988,6 +2093,7 @@ body::after {
     <button class="nav-btn" id="nav-lexicon" style="font-size:13px;">辞海 →</button>
     <button class="nav-btn" id="nav-thinkers" style="font-size:13px;">现代思想 →</button>
     <button class="nav-btn" id="nav-events" style="font-size:13px;">哲学史事件 →</button>
+    <button class="nav-btn" id="nav-dialogues" style="font-size:13px;">对话录 →</button>
   </div>
 </div>
 
@@ -2014,6 +2120,24 @@ body::after {
     <span class="story-concept-label" id="story-concept-label"></span>
   </div>
   <div class="story-scroll" id="story-scroll"></div>
+</div>
+
+<!-- ═══ Dialogues List Screen ═══ -->
+<div id="dialogues-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="dialogues-back-btn">←</button>
+    <span class="story-concept-label">对话录</span>
+  </div>
+  <div class="dialogues-scroll" id="dialogues-scroll"></div>
+</div>
+
+<!-- ═══ Dialogue Detail Screen ═══ -->
+<div id="dialogue-detail-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="dialogue-detail-back-btn">←</button>
+    <span class="story-concept-label" id="dialogue-detail-label">对话</span>
+  </div>
+  <div class="dialogue-detail-scroll" id="dialogue-detail-scroll"></div>
 </div>
 
 <!-- ═══ Events List Screen ═══ -->
@@ -2548,6 +2672,149 @@ const DEEP_READS = {
     apply: '识别你生活中的"异托邦"——夜晚的便利店、失眠的微信对话、深夜大排档——这些缝隙时刻是你呼吸的地方。',
   },
 };
+
+// ═══ 跨学派对话录 ═══
+const DIALOGUES = [
+  {
+    id: 'nietzsche-camus-meaninglessness',
+    title: '关于无意义',
+    a: { name: '尼采', color: 'nietzsche' },
+    b: { name: '加缪', color: 'camus' },
+    summary: '上帝死后，要主动创造意义，还是清醒地接受无意义？',
+    turns: [
+      { who: 'b', text: '你诊断了上帝之死。然后你做了什么？发明了超人。' },
+      { who: 'a', text: '因为没有别的办法。如果上帝死了而你不创造，你就只能虚无。要么主动，要么被动。' },
+      { who: 'b', text: '我不同意。还有第三条路——不创造，也不虚无。直面荒诞，然后行动。' },
+      { who: 'a', text: '但你的"行动"为什么？为什么不躺着？' },
+      { who: 'b', text: '因为反抗本身就是答案。不需要外部目的。' },
+      { who: 'a', text: '但反抗指向某个改善——你想让世界更好。这是隐藏的目的论。' },
+      { who: 'b', text: '不。我反抗，不是因为我相信改善。是因为我不愿意被这个无意义吞没。' },
+      { who: 'a', text: '你以为这和我"权力意志"不同？都是生命拒绝消失的方式。' },
+      { who: 'b', text: '区别在于——你假设超出自己有方向，我说没有方向。你的超人还在某种顶峰；我的西西弗斯永远在山脚下。' },
+      { who: 'a', text: '那你为什么还推石头？' },
+      { who: 'b', text: '因为在推的过程中，石头变成了我的。这就够了。' },
+      { who: 'a', text: '……你说了一句我没说过的话。我说"成为你自己"，你说"在过程中，自我已经是了"。' },
+      { who: 'b', text: '1888 年你疯了。1960 年我死于车祸。两个不同的死法，证明了两种不同的活法。' },
+      { who: 'a', text: '你死得比我好。' },
+    ],
+  },
+  {
+    id: 'foucault-arendt-evil',
+    title: '关于平庸之恶',
+    a: { name: '阿伦特', color: 'foucault' /* purple-ish substitute */ },
+    b: { name: '福柯', color: 'foucault' },
+    summary: '艾希曼为什么没思考？是个人的失败，还是装置的产物？',
+    turns: [
+      { who: 'a', text: '艾希曼让我看清了——恶不需要怪物。一个完全平庸的人就能执行大屠杀。' },
+      { who: 'b', text: '但你说"他没在思考"——好像他可以"开始思考"就阻止了恶。我不这么乐观。' },
+      { who: 'a', text: '你的意思是？' },
+      { who: 'b', text: '思考本身也是被生产的。教育、媒体、官僚程序——它们生产某种"可以思考的范围"。在艾希曼的范围里，"是否要执行命令"根本不在选项里。' },
+      { who: 'a', text: '那希望在哪里？' },
+      { who: 'b', text: '希望不在"个体的清醒"，希望在"装置的批判"。改变能让人不思考的结构，比要求每个个体都思考更可能。' },
+      { who: 'a', text: '这是不是又把责任从个体身上拿走了？' },
+      { who: 'b', text: '不是拿走责任，是把责任放对位置。让一个 50 年代受教育的德国官僚"自己想清楚"是不公平的——他从来没有那个思考的工具。' },
+      { who: 'a', text: '但他可以拒绝。耶路撒冷的审判证明了——他可以拒绝，他选择不。' },
+      { who: 'b', text: '他可以拒绝？他的"我"已经是纳粹生产出来的"我"。让那个"我"拒绝"我自己"——这是一种近乎不可能的姿态。' },
+      { who: 'a', text: '那么道德判断变成什么了？' },
+      { who: 'b', text: '道德判断仍然有效——但它不再是关于"个体良心"的事，是关于"哪些装置允许什么样的主体"。' },
+      { who: 'a', text: '……我们不完全同意，但你说的让我重新思考。' },
+      { who: 'b', text: '这就是好的对话。' },
+    ],
+  },
+  {
+    id: 'stoic-han-selfmanagement',
+    title: '关于自我管理',
+    a: { name: '爱比克泰德', color: 'stoic' },
+    b: { name: '韩炳哲', color: 'foucault' },
+    summary: '斯多葛"管理自己"和当代"自我提升"——是同一件事吗？',
+    turns: [
+      { who: 'b', text: '你说"成就社会"——每个人成为自己的剥削者。但这难道不是斯多葛教过的事吗？管理自己。' },
+      { who: 'a', text: '完全不是。斯多葛的"自我管理"是为了从外部世界中解放出来——专注于你能控制的，不被名利所牵。' },
+      { who: 'b', text: '是。' },
+      { who: 'a', text: '但现在的"自我管理"——健身打卡、效率工具、个人 KPI——是为了被外部世界更好地用。它把你变成更高效的劳动者，不是更自由的人。' },
+      { who: 'b', text: '但形式上是一样的——人用工具来塑造自己。' },
+      { who: 'a', text: '形式相似，目的相反。斯多葛的目的是 ataraxia——不被扰乱。当代自我提升的目的是 productivity——更多产出。' },
+      { who: 'b', text: '那如何区分？' },
+      { who: 'a', text: '问一个问题：你完成这件事之后，会想休息，还是想做更多？真正的斯多葛实践，完成之后是平静。当代成就实践，完成之后是焦虑——"下一个"。' },
+      { who: 'b', text: '所以问题不在"自我管理"本身——在"管理的目的"。' },
+      { who: 'a', text: '是。我担心的不是自律，是被规训成"无法停下来的自律"。' },
+      { who: 'b', text: '在我那个时代，奴隶没有选择不工作的权利。我们说的"内在自由"是对外部失去权力的人说的。' },
+      { who: 'a', text: '而你们这些当代自由人，本来可以停下来，却不能。这是新的奴役。' },
+      { who: 'b', text: '……我们的位置颠倒了。我是奴隶，思想是自由的；你们是自由人，思想是被驯化的。' },
+      { who: 'a', text: '所以应该重新读你。' },
+    ],
+  },
+  {
+    id: 'sartre-heidegger-freedom',
+    title: '关于自由',
+    a: { name: '萨特', color: 'camus' },
+    b: { name: '海德格尔', color: 'nietzsche' },
+    summary: '"被抛"之后，自由是绝对的，还是有限的？',
+    turns: [
+      { who: 'a', text: '你教过我"被抛"——人没有选择被生下，没有选择处境。然后呢？' },
+      { who: 'b', text: '然后是"本真"——把继承的东西变成你选择的。' },
+      { who: 'a', text: '这就是"存在先于本质"。但你不愿意接受我把这变成行动哲学。' },
+      { who: 'b', text: '因为你跳过了存在的问题。"自由"在你那里变成了"个体的随意"——这恰恰是不本真的。' },
+      { who: 'a', text: '但如果不是个体在选择，谁在选择？' },
+      { who: 'b', text: '选择是"此在"在"被抛"中做出的——不是"个体"对"环境"。你的存在主义太人本主义了。' },
+      { who: 'a', text: '你这么说，是因为你曾经做过那个选择——1933 年你支持纳粹。然后你说那不算"你"——你说那是"历史送来的"。' },
+      { who: 'b', text: '……' },
+      { who: 'a', text: '在我的存在主义里，你是有罪的。在你的"被抛"哲学里，你可以推卸。这就是为什么我必须把"自由"从你那里拿走，变成行动。' },
+      { who: 'b', text: '你太苛刻。' },
+      { who: 'a', text: '我必须苛刻。因为你不苛刻，所以你戴过纳粹的徽章。' },
+      { who: 'b', text: '你不也支持过斯大林？' },
+      { who: 'a', text: '是的。这是我的"自欺"。区别在于——我承认它是自欺。你拒绝承认。' },
+      { who: 'b', text: '……' },
+      { who: 'a', text: '被抛是真的，海德格尔。但被抛之后，你做了什么——这是绝对自由的。' },
+    ],
+  },
+  {
+    id: 'wittgenstein-baudrillard-signs',
+    title: '关于符号',
+    a: { name: '维特根斯坦', color: 'nietzsche' },
+    b: { name: '鲍德里亚', color: 'foucault' },
+    summary: '语言不对应现实——但在 AI 时代，连"使用者"都消失了？',
+    turns: [
+      { who: 'a', text: '你说我们生活在"拟像"里——符号脱钩于现实。' },
+      { who: 'b', text: '是。' },
+      { who: 'a', text: '但"现实"是什么？也是另一种语言游戏。我从来不假设语言对应"真实"——我说语言就是一种使用。' },
+      { who: 'b', text: '但你假设有"使用"——人在做什么。现在拟像本身已经在"做"。算法生成内容，AI 用 AI 训练，符号自我繁殖。"使用者"在哪里？' },
+      { who: 'a', text: '……这是个新问题。' },
+      { who: 'b', text: '你的语言游戏假设有玩家。如果游戏开始自己玩呢？' },
+      { who: 'a', text: '那就不是游戏了。' },
+      { who: 'b', text: '但它仍然在生产意义、生产现实、生产人。' },
+      { who: 'a', text: '那意义还是意义吗？' },
+      { who: 'b', text: '在拟像第四阶段，"意义"已经和"符号被产生"无法区分。' },
+      { who: 'a', text: '那我们只能保持沉默。' },
+      { who: 'b', text: '我们已经在保持沉默了——我们的沉默就在每一次点赞、每一次刷屏、每一次自动转发里。' },
+      { who: 'a', text: '……我以为我留下了一个伦理：凡是不能说的，应当保持沉默。你让我看到——现在不是"不能说"，是"说不出来"。' },
+      { who: 'b', text: '欢迎来到 21 世纪。' },
+    ],
+  },
+  {
+    id: 'butler-foucault-subject',
+    title: '关于主体',
+    a: { name: '巴特勒', color: 'foucault' },
+    b: { name: '福柯', color: 'foucault' },
+    summary: '主体是被生产的——但主体也在每次表演中重新生产自己？',
+    turns: [
+      { who: 'b', text: '我说主体是被生产的——通过话语、规训、知识。' },
+      { who: 'a', text: '是。我从你那里出发。' },
+      { who: 'b', text: '但你走得更远？' },
+      { who: 'a', text: '你停在"主体被生产"。我说"主体在表演中生产自己"。这不是被动接受，是主动重复。' },
+      { who: 'b', text: '差别是？' },
+      { who: 'a', text: '你的框架里反抗很困难——主体已经被构成了，怎么反？我的框架里，每一次重复都是一次微小的偏离的可能。我可以"做"性别，也可以"做错"性别。' },
+      { who: 'b', text: '所以你的政治更乐观？' },
+      { who: 'a', text: '不是乐观——是更精确。如果性别是表演，那么每一场表演都可以略微不同。改变在小处。' },
+      { who: 'b', text: '但小处的累积，是否能改变大装置？' },
+      { who: 'a', text: '这是开放问题。我相信可以。' },
+      { who: 'b', text: '我希望你是对的。我晚期转向"自我的关照"——某种程度上也是在找这个出路。' },
+      { who: 'a', text: '我们都在找。我比你大胆地命名了。' },
+      { who: 'b', text: '因为你晚我 30 年。这 30 年里，事情变得更紧迫。' },
+      { who: 'a', text: '……是。' },
+    ],
+  },
+];
 
 // ═══ 哲学史重大事件 ═══
 const EVENTS = [
@@ -3458,6 +3725,53 @@ function buildRadarSVG(stats, size = 200) {
   }).join('');
 
   return `<svg class="mind-radar" width="${size}" height="${size + 20}" viewBox="0 -10 ${size} ${size + 20}">${bgPolys}${axes}${statPoly}${dots}${labels}</svg>`;
+}
+
+function renderDialogues() {
+  const scroll = document.getElementById('dialogues-scroll');
+  const cards = DIALOGUES.map(d => `
+    <button class="dialogue-card" data-dialogue="${d.id}">
+      <div class="dialogue-card-pair">${escapeHtml(d.a.name)} ✕ ${escapeHtml(d.b.name)}</div>
+      <div class="dialogue-card-title">${escapeHtml(d.title)}</div>
+      <div class="dialogue-card-summary">${escapeHtml(d.summary)}</div>
+    </button>
+  `).join('');
+  scroll.innerHTML = `
+    <div class="dialogues-title">对话录</div>
+    <div class="dialogues-subtitle">把不同时代的思想家放进同一个房间</div>
+    ${cards}
+  `;
+  scroll.querySelectorAll('.dialogue-card').forEach(card => {
+    card.addEventListener('click', () => {
+      haptic('light');
+      openDialogue(card.getAttribute('data-dialogue'));
+    });
+  });
+}
+
+function openDialogue(dId) {
+  const d = DIALOGUES.find(x => x.id === dId);
+  if (!d) return;
+  document.getElementById('dialogue-detail-label').textContent = d.title;
+  const turns = d.turns.map(t => {
+    const speaker = t.who === 'a' ? d.a : d.b;
+    const turnClass = t.who === 'a' ? 'dd-turn-a' : 'dd-turn-b';
+    return `
+      <div class="dd-turn ${turnClass}" data-color="${speaker.color}">
+        <div class="dd-turn-name">${escapeHtml(speaker.name)}</div>
+        <div class="dd-turn-text">${escapeHtml(t.text)}</div>
+      </div>
+    `;
+  }).join('');
+  const scroll = document.getElementById('dialogue-detail-scroll');
+  scroll.innerHTML = `
+    <div class="dd-title">${escapeHtml(d.title)}</div>
+    <div class="dd-pair">${escapeHtml(d.a.name)} ✕ ${escapeHtml(d.b.name)}</div>
+    <div class="dd-summary">${escapeHtml(d.summary)}</div>
+    ${turns}
+  `;
+  showScreen('dialogue-detail');
+  window.scrollTo(0, 0);
 }
 
 function renderEvents() {
@@ -4782,6 +5096,22 @@ document.getElementById('nav-global-journal').addEventListener('click', () => {
   journalGlobal = true;
   renderJournal();
   showScreen('journal');
+});
+
+document.getElementById('nav-dialogues').addEventListener('click', () => {
+  haptic('light');
+  renderDialogues();
+  showScreen('dialogues');
+});
+
+document.getElementById('dialogues-back-btn').addEventListener('click', () => {
+  renderHome();
+  showScreen('home');
+});
+
+document.getElementById('dialogue-detail-back-btn').addEventListener('click', () => {
+  renderDialogues();
+  showScreen('dialogues');
 });
 
 document.getElementById('nav-events').addEventListener('click', () => {
