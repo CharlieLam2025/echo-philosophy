@@ -956,6 +956,121 @@ body::after {
   letter-spacing: 0.15em;
 }
 
+/* ── Lexicon screen ── */
+.lexicon-scroll {
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.lexicon-title {
+  font-size: 28px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.lexicon-subtitle {
+  font-size: 12px;
+  opacity: 0.35;
+  font-style: italic;
+  letter-spacing: 0.1em;
+  margin-bottom: 28px;
+}
+.lexicon-filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 16px 0;
+  border-top: 1px solid rgba(245,241,232,0.06);
+  border-bottom: 1px solid rgba(245,241,232,0.06);
+  margin-bottom: 32px;
+}
+.lexicon-filter-btn {
+  background: transparent;
+  border: 1px solid rgba(245,241,232,0.1);
+  color: #f5f1e8;
+  font-family: inherit;
+  font-size: 12px;
+  padding: 6px 14px;
+  border-radius: 16px;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: all 0.2s;
+}
+.lexicon-filter-btn.active {
+  opacity: 1;
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.lexicon-filter-btn:focus { outline: none; }
+
+.lexicon-group { margin-bottom: 40px; }
+.lexicon-group-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  opacity: 0.35;
+  margin-bottom: 18px;
+  color: rgba(245,241,232,0.5);
+}
+.lexicon-entry {
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(245,241,232,0.04);
+}
+.lexicon-entry-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+.lexicon-zh {
+  font-size: 18px;
+  opacity: 0.9;
+}
+.lexicon-orig {
+  font-size: 14px;
+  opacity: 0.45;
+  font-style: italic;
+}
+.lexicon-lang {
+  font-size: 10px;
+  opacity: 0.3;
+  letter-spacing: 0.15em;
+  padding: 2px 8px;
+  border: 1px solid rgba(245,241,232,0.1);
+  border-radius: 10px;
+  margin-left: auto;
+}
+.lexicon-etym {
+  font-size: 12px;
+  opacity: 0.4;
+  font-style: italic;
+  margin-bottom: 10px;
+}
+.lexicon-def {
+  font-size: 14px;
+  line-height: 1.8;
+  opacity: 0.78;
+}
+.lexicon-concepts {
+  margin-top: 10px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.lexicon-concept-tag {
+  background: transparent;
+  border: 1px solid rgba(245,241,232,0.08);
+  color: #f5f1e8;
+  font-family: inherit;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.2s;
+}
+.lexicon-concept-tag:hover { opacity: 0.9; }
+.lexicon-concept-tag:focus { outline: none; }
+
 /* ── Themes section (home) ── */
 .themes-section {
   padding: 40px 28px 32px;
@@ -1585,8 +1700,9 @@ body::after {
   <div class="philosopher-list stagger" id="philosopher-list"></div>
   <div id="themes-section" class="themes-section"></div>
   <div id="daily-wisdom" class="daily-wisdom" style="display:none;"></div>
-  <div style="padding:0 28px 80px;">
+  <div style="padding:0 28px 80px; display:flex; gap:24px; flex-wrap:wrap;">
     <button class="nav-btn" id="nav-global-journal" style="font-size:13px;">全部思考记录 →</button>
+    <button class="nav-btn" id="nav-lexicon" style="font-size:13px;">辞海 →</button>
   </div>
 </div>
 
@@ -1613,6 +1729,15 @@ body::after {
     <span class="story-concept-label" id="story-concept-label"></span>
   </div>
   <div class="story-scroll" id="story-scroll"></div>
+</div>
+
+<!-- ═══ Lexicon Screen ═══ -->
+<div id="lexicon-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="lexicon-back-btn">←</button>
+    <span class="story-concept-label">辞海</span>
+  </div>
+  <div class="lexicon-scroll" id="lexicon-scroll"></div>
 </div>
 
 <!-- ═══ Theme Detail Screen ═══ -->
@@ -2102,6 +2227,131 @@ const DEEP_READS = {
     apply: '识别你生活中的"异托邦"——夜晚的便利店、失眠的微信对话、深夜大排档——这些缝隙时刻是你呼吸的地方。',
   },
 };
+
+// ═══ 辞海 (关键术语) ═══
+const LEXICON = [
+  // ── 希腊语 ──
+  { zh: '逻各斯', orig: 'Logos (λόγος)', lang: 'Greek', etym: '希腊语 légō（说、计算、汇集）',
+    def: '同时意味着"言说"、"理性"、"秩序"、"原因"。赫拉克利特首先把它从"说话"扩展为"宇宙的内在秩序"。斯多葛把它发展为"贯穿万物的理性原则"——你是它的一部分，不是它的对手。',
+    concepts: ['logos'], school: 'stoic' },
+  { zh: '不动心', orig: 'Apatheia (ἀπάθεια)', lang: 'Greek', etym: '前缀 a-（无）+ pathos（被动的情感、激情）',
+    def: '不是"冷漠"——是"不被激情劫持"。pathos 在希腊语中意味着"被动地承受"——apatheia 因此是主动状态：感受仍在，但你不被它推着走。',
+    concepts: ['apatheia'], school: 'stoic' },
+  { zh: '主导原则', orig: 'Hegemonikon (ἡγεμονικόν)', lang: 'Greek', etym: '希腊语 hēgemōn（领袖、统帅）',
+    def: '斯多葛的"内在堡垒"原词。指灵魂中的"统帅部分"——做判断、做决定的核心。守护 hegemonikon 是斯多葛实践的中心：外界一切都进不来，除非这个统帅同意。',
+    concepts: ['inner-citadel'], school: 'stoic' },
+  { zh: '决意', orig: 'Prohairesis (προαίρεσις)', lang: 'Greek', etym: '前缀 pro-（之前）+ hairesis（选择）',
+    def: '爱比克泰德的核心词——"在行动之前的那个选择"。不是冲动反应，是有意识的同意。"在你掌控之内的"，就是你的 prohairesis；其余都不是。',
+    concepts: ['dichotomy-of-control'], school: 'stoic' },
+  { zh: '至福', orig: 'Eudaimonia (εὐδαιμονία)', lang: 'Greek', etym: 'eu-（好）+ daimōn（守护神/灵性）',
+    def: '常被译为"幸福"——但字面是"被好的守护神所眷顾"。亚里士多德把它定义为"按德性活出来的完整人生"——不是瞬间快乐，是一生的繁盛。',
+    concepts: ['virtue-as-sole-good'], school: 'stoic' },
+  { zh: '德', orig: 'Aretē (ἀρετή)', lang: 'Greek', etym: '与 aristos（最好）同源',
+    def: '不是道德式的"美德"——是"卓越"。一把刀的 aretē 是锋利，一匹马的 aretē 是奔跑——一个人的 aretē 是按其本性活到最好。',
+    concepts: ['virtue-as-sole-good'], school: 'stoic' },
+  { zh: '世界公民', orig: 'Kosmopolitēs (κοσμοπολίτης)', lang: 'Greek', etym: 'kosmos（秩序/宇宙）+ politēs（公民）',
+    def: '第欧根尼最早自称的身份。斯多葛接续：宇宙是一个城邦，所有理性存在都是公民。这早于现代"全球公民"两千年。',
+    concepts: ['cosmopolitan'], school: 'stoic' },
+  { zh: '直言', orig: 'Parrhēsia (παρρησία)', lang: 'Greek', etym: 'pan-（一切）+ rhēsis（言说）',
+    def: '"说出一切"。古希腊政治中的特殊权利——对掌权者说真话，承担一切风险。福柯晚期重新挖掘：直言不是技术，是一种存在方式——以风险担保真理。',
+    concepts: ['parrhesia'], school: 'foucault' },
+
+  // ── 拉丁语 ──
+  { zh: '命运之爱', orig: 'Amor fati', lang: 'Latin', etym: 'amor（爱）+ fatum（命运）',
+    def: '尼采从斯多葛接续来的术语。不是"接受命运"（这是消极的），是"热爱命运"——把发生的事变成你本来就想要的事。',
+    concepts: ['amor-fati', 'amor-fati-stoic'], school: 'nietzsche' },
+  { zh: '勿忘有死', orig: 'Memento mori', lang: 'Latin', etym: 'memento（记住）+ mori（去死）',
+    def: '罗马凯旋仪式中，奴隶在将军耳边低语的话："记住你会死。"被斯多葛和基督教传统接续——不是恐吓，是清醒的解放。',
+    concepts: ['memento-mori'], school: 'stoic' },
+  { zh: '预想灾难', orig: 'Praemeditatio malorum', lang: 'Latin', etym: 'prae-（之前）+ meditari（沉思）+ malorum（不好的事）',
+    def: '塞涅卡和马可·奥勒留的核心练习。提前在脑中遭遇最坏的可能——不是悲观，是给恐惧"先死一次"的机会。',
+    concepts: ['premeditatio-malorum'], school: 'stoic' },
+  { zh: '障碍即道路', orig: 'Impedimentum via est', lang: 'Latin', etym: 'impedimentum（阻碍）+ via est（是道路）',
+    def: '马可·奥勒留的著名公式。完整是"挡在行动之路上的东西，推动了行动；挡在路上的东西，成了道路本身"。挡你的事不是绕道理由，是道路本身。',
+    concepts: ['obstacle-is-way'], school: 'stoic' },
+  { zh: '修练', orig: 'Askēsis (ἄσκησις, askēsis)', lang: 'Greek', etym: '希腊语 askein（练习、操作）',
+    def: '原指运动员的训练。斯多葛/早期基督教借用为"灵魂的训练"——通过自愿受苦给韧性做压力测试。和现代"禁欲"不同：是练习不是惩罚。',
+    concepts: ['voluntary-discomfort', 'ascetic-ideal'], school: 'stoic' },
+
+  // ── 德语 ──
+  { zh: '超人', orig: 'Übermensch', lang: 'German', etym: 'über（超出、之上）+ Mensch（人）',
+    def: '字面是"超出自己的人"——重点是"超出"这个动作，不是某个终点。被纳粹盗用是 20 世纪最严重的语义事故；尼采本意中 Übermensch 是个体的自我超越，不是种族的优越。',
+    concepts: ['ubermensch'], school: 'nietzsche' },
+  { zh: '末人', orig: 'Letzter Mensch', lang: 'German', etym: 'letzter（最后的）+ Mensch（人）',
+    def: '尼采杜撰的概念。不是骂"普通人"——是"放弃了超出自己的可能"的人。末人发明了"幸福"，眨着眼睛说"我们都过得好"——但已不再有任何渴望。',
+    concepts: ['last-man'], school: 'nietzsche' },
+  { zh: '权力意志', orig: 'Wille zur Macht', lang: 'German', etym: 'Wille（意志）+ zur（朝向）+ Macht（力量/权力）',
+    def: 'Macht 在德语中比"权力"宽——是植物长高的力、冰川推进的力、艺术家创造的力。尼采把它视为生命最根本的驱力：不断自我超出、自我克服。',
+    concepts: ['will-to-power'], school: 'nietzsche' },
+  { zh: '永恒轮回', orig: 'Ewige Wiederkunft', lang: 'German', etym: 'ewige（永恒的）+ Wiederkunft（再来）',
+    def: '不是宇宙学假设——是伦理实验。问你："如果这一切将无限重复，你愿意吗？"一个不愿被重复的人生，凭什么是你的人生？',
+    concepts: ['eternal-return'], school: 'nietzsche' },
+  { zh: '怨恨', orig: 'Ressentiment', lang: 'French/German', etym: '法语 ressentir（重新感受）——尼采从法语借入德文',
+    def: '不是"嫉妒"——更深。是把"我没有"翻译成"那个东西本来就不好"。怨恨是有创造力的：它发明了一整套道德把强者的价值降级。',
+    concepts: ['ressentiment'], school: 'nietzsche' },
+  { zh: '坏良心', orig: 'Schlechtes Gewissen', lang: 'German', etym: 'schlecht（坏的）+ Gewissen（良心）',
+    def: '尼采的诊断：内疚不是"道德感的证明"——它的起源是攻击性无处释放，转向自身。你恨不了别人，就开始恨自己。',
+    concepts: ['bad-conscience'], school: 'nietzsche' },
+  { zh: '自由精神', orig: 'Freigeist', lang: 'German', etym: 'frei（自由的）+ Geist（精神）',
+    def: '不是"想干嘛干嘛"的自由——是"为自己立法"的自由。从所有"你应当"中挣脱，开始用自己的标准评估——这比服从规则累得多。',
+    concepts: ['free-spirit'], school: 'nietzsche' },
+  { zh: '深渊', orig: 'Abgrund', lang: 'German', etym: 'Ab-（远离、向下）+ Grund（地基）',
+    def: '字面是"无底"——脚下没有地基。尼采用它指意义的真空，凝视它本身就是塑造你的过程：你研究什么，什么就在塑造你。',
+    concepts: ['abyss'], school: 'nietzsche' },
+  { zh: '距离的激情', orig: 'Pathos der Distanz', lang: 'German', etym: 'pathos（激情）+ Distanz（距离）',
+    def: '不是傲慢——是拒绝把外界标准当成自己的尺度。"距离"是你和大众价值之间留出的呼吸空间。',
+    concepts: ['pathos-of-distance'], school: 'nietzsche' },
+  { zh: '重估一切价值', orig: 'Umwertung aller Werte', lang: 'German', etym: 'Um-（重新、扭转）+ Wertung（评价）',
+    def: '尼采给自己定的最高任务。不是在旧框架里修补——是质疑"价值评估"本身的来源。你说"成功"时，先问"谁定义的成功"。',
+    concepts: ['revaluation'], school: 'nietzsche' },
+  { zh: '群居动物', orig: 'Herdentier', lang: 'German', etym: 'Herde（畜群）+ Tier（动物）',
+    def: '不止是"从众"——更深：群体的判断本能就是个体的判断本能，不是先有判断再加入群体。"大家都这样"取消了个体判断。',
+    concepts: ['herd-animal'], school: 'nietzsche' },
+  { zh: '存在', orig: 'Sein', lang: 'German', etym: '与英语 to be 同源',
+    def: '海德格尔哲学的中心问题——但尼采早就质疑过：什么是"存在"？我们把"是"当作理所当然，但这个"是"本身是怎么来的？',
+    concepts: ['truth-as-fiction'], school: 'nietzsche' },
+
+  // ── 法语 ──
+  { zh: '荒诞', orig: "L'Absurde", lang: 'French', etym: '拉丁语 absurdus（不和谐的、刺耳的）',
+    def: '加缪：荒诞不是世界的属性，也不是人的属性——是两者之间的冲撞。人要意义，世界不给——这种张力本身就是荒诞。',
+    concepts: ['absurd'], school: 'camus' },
+  { zh: '反抗', orig: 'La révolte', lang: 'French', etym: '拉丁语 revolvere（向后转）',
+    def: '加缪的核心姿态。不是推翻什么——是在明知无意义的前提下依然行动。反抗本身就是答案，不需要外部目的来正当化。',
+    concepts: ['revolt'], school: 'camus' },
+  { zh: '清醒', orig: 'La lucidité', lang: 'French', etym: '拉丁语 lucidus（明亮的）',
+    def: '加缪意义上的清醒不是中立——是英雄行为。看清了荒诞还不闭眼——这种持续的看清需要勇气，多数人选择哲学自杀。',
+    concepts: ['lucidity'], school: 'camus' },
+  { zh: '哲学自杀', orig: 'Le suicide philosophique', lang: 'French', etym: '加缪自创短语',
+    def: '加缪对"任何形式的形而上学逃避"的命名。用宗教/政治/任何体系来消灭荒诞——比如"我相信一切自有安排"——都是哲学自杀。',
+    concepts: ['philosophical-suicide'], school: 'camus' },
+  { zh: '团结', orig: 'La solidarité', lang: 'French', etym: '拉丁语 solidus（坚固的、整体的）',
+    def: '加缪："我反抗，故我们存在。"团结不是志同道合——是共同被荒诞砸到的承认，从个人反抗发现集体处境。',
+    concepts: ['solidarity'], school: 'camus' },
+  { zh: '话语', orig: 'Le discours', lang: 'French', etym: '拉丁语 discursus（来回奔跑）',
+    def: '不只是"说话"——福柯把它扩展为一整套被允许说、被禁止说、被认作正常的语言机制。话语不只描述现实，它在生产现实。',
+    concepts: ['discourse'], school: 'foucault' },
+  { zh: '权力-知识', orig: 'Pouvoir-savoir', lang: 'French', etym: 'pouvoir（权力/能够）+ savoir（知识/知道）',
+    def: '福柯的核心概念——两者用连字符相连，强调它们不可分。没有不预设权力关系的知识，也没有不需要知识的权力。',
+    concepts: ['power-knowledge'], school: 'foucault' },
+  { zh: '生命权力', orig: 'Biopouvoir', lang: 'French', etym: 'bio-（生命）+ pouvoir（权力）',
+    def: '从 17 世纪以来权力的新形式。旧主权说"让你死或让你活"——新生命权力说"让生命增殖、给生命排序、管理生命"。它管你的健康、寿命、生育、营养。',
+    concepts: ['biopower'], school: 'foucault' },
+  { zh: '治理术', orig: 'Gouvernementalité', lang: 'French', etym: '福柯自创——gouverner（治理）+ mentalité（心态）',
+    def: '"治理 + 心态" 的复合词。意指：治理不只是国家管理，也是一整套关于"应当如何管理人"的思维方式——包括你管自己。',
+    concepts: ['governmentality'], school: 'foucault' },
+  { zh: '全景敞视', orig: 'Panoptique', lang: 'French', etym: '希腊语 pan-（一切）+ optikos（看的）',
+    def: '边沁的监狱设计——中心塔可以监视所有牢房，但囚徒不知道何时被看。福柯：可见性是一个陷阱——你不需要被监视，你自己看自己。',
+    concepts: ['panopticon'], school: 'foucault' },
+  { zh: '异托邦', orig: 'Hétérotopie', lang: 'French', etym: 'hetero-（不同的）+ topos（地方）',
+    def: '与"乌托邦"对照——乌托邦不存在，异托邦真实存在。墓地、剧场、监狱、博物馆、邮轮都是异托邦——在正常秩序的缝隙中，存在着另一种空间。',
+    concepts: ['heterotopia'], school: 'foucault' },
+  { zh: '部署', orig: 'Dispositif', lang: 'French', etym: '法语 disposer（安排、配置）',
+    def: '福柯后期的关键词——意指一组异质元素（话语、机构、建筑、法律、知识）的总和，被部署来回应某个紧急情况。所有现代权力都是 dispositif。',
+    concepts: ['power-knowledge', 'biopower'], school: 'foucault' },
+  { zh: '自我的关照', orig: 'Souci de soi', lang: 'French', etym: 'souci（关照、忧虑）+ de soi（对自己）',
+    def: '福柯晚期挖掘的古代实践。和"认识自己"对立——古希腊罗马的核心不是"了解自己有多坏"，是"塑造自己想成为的样子"。',
+    concepts: ['technologies-of-self'], school: 'foucault' },
+];
 
 // ═══ 主题地图 ═══
 const THEMES = [
@@ -2661,6 +2911,89 @@ function buildRadarSVG(stats, size = 200) {
   }).join('');
 
   return `<svg class="mind-radar" width="${size}" height="${size + 20}" viewBox="0 -10 ${size} ${size + 20}">${bgPolys}${axes}${statPoly}${dots}${labels}</svg>`;
+}
+
+let lexiconFilter = 'all';
+function renderLexicon() {
+  const scroll = document.getElementById('lexicon-scroll');
+  const groups = {
+    nietzsche: { name: '尼采', entries: [] },
+    stoic: { name: '斯多葛', entries: [] },
+    camus: { name: '加缪', entries: [] },
+    foucault: { name: '福柯', entries: [] },
+  };
+  LEXICON.forEach(e => {
+    if (groups[e.school]) groups[e.school].entries.push(e);
+  });
+
+  const filterBar = `
+    <div class="lexicon-filter-bar">
+      <button class="lexicon-filter-btn ${lexiconFilter==='all' ? 'active' : ''}" data-filter="all">全部</button>
+      <button class="lexicon-filter-btn ${lexiconFilter==='nietzsche' ? 'active' : ''}" data-filter="nietzsche">尼采</button>
+      <button class="lexicon-filter-btn ${lexiconFilter==='stoic' ? 'active' : ''}" data-filter="stoic">斯多葛</button>
+      <button class="lexicon-filter-btn ${lexiconFilter==='camus' ? 'active' : ''}" data-filter="camus">加缪</button>
+      <button class="lexicon-filter-btn ${lexiconFilter==='foucault' ? 'active' : ''}" data-filter="foucault">福柯</button>
+    </div>
+  `;
+
+  const groupHtml = Object.entries(groups).map(([key, g]) => {
+    if (lexiconFilter !== 'all' && lexiconFilter !== key) return '';
+    if (g.entries.length === 0) return '';
+    const entries = g.entries.map(e => {
+      const conceptTags = e.concepts.map(cId => {
+        const name = CONCEPT_NAMES[cId] || cId;
+        return `<button class="lexicon-concept-tag" data-concept="${cId}">${escapeHtml(name)}</button>`;
+      }).join('');
+      return `
+        <div class="lexicon-entry">
+          <div class="lexicon-entry-head">
+            <span class="lexicon-zh">${escapeHtml(e.zh)}</span>
+            <span class="lexicon-orig">${escapeHtml(e.orig)}</span>
+            <span class="lexicon-lang">${escapeHtml(e.lang)}</span>
+          </div>
+          <div class="lexicon-etym">字源：${escapeHtml(e.etym)}</div>
+          <div class="lexicon-def">${escapeHtml(e.def)}</div>
+          ${conceptTags ? `<div class="lexicon-concepts">${conceptTags}</div>` : ''}
+        </div>
+      `;
+    }).join('');
+    return `
+      <div class="lexicon-group">
+        <div class="lexicon-group-label">${g.name}</div>
+        ${entries}
+      </div>
+    `;
+  }).join('');
+
+  scroll.innerHTML = `
+    <div class="lexicon-title">辞海</div>
+    <div class="lexicon-subtitle">关键术语 · 字源 · 释义</div>
+    ${filterBar}
+    ${groupHtml}
+  `;
+
+  scroll.querySelectorAll('.lexicon-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      lexiconFilter = btn.getAttribute('data-filter');
+      haptic('light');
+      renderLexicon();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  scroll.querySelectorAll('.lexicon-concept-tag').forEach(tag => {
+    tag.addEventListener('click', () => {
+      const conceptId = tag.getAttribute('data-concept');
+      const phId = findPhilosopherForConcept(conceptId);
+      const philosopher = PHILOSOPHERS.find(p => p.id === phId);
+      if (philosopher) {
+        haptic('light');
+        enterPhilosopher(philosopher).then(() => {
+          setTimeout(() => openStory(conceptId), 400);
+        });
+      }
+    });
+  });
 }
 
 function renderThemesSection() {
@@ -3785,6 +4118,18 @@ document.getElementById('nav-global-journal').addEventListener('click', () => {
   journalGlobal = true;
   renderJournal();
   showScreen('journal');
+});
+
+document.getElementById('nav-lexicon').addEventListener('click', () => {
+  haptic('light');
+  lexiconFilter = 'all';
+  renderLexicon();
+  showScreen('lexicon');
+});
+
+document.getElementById('lexicon-back-btn').addEventListener('click', () => {
+  renderHome();
+  showScreen('home');
 });
 
 document.getElementById('theme-back-btn').addEventListener('click', () => {
