@@ -956,6 +956,135 @@ body::after {
   letter-spacing: 0.15em;
 }
 
+/* ── Events list screen ── */
+.events-scroll {
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.events-title {
+  font-size: 28px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.events-subtitle {
+  font-size: 12px;
+  opacity: 0.35;
+  font-style: italic;
+  margin-bottom: 40px;
+}
+.event-card {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(245,241,232,0.05);
+  color: #f5f1e8;
+  font-family: inherit;
+  text-align: left;
+  padding: 22px 0;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.event-card:active { opacity: 0.7; transform: translateX(3px); }
+.event-card:focus { outline: none; }
+.event-date {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  opacity: 0.35;
+  margin-bottom: 6px;
+}
+.event-title {
+  font-size: 19px;
+  opacity: 0.9;
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+.event-place {
+  font-size: 12px;
+  opacity: 0.35;
+  font-style: italic;
+  margin-bottom: 10px;
+}
+.event-hook {
+  font-size: 14px;
+  line-height: 1.7;
+  opacity: 0.65;
+}
+
+/* ── Event detail screen ── */
+.event-detail-scroll {
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.ed-date {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  opacity: 0.4;
+  margin-bottom: 6px;
+}
+.ed-title {
+  font-size: 28px;
+  opacity: 0.9;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+.ed-place {
+  font-size: 13px;
+  opacity: 0.4;
+  font-style: italic;
+  margin-bottom: 12px;
+}
+.ed-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+.ed-tag {
+  font-size: 10px;
+  opacity: 0.45;
+  padding: 3px 10px;
+  border: 1px solid rgba(245,241,232,0.1);
+  border-radius: 10px;
+  letter-spacing: 0.05em;
+}
+.ed-hook {
+  font-size: 17px;
+  line-height: 1.7;
+  opacity: 0.8;
+  font-style: italic;
+  padding: 20px 0 24px;
+  border-top: 1px solid rgba(245,241,232,0.06);
+  border-bottom: 1px solid rgba(245,241,232,0.06);
+  margin-bottom: 36px;
+}
+.ed-section {
+  margin-bottom: 36px;
+}
+.ed-section-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  opacity: 0.45;
+  margin-bottom: 16px;
+  color: rgba(245,241,232,0.55);
+}
+.ed-body {
+  font-size: 15px;
+  line-height: 1.95;
+  opacity: 0.82;
+  white-space: pre-wrap;
+}
+.ed-resonance {
+  font-size: 14px;
+  line-height: 1.85;
+  opacity: 0.6;
+  font-style: italic;
+  padding: 18px 0;
+  border-top: 1px solid rgba(245,241,232,0.05);
+}
+
 /* ── Thinkers list screen ── */
 .thinkers-scroll {
   padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
@@ -1858,6 +1987,7 @@ body::after {
     <button class="nav-btn" id="nav-global-journal" style="font-size:13px;">全部思考记录 →</button>
     <button class="nav-btn" id="nav-lexicon" style="font-size:13px;">辞海 →</button>
     <button class="nav-btn" id="nav-thinkers" style="font-size:13px;">现代思想 →</button>
+    <button class="nav-btn" id="nav-events" style="font-size:13px;">哲学史事件 →</button>
   </div>
 </div>
 
@@ -1884,6 +2014,24 @@ body::after {
     <span class="story-concept-label" id="story-concept-label"></span>
   </div>
   <div class="story-scroll" id="story-scroll"></div>
+</div>
+
+<!-- ═══ Events List Screen ═══ -->
+<div id="events-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="events-back-btn">←</button>
+    <span class="story-concept-label">哲学史事件</span>
+  </div>
+  <div class="events-scroll" id="events-scroll"></div>
+</div>
+
+<!-- ═══ Event Detail Screen ═══ -->
+<div id="event-detail-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="event-detail-back-btn">←</button>
+    <span class="story-concept-label" id="event-detail-label">事件</span>
+  </div>
+  <div class="event-detail-scroll" id="event-detail-scroll"></div>
 </div>
 
 <!-- ═══ Thinkers List Screen ═══ -->
@@ -2400,6 +2548,98 @@ const DEEP_READS = {
     apply: '识别你生活中的"异托邦"——夜晚的便利店、失眠的微信对话、深夜大排档——这些缝隙时刻是你呼吸的地方。',
   },
 };
+
+// ═══ 哲学史重大事件 ═══
+const EVENTS = [
+  {
+    id: 'socrates-death',
+    title: '苏格拉底之死',
+    date: '公元前 399',
+    place: '雅典',
+    tags: ['死亡', '殉道', '哲学的开端'],
+    hook: '西方哲学第一个为思想去死的人。',
+    body: '苏格拉底 70 岁。他被指控两条罪——"腐蚀青年"和"对城邦诸神不敬"。曾经培育他的雅典，现在判处他死刑。\n\n他可以选择流亡。他的朋友克里同准备好了一切，连船都备好了。他拒绝了。\n\n他喝下毒堇——脚先冷，然后小腿，然后腹部。临死前他说："克里同，我们欠阿斯克勒庇俄斯（医神）一只公鸡。别忘了。"\n\n柏拉图就在旁边。这是西方哲学的真正开端——不是某本书，是某个人选择不逃。',
+    why: '所有后来的哲学家都在回应这一刻。柏拉图、亚里士多德、奥古斯丁、笛卡尔、康德、尼采——每一个都被苏格拉底的死亡塑造。\n\n苏格拉底证明了一件事：思想可以重过生命。从这一刻起，哲学不再是辩论游戏——它是一种可以让人愿意去死的生活方式。',
+    resonance: '这个传统贯穿到福柯晚年——他在讲"parrhesia"（直言）时反复回到苏格拉底：直言者必须冒着风险讲真话，而苏格拉底是最高的样本。',
+  },
+  {
+    id: 'seneca-suicide',
+    title: '塞涅卡奉旨自杀',
+    date: '公元 65',
+    place: '罗马近郊',
+    tags: ['死亡', '哲学家与暴君', '斯多葛实践'],
+    hook: '哲学家被自己当年教过的暴君赐死——他用了一生准备这一天。',
+    body: '塞涅卡曾是少年尼禄的导师，后来是他的政治顾问。12 年后，皮索阴谋案爆发——尼禄怀疑（多半诬陷）塞涅卡参与。\n\n一个百夫长来到他家："皇帝希望你自尽。"\n\n塞涅卡平静地切开手腕。血流得太慢——他年纪大了，血管已不堪。他喝下毒堇。仍然没死。最后他被抬进热水浴中加速血液流动。\n\n临终前他口述了最后的文字给秘书。\n\n他一辈子在练习这一刻——他的《道德书简》充满了"预想灾难"，反复演练死亡。这次审判证明了他的哲学。他作为一个斯多葛死去。',
+    why: '塞涅卡的故事是斯多葛实践的极限测试——你的哲学能不能在你被迫死的时候撑得住？\n\n他撑住了。但代价是：他在尼禄宫廷做了 12 年高官，写了大量"宇宙有秩序"的文字，同时眼睁睁看着这位皇帝一步步成为暴君。他的哲学是真的吗？还是一种精致的妥协？\n\n这个问题至今未决——但他的死亡，确实是他写过的所有话的注脚。',
+    resonance: '马可·奥勒留几代之后做的就是塞涅卡做不到的——同时做哲学家和皇帝。但马可的成功，依赖于塞涅卡的失败给出的教训。',
+  },
+  {
+    id: 'marcus-meditations',
+    title: '马可·奥勒留在战场上写《沉思录》',
+    date: '公元 161-180',
+    place: '多瑙河战线',
+    tags: ['斯多葛实践', '皇帝的私人笔记', '瘟疫'],
+    hook: '一个罗马皇帝，在帝国边境的帐篷里，用希腊语给自己写注。',
+    body: '马可在位 19 年，其中 15 年在多瑙河前线。日耳曼部落不停地攻击边境，而帝国内部安东尼瘟疫（可能是天花）杀死了 500 万人——包括他的共治皇帝维鲁斯。\n\n夜里，在帐篷里，他用希腊语给自己写笔记。不是为发表。是为了让自己撑下去。\n\n他在笔记里反复对自己说："你随时可能死。"他用自己的名字称呼自己："马可，记住——"他训练自己分清"在我掌控之内"和"不在"。\n\n他从来没出版过这些。它们是在他死后偶然流传下来的。\n\n我们因此奇迹般地拥有了一份完整的私人笔记——一位罗马皇帝，一边管理着崩塌的帝国，一边练习斯多葛。',
+    why: '《沉思录》的特殊性不是它有什么新思想——它没有。特殊在它是私人的：一个人在压力下让哲学真的生效的现场记录。\n\n哲学常常显得"轻巧"——只有在皇帝边境战场和瘟疫中实践它，才能看到它真的能不能扛住。\n\n马可证明了——能扛住。',
+    resonance: '所有后来的"实用斯多葛"——从中世纪的修道院到现代的硅谷 CEO——都在向马可学：哲学不是写出来的，是活出来的。',
+  },
+  {
+    id: 'nietzsche-wagner',
+    title: '尼采与瓦格纳的决裂',
+    date: '1869 – 1888',
+    place: '巴塞尔 / 拜罗伊特',
+    tags: ['友谊与崇拜', '艺术与思想', '20 年决裂史'],
+    hook: '一段从崇拜到决裂的关系，写出了尼采整个思想的轨迹。',
+    body: '1869 年。25 岁的尼采刚被任命为巴塞尔大学最年轻的语言学教授。他去拜访瓦格纳。\n\n瓦格纳 56 岁，已是欧洲最有名的作曲家。柯西玛（瓦格纳的妻子）成为尼采的密友。瓦格纳是他的英雄、父亲、艺术上的导师。\n\n整个 1870 年代，尼采把瓦格纳推销为"德国文化的救赎者"。他写《悲剧的诞生》献给瓦格纳。\n\n1876 年第一届拜罗伊特音乐节。尼采从音乐节中途逃走，病倒了。他终于看清楚——瓦格纳已经变成了他最讨厌的样子：德国民族主义、基督教神秘主义、"救赎"戏剧的宫廷作曲家。\n\n1878 年决裂。瓦格纳寄给尼采他最后的歌剧《帕西法尔》；尼采寄回《人性的，太人性的》——两人互相嫌恶，再无往来。\n\n1883 年瓦格纳死。尼采一直写他直到自己崩溃——1888 年《瓦格纳事件》是他对这段关系的最终结算。',
+    why: '尼采"超人"的诞生，部分是为了走出"以瓦格纳为父亲"。整个尼采的写作，可以看作一段持续 20 年的"杀父运动"。\n\n他需要瓦格纳，因为没有崇拜对象就无法发现自己；他必须杀死瓦格纳，因为崇拜会让他停下。\n\n这就是为什么尼采的哲学如此"不留情面"——他对自己最爱的人都不留情，何况其他？',
+    resonance: '加缪与萨特的决裂，模式上几乎完全重复——崇拜、合作、价值分歧、公开攻击、再无往来、对方死后才被理解。法国 20 世纪的友谊破裂，是德国 19 世纪的回响。',
+  },
+  {
+    id: 'heidegger-nazi',
+    title: '海德格尔的 1933 校长就职演讲',
+    date: '1933 年 5 月',
+    place: '弗莱堡大学',
+    tags: ['哲学家与政治', '历史伤口', '未解的污点'],
+    hook: '20 世纪最重要的哲学家之一，加入了纳粹党。',
+    body: '1933 年 4 月，海德格尔成为弗莱堡大学校长。5 月加入纳粹党。5 月 27 日，他的校长就职演讲——《德意志大学的自我主张》——支持元首原则，号召学生"劳动服务"和"军事服务"。\n\n1934 年 4 月辞去校长职务。但从未正式退出纳粹党。1945 年后从未公开道歉。在给雅斯贝尔斯的私信中提到"一个错误"——但在哲学著作中拒绝处理这件事。\n\n"海德格尔问题"困扰着哲学。他可能是 20 世纪最重要的哲学家，他是个纳粹。\n\n汉娜·阿伦特，他 1920 年代的学生和情人，1950 年代后帮他重建学术声誉——这本身就是一团道德困局。',
+    why: '海德格尔教过一切：本真性、被抛、向死而在、批判技术理性。然后他自己——按他自己的哲学——失败得彻底。\n\n这是哲学史上最尖锐的难题之一：当一个思想家本人没有"本真地"活，他的哲学还值得读吗？\n\n阿多诺说不值得。阿伦特说值得（虽然她和他有过情感纠葛）。德里达说必须读，但读的时候要把那个污点一起读。\n\n这至今未决。',
+    resonance: '所有 20 世纪后半的批判理论——福柯、德里达、阿甘本、布迪厄——都在某种意义上回应海德格尔的"不可读"：你怎么读一个失败的人的伟大思想？',
+  },
+  {
+    id: 'camus-sartre-break',
+    title: '加缪 vs 萨特之争',
+    date: '1952',
+    place: '《现代》杂志',
+    tags: ['友谊破裂', '左翼内部分歧', '历史与道德'],
+    hook: '20 世纪最著名的友谊破裂——存在主义两个最响亮的声音公开决裂。',
+    body: '加缪和萨特在 1943 年纳粹占领的巴黎相识。从此十年密友——一起编《Combat》、一起在咖啡馆、一起被视为"法国知识界的双子星"。\n\n1951 年加缪出版《反抗者》，批判革命暴力——他写：所有"为了未来的革命可以杀人现在"的逻辑，都是哲学自杀。他点名了斯大林。\n\n萨特，作为《现代》杂志的主编，安排一位年轻批评家弗朗西斯·让松写一篇彻底摧毁性的书评。然后萨特自己写了一封公开信，措辞尖刻："你的灵魂干干净净，加缪——但你也变得多么愚蠢。"\n\n加缪写了回应。萨特回击。再无往来。\n\n加缪 1960 年 1 月车祸去世。萨特在私下承认——加缪可能是对的。',
+    why: '表面是文体之争——其实是核心价值之争：\n\n萨特：在压迫面前，唯一本真的回应是革命承诺——即使带来暴力。\n加缪：任何为"未来"杀人的逻辑都是自欺——你只是在用宏大叙事盖住具体的尸体。\n\n加缪赌的是：可以反斯大林，同时反资本主义。萨特赌的是：只能选边站。\n\n冷战之后我们知道——加缪赌对了。但那时萨特是法国最响的声音，加缪被孤立。他没活到看到自己被证明。',
+    resonance: '所有"反抗的伦理"——从加缪到福柯到鲍曼——都在这场决裂的余波中工作。问题始终没变：你怎么反抗，又不变成你反抗的东西？',
+  },
+  {
+    id: 'foucault-lectures',
+    title: '福柯的法兰西学院讲座',
+    date: '1970 – 1984',
+    place: '巴黎法兰西学院',
+    tags: ['公开思想现场', '14 年讲座', '思想的公共生产'],
+    hook: '14 年，每周三晚，一位思想家在法国最高学术殿堂当众思考。',
+    body: '1970 年福柯当选法兰西学院教授——法国学术体系的最高荣誉。法兰西学院没有学生，没有考试——教授每年必须公开开课，免费，向所有人开放。\n\n14 年间每周三晚上，5 点 45 分，福柯讲课。听众早上 9 点就来排队。讲堂超载——人们站在过道、坐在地上。录音机摆满前排。\n\n每年一个主题：1971-76 形成了我们现在所说的"规训"和"生命权力"。1978-79 转向"治理术"。1980-84 回到古代伦理——自我的关照、parrhesia（直言）。\n\n1984 年最后一讲，《说真话的勇气》，结束时他没做总结——他只是看时间到了，就走下讲台。几个月后去世。\n\n这些讲座，被听众录下整理，他死后变成 13 卷出版——可能是 20 世纪最庞大的"公共思想"项目。',
+    why: '福柯把哲学从书房带到了讲台。他不是先写好书再讲——讲座本身就是思考的发生。每年一个新方向，公开调整自己之前的立场。\n\n这种"公开思考"是史无前例的——他不害怕说"我去年错了"，不害怕在听众面前修正自己。\n\n相比之下，海德格尔的思考永远在书房，永远是定稿。福柯的思考是表演——但不是表演给观众，是和观众一起思考。',
+    resonance: '20 世纪所有"公共知识分子"项目——从萨特的报纸社论到当代的播客哲学——都在福柯的讲座之后变得可能。他证明了：哲学可以是事件。',
+  },
+  {
+    id: 'arendt-eichmann',
+    title: '阿伦特参加艾希曼审判',
+    date: '1961',
+    place: '耶路撒冷',
+    tags: ['平庸之恶', '历史伤口', '一次报道改变一个时代'],
+    hook: '一次审判，一个 55 岁犹太女哲学家，一份 5 部分的报道——重新定义了"恶"。',
+    body: '1961 年。汉娜·阿伦特，55 岁，犹太人，1933 年逃离纳粹的德国——现在受《纽约客》之邀去耶路撒冷报道阿道夫·艾希曼的审判。\n\n艾希曼是"最终解决方案"的主要执行者之一。1960 年以色列特工在阿根廷抓到他，秘密运回耶路撒冷受审。\n\n阿伦特期待看到一个怪物。她看到一个文员。礼貌、平庸、极其普通。他用空洞的官僚用语说话。"我只是在做我的工作。"\n\n她的 5 部分报道《耶路撒冷的艾希曼》以及副标题《平庸之恶》，成为 20 世纪最具争议的思想文献之一。\n\n她被指控"贬低大屠杀"、"指责受害者"（她分析了部分犹太人议会与纳粹的协作）。她的许多老朋友——包括以色列建国的核心人物——和她绝交。\n\n她坚持自己看到的——并不是要免除艾希曼的罪，而是要让我们明白：恶的真正可怕之处是它可以由完全平庸的人执行。',
+    why: '阿伦特做的事，比"诊断纳粹"重要得多——她描述了官僚主义时代的恶。\n\n艾希曼不需要恨犹太人。他需要做好他的工作。这种"做好工作"的能力——拒绝思考自己工作意味着什么——是 20 世纪所有大规模恶的核心机制。\n\n而它不会随着纳粹消失。它在每一个"我只是在执行流程"的现代场景里继续存在。',
+    resonance: '从阿甘本的"赤裸生命"到当代对算法权力的批判——所有 21 世纪的政治哲学，都在和阿伦特对话："恶"在官僚化的世界里，是怎么运作的？',
+  },
+];
 
 // ═══ 现代思想家短篇集 ═══
 const THINKERS = [
@@ -3218,6 +3458,61 @@ function buildRadarSVG(stats, size = 200) {
   }).join('');
 
   return `<svg class="mind-radar" width="${size}" height="${size + 20}" viewBox="0 -10 ${size} ${size + 20}">${bgPolys}${axes}${statPoly}${dots}${labels}</svg>`;
+}
+
+function renderEvents() {
+  const scroll = document.getElementById('events-scroll');
+  const cards = EVENTS.map(e => `
+    <button class="event-card" data-event="${e.id}">
+      <div class="event-date">${escapeHtml(e.date)}</div>
+      <div class="event-title">${escapeHtml(e.title)}</div>
+      <div class="event-place">${escapeHtml(e.place)}</div>
+      <div class="event-hook">${escapeHtml(e.hook)}</div>
+    </button>
+  `).join('');
+  scroll.innerHTML = `
+    <div class="events-title">哲学史事件</div>
+    <div class="events-subtitle">思想发生在具体的历史时刻里</div>
+    ${cards}
+  `;
+  scroll.querySelectorAll('.event-card').forEach(card => {
+    card.addEventListener('click', () => {
+      haptic('light');
+      openEvent(card.getAttribute('data-event'));
+    });
+  });
+}
+
+function openEvent(eventId) {
+  const e = EVENTS.find(x => x.id === eventId);
+  if (!e) return;
+  document.getElementById('event-detail-label').textContent = e.title;
+  const scroll = document.getElementById('event-detail-scroll');
+  const tags = e.tags.map(t => `<span class="ed-tag">${escapeHtml(t)}</span>`).join('');
+  scroll.innerHTML = `
+    <div class="ed-date">${escapeHtml(e.date)}</div>
+    <div class="ed-title">${escapeHtml(e.title)}</div>
+    <div class="ed-place">${escapeHtml(e.place)}</div>
+    <div class="ed-tags">${tags}</div>
+    <div class="ed-hook">${escapeHtml(e.hook)}</div>
+
+    <div class="ed-section">
+      <div class="ed-section-label">事件</div>
+      <div class="ed-body">${escapeHtml(e.body)}</div>
+    </div>
+
+    <div class="ed-section">
+      <div class="ed-section-label">为什么重要</div>
+      <div class="ed-body">${escapeHtml(e.why)}</div>
+    </div>
+
+    <div class="ed-section">
+      <div class="ed-section-label">回声</div>
+      <div class="ed-resonance">${escapeHtml(e.resonance)}</div>
+    </div>
+  `;
+  showScreen('event-detail');
+  window.scrollTo(0, 0);
 }
 
 function renderThinkers() {
@@ -4487,6 +4782,22 @@ document.getElementById('nav-global-journal').addEventListener('click', () => {
   journalGlobal = true;
   renderJournal();
   showScreen('journal');
+});
+
+document.getElementById('nav-events').addEventListener('click', () => {
+  haptic('light');
+  renderEvents();
+  showScreen('events');
+});
+
+document.getElementById('events-back-btn').addEventListener('click', () => {
+  renderHome();
+  showScreen('home');
+});
+
+document.getElementById('event-detail-back-btn').addEventListener('click', () => {
+  renderEvents();
+  showScreen('events');
 });
 
 document.getElementById('nav-thinkers').addEventListener('click', () => {
