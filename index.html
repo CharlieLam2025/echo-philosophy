@@ -956,6 +956,159 @@ body::after {
   letter-spacing: 0.15em;
 }
 
+/* ── Themes section (home) ── */
+.themes-section {
+  padding: 40px 28px 32px;
+  border-top: 1px solid rgba(245,241,232,0.06);
+  margin: 0 0 12px;
+}
+.themes-label {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  opacity: 0.3;
+  margin-bottom: 6px;
+}
+.themes-sublabel {
+  font-size: 12px;
+  opacity: 0.18;
+  margin-bottom: 24px;
+}
+.theme-card {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #f5f1e8;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(245,241,232,0.04);
+  transition: opacity 0.2s, transform 0.2s;
+}
+.theme-card:focus { outline: none; }
+.theme-card:active { opacity: 0.7; transform: scale(0.99); }
+.theme-card-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+.theme-card-symbol {
+  font-size: 16px;
+  opacity: 0.4;
+  width: 18px;
+}
+.theme-card-name {
+  font-size: 17px;
+  opacity: 0.85;
+}
+.theme-card-sub {
+  font-size: 12px;
+  opacity: 0.3;
+  margin-left: auto;
+  font-style: italic;
+}
+
+/* ── Theme detail screen ── */
+.theme-scroll {
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.theme-symbol-large {
+  font-size: 40px;
+  opacity: 0.5;
+  margin-bottom: 12px;
+}
+.theme-name {
+  font-size: 28px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.theme-subtitle {
+  font-size: 13px;
+  opacity: 0.35;
+  font-style: italic;
+  margin-bottom: 36px;
+  letter-spacing: 0.05em;
+}
+.theme-intro {
+  font-size: 15px;
+  line-height: 1.9;
+  opacity: 0.78;
+  padding: 24px 0 28px;
+  border-top: 1px solid rgba(245,241,232,0.06);
+  border-bottom: 1px solid rgba(245,241,232,0.06);
+  margin-bottom: 40px;
+  white-space: pre-wrap;
+}
+.theme-section-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  opacity: 0.45;
+  margin-bottom: 24px;
+  color: rgba(245,241,232,0.5);
+}
+.theme-dialogue { margin-bottom: 52px; }
+.dialogue-row {
+  margin-bottom: 24px;
+  padding-left: 16px;
+  border-left: 2px solid;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.dialogue-row[data-philosopher="nietzsche"] { border-left-color: rgba(196,164,105,0.5); }
+.dialogue-row[data-philosopher="stoic"]     { border-left-color: rgba(150,170,180,0.5); }
+.dialogue-row[data-philosopher="camus"]     { border-left-color: rgba(200,130,100,0.5); }
+.dialogue-row[data-philosopher="foucault"]  { border-left-color: rgba(165,140,185,0.5); }
+.dialogue-name {
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  opacity: 0.55;
+  margin-bottom: 6px;
+}
+.dialogue-text { opacity: 0.85; }
+
+.theme-concept-list {
+  margin-top: 20px;
+}
+.theme-concept-row {
+  display: flex;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(245,241,232,0.05);
+  color: #f5f1e8;
+  font-family: inherit;
+  text-align: left;
+  padding: 14px 0;
+  cursor: pointer;
+  gap: 14px;
+  align-items: center;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.theme-concept-row:active { opacity: 0.7; transform: translateX(2px); }
+.theme-concept-row:focus { outline: none; }
+.theme-concept-symbol {
+  font-size: 12px;
+  width: 14px;
+  opacity: 0.4;
+}
+.theme-concept-symbol[data-philosopher="nietzsche"] { color: rgba(196,164,105,0.7); }
+.theme-concept-symbol[data-philosopher="stoic"]     { color: rgba(150,170,180,0.7); }
+.theme-concept-symbol[data-philosopher="camus"]     { color: rgba(200,130,100,0.7); }
+.theme-concept-symbol[data-philosopher="foucault"]  { color: rgba(165,140,185,0.7); }
+.theme-concept-text {
+  flex: 1;
+  font-size: 15px;
+  opacity: 0.85;
+}
+.theme-concept-pname {
+  font-size: 11px;
+  opacity: 0.35;
+  font-style: italic;
+}
+
 /* ── Archive screen ── */
 .archive-scroll {
   padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
@@ -1430,6 +1583,7 @@ body::after {
   <div id="continue-card" class="continue-card" style="display:none;"></div>
   <div id="mind-card" class="mind-card" style="display:none;"></div>
   <div class="philosopher-list stagger" id="philosopher-list"></div>
+  <div id="themes-section" class="themes-section"></div>
   <div id="daily-wisdom" class="daily-wisdom" style="display:none;"></div>
   <div style="padding:0 28px 80px;">
     <button class="nav-btn" id="nav-global-journal" style="font-size:13px;">全部思考记录 →</button>
@@ -1459,6 +1613,15 @@ body::after {
     <span class="story-concept-label" id="story-concept-label"></span>
   </div>
   <div class="story-scroll" id="story-scroll"></div>
+</div>
+
+<!-- ═══ Theme Detail Screen ═══ -->
+<div id="theme-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="theme-back-btn">←</button>
+    <span class="story-concept-label" id="theme-header-label">主题</span>
+  </div>
+  <div class="theme-scroll" id="theme-scroll"></div>
 </div>
 
 <!-- ═══ Archive Screen ═══ -->
@@ -1940,6 +2103,108 @@ const DEEP_READS = {
   },
 };
 
+// ═══ 主题地图 ═══
+const THEMES = [
+  {
+    id: 'death',
+    name: '关于死亡',
+    symbol: '☿',
+    subtitle: '所有思考的终点',
+    intro: '每个哲学家都知道——所有思考的终点就是死亡。但他们的反应尖锐不同。\n\n尼采用永恒轮回反问"你愿意吗"——把死亡变成测试人生厚度的尺度。斯多葛每天提醒自己"今天可能就是最后一天"——让死亡催促你认真活。加缪干脆把死亡变成荒诞的核心问题——只有一个真正严肃的哲学问题就是自杀。福柯则发现——现代权力的核心，已经从"让人死"转向了"管理人的活"。',
+    dialogue: [
+      { philosopher: 'nietzsche', text: '问"如果这一切将重复一万次，你愿意吗"——死亡是测试人生的最终尺度。一个不愿被重复的人生，凭什么是你的人生？' },
+      { philosopher: 'stoic',     text: '"记住你会死"——不是恐吓，是解放。你会死，所以现在就该做真正想做的事。死亡是斯多葛日常练习的核心：每天死一次，每天重活一次。' },
+      { philosopher: 'camus',     text: '死亡是世界冷漠的最终证明——它对你没有恶意也没有善意，它只是会来。反抗就是不被这冷漠收编——在明知必死的前提下依然行动。' },
+      { philosopher: 'foucault',  text: '现代权力不再"让你死"——它管理你的寿命、健康、生育、营养。死亡变成"被允许"或"被推迟"。最沉重的权力，是为你好的权力。' },
+    ],
+    concepts: ['eternal-return', 'memento-mori', 'present-moment', 'absurd', 'sisyphus', 'biopower'],
+  },
+  {
+    id: 'freedom',
+    name: '关于自由',
+    symbol: '○',
+    subtitle: '你以为的自由是真的吗',
+    intro: '自由不是一个概念，是一组问题。你以为的自由是真的吗？自由意味着挣脱什么、走向什么？\n\n尼采说自由要为自己立法——这比服从规则累得多。斯多葛说自由就是不被你不能控制的事物所役。加缪说——没有意义之后，你才彻底自由。福柯则给出最不安的回答：你以为的自由，可能正是被规训出来的。',
+    dialogue: [
+      { philosopher: 'nietzsche', text: '自由 = 从奴隶道德中挣脱，自己制定价值。从"骆驼"到"狮子"到"孩子"——精神的三种变形就是自由的三个阶段。' },
+      { philosopher: 'stoic',     text: '自由 = 把注意力收回到你能控制的那部分。其余的——身体、名声、财产——天生就不是你的。这不是认命，是聚焦。' },
+      { philosopher: 'camus',     text: '自由 = 放下了"应当如此"的期待。荒诞的人没有未来，没有补偿，没有意义——所以他现在彻底自由了。这是无望的自由。' },
+      { philosopher: 'foucault',  text: '自由 = 在规训之中找到呼吸的缝隙。所有"自我提升"工具都在塑造你——真正的自由是辨认这些工具，然后选择性地用它们。' },
+    ],
+    concepts: ['free-spirit', 'three-metamorphoses', 'dichotomy-of-control', 'inner-citadel', 'freedom-without-hope', 'revolt', 'technologies-of-self', 'parrhesia', 'heterotopia'],
+  },
+  {
+    id: 'others',
+    name: '关于他人',
+    symbol: '⌘',
+    subtitle: '我们是谁',
+    intro: '四位哲学家对"群体"的判断尖锐分歧。\n\n尼采看群居动物是个体性的杀手——大多数人用"大家都这样"取消自己的判断。斯多葛把整个人类视为同一城邦——你首先是世界公民，然后才是别的。加缪说反抗的尽头是发现自己和他人在同一艘船上——共同被荒诞砸到，所以站在一起。福柯说——所谓"我们"，往往是规训的产物。',
+    dialogue: [
+      { philosopher: 'nietzsche', text: '群居是末人的温床——警惕"大家都这样"。真正创造的人必须主动离开人群，走进旷野。这不是傲慢，是自保。' },
+      { philosopher: 'stoic',     text: '我们都是宇宙公民——超越部落和国族。评价陌生人时不要先贴标签——他首先是人，然后才是别的。' },
+      { philosopher: 'camus',     text: '"我反抗，故我们存在"——共同被荒诞砸到，所以站在一起。团结不是志同道合，是共同处境的承认。' },
+      { philosopher: 'foucault',  text: '共同体也是被生产的——警惕"我们"是谁定义的。每个"正常人"的群体，都意味着另一个"不正常"的群体。' },
+    ],
+    concepts: ['herd-animal', 'pity-danger', 'cosmopolitan', 'solidarity', 'normalization', 'discourse', 'governmentality'],
+  },
+  {
+    id: 'truth',
+    name: '关于真理',
+    symbol: '⊙',
+    subtitle: '什么算真的',
+    intro: '什么是真的？\n\n尼采说没有"真理"，只有解释——但有些解释让我们活下去。斯多葛说宇宙有理性——你要去校准。加缪说清醒就是看清没有意义这件事——这本身是最难承受的真理。福柯说——所谓真理，是权力筛选出来的话语，每一个"科学事实"背后都站着一个权力配置。',
+    dialogue: [
+      { philosopher: 'nietzsche', text: '真理是错误——是我们为活下去而维持的有用虚构。问"这是不是真的"之前，先问"这帮我们活下去做什么"。' },
+      { philosopher: 'stoic',     text: '真理是宇宙的逻各斯——你的任务是与之共振。但这个逻各斯不可见，只能通过理性和德行去触及。' },
+      { philosopher: 'camus',     text: '真理就是清醒——看清这一切都没有终极意义。这本身需要英雄式的勇气——多数人选择哲学自杀，闭眼不看。' },
+      { philosopher: 'foucault',  text: '真理是话语权力的产物——问"谁让这是真的"。每个"科学共识"背后都有一个权力配置——医院、学校、实验室、专家。' },
+    ],
+    concepts: ['perspectivism', 'truth-as-fiction', 'genealogy', 'logos', 'lucidity', 'philosophical-suicide', 'power-knowledge', 'discourse', 'archaeology'],
+  },
+  {
+    id: 'action',
+    name: '关于行动',
+    symbol: '▷',
+    subtitle: '凭什么动',
+    intro: '在"我应该做什么"之外的问题是"我凭什么动"。当上帝死了、意义崩溃，行动如何还可能？\n\n尼采说——意志本身就是答案，生命就是自我超出。斯多葛说——动那能动的，其余放下，专注就是力量。加缪说——明知无意义就是行动的原因，反抗本身就是姿态。福柯说——说真话就是行动，对权力说真话需要冒一切风险。',
+    dialogue: [
+      { philosopher: 'nietzsche', text: '行动来自权力意志——生命就是自我超出。不是为了什么目的行动，行动本身就是生命的展开。' },
+      { philosopher: 'stoic',     text: '行动锁定在能控制的部分——专注就是力量。不要在结果上浪费力气——你的工作只在过程里。' },
+      { philosopher: 'camus',     text: '反抗就是行动——明知无意义所以做。不为成功而做，为不消失而做。每个行动都是对虚无的回答。' },
+      { philosopher: 'foucault',  text: '直言就是行动——对权力说真话，承担风险。这种 parrhesia 是少有的、不被规训完全收编的行动形式。' },
+    ],
+    concepts: ['will-to-power', 'amor-fati', 'master-morality', 'obstacle-is-way', 'revolt', 'creation-absurd', 'parrhesia'],
+  },
+  {
+    id: 'self',
+    name: '关于自我',
+    symbol: '⊕',
+    subtitle: '自我从哪里来',
+    intro: '自我从哪里来？四位哲学家都不相信"本质的自我"——但他们的替代方案不同。\n\n尼采说自我要不断变形——骆驼到狮子到孩子。斯多葛说自我是要守护的内在堡垒——外面的一切只有你允许才能进来。加缪说自我在反抗中确认——不抗议就消失。福柯说——所谓自我，是各种"自我技术"塑造出来的——日记、冥想、健身、心理咨询，你用什么塑造自己，就被那个东西塑造。',
+    dialogue: [
+      { philosopher: 'nietzsche', text: '自我是变形的过程——你的工作是超出自己。没有"成为"，只有"正在成为"。停止变形的瞬间，你就死了。' },
+      { philosopher: 'stoic',     text: '自我是内在堡垒——守住核心。外面的一切都可能被夺走，唯有你的判断、欲望、回应是你的。守住这一小块。' },
+      { philosopher: 'camus',     text: '自我在反抗中显现——不抗议就消失。一个不反抗的人最终连自己都不在了，溶进荒诞里。' },
+      { philosopher: 'foucault',  text: '自我是被技术塑造的——你的日记/健身/冥想也在塑造你。选择"自我提升"工具前先问——它会把我变成什么？' },
+    ],
+    concepts: ['three-metamorphoses', 'ubermensch', 'eternal-return', 'inner-citadel', 'apatheia', 'lucidity', 'revolt', 'technologies-of-self'],
+  },
+];
+
+// Reverse lookup: concept ID → philosopher ID
+function findPhilosopherForConcept(conceptId) {
+  // Heuristic by concept ID prefix patterns
+  const nietzscheIds = new Set(['god-is-dead','perspectivism','truth-as-fiction','ressentiment','slave-morality','master-morality','will-to-power','apollonian-dionysian','three-metamorphoses','free-spirit','amor-fati','ubermensch','last-man','herd-animal','pity-danger','eternal-return','nihilism','bad-conscience','ascetic-ideal','genealogy','revaluation','pathos-of-distance','gay-science','creator-solitude','abyss']);
+  const stoicIds = new Set(['dichotomy-of-control','logos','virtue-as-sole-good','apatheia','premeditatio-malorum','memento-mori','present-moment','amor-fati-stoic','inner-citadel','cosmopolitan','obstacle-is-way','voluntary-discomfort']);
+  const camusIds = new Set(['absurd','philosophical-suicide','lucidity','revolt','sisyphus','indifference-of-world','freedom-without-hope','passion-quantity','creation-absurd','solidarity']);
+  const foucaultIds = new Set(['discourse','power-knowledge','archaeology','normalization','panopticon','biopower','governmentality','technologies-of-self','parrhesia','heterotopia']);
+  if (nietzscheIds.has(conceptId)) return 'nietzsche';
+  if (stoicIds.has(conceptId)) return 'stoic';
+  if (camusIds.has(conceptId)) return 'camus';
+  if (foucaultIds.has(conceptId)) return 'foucault';
+  return null;
+}
+
 // ═══ 哲学家档案 ═══
 const PHILOSOPHER_ARCHIVES = {
   nietzsche: {
@@ -2309,6 +2574,9 @@ function renderHome() {
   // Mind card
   renderMindCardHome();
 
+  // Themes section
+  renderThemesSection();
+
   // Daily wisdom
   renderDailyWisdom();
 
@@ -2394,6 +2662,123 @@ function buildRadarSVG(stats, size = 200) {
 
   return `<svg class="mind-radar" width="${size}" height="${size + 20}" viewBox="0 -10 ${size} ${size + 20}">${bgPolys}${axes}${statPoly}${dots}${labels}</svg>`;
 }
+
+function renderThemesSection() {
+  const section = document.getElementById('themes-section');
+  const cards = THEMES.map(t => `
+    <button class="theme-card" data-theme="${t.id}">
+      <div class="theme-card-row">
+        <span class="theme-card-symbol">${t.symbol}</span>
+        <span class="theme-card-name">${escapeHtml(t.name)}</span>
+        <span class="theme-card-sub">${escapeHtml(t.subtitle)}</span>
+      </div>
+    </button>
+  `).join('');
+  section.innerHTML = `
+    <div class="themes-label">另一种读法</div>
+    <div class="themes-sublabel">不按哲学家分组，按问题横切</div>
+    ${cards}
+  `;
+  section.querySelectorAll('.theme-card').forEach(card => {
+    card.addEventListener('click', () => {
+      haptic('light');
+      const themeId = card.getAttribute('data-theme');
+      openTheme(themeId);
+    });
+  });
+}
+
+function openTheme(themeId) {
+  const theme = THEMES.find(t => t.id === themeId);
+  if (!theme) return;
+
+  // Reset accent on html
+  document.documentElement.removeAttribute('data-philosopher');
+
+  const scroll = document.getElementById('theme-scroll');
+  document.getElementById('theme-header-label').textContent = theme.name;
+
+  const dialogue = theme.dialogue.map(d => {
+    const philosopher = PHILOSOPHERS.find(p => p.id === d.philosopher);
+    return `
+      <div class="dialogue-row" data-philosopher="${d.philosopher}">
+        <div class="dialogue-name">${philosopher ? philosopher.name : d.philosopher}</div>
+        <div class="dialogue-text">${escapeHtml(d.text)}</div>
+      </div>
+    `;
+  }).join('');
+
+  const concepts = theme.concepts.map(cId => {
+    const phId = findPhilosopherForConcept(cId);
+    const philosopher = PHILOSOPHERS.find(p => p.id === phId);
+    // Concept name lookup — we don't have all concepts loaded; use a static map
+    const conceptName = CONCEPT_NAMES[cId] || cId;
+    return `
+      <button class="theme-concept-row" data-concept="${cId}" data-philosopher="${phId}">
+        <span class="theme-concept-symbol" data-philosopher="${phId}">${philosopher ? philosopher.ornament : '·'}</span>
+        <span class="theme-concept-text">${escapeHtml(conceptName)}</span>
+        <span class="theme-concept-pname">${philosopher ? philosopher.name : ''}</span>
+      </button>
+    `;
+  }).join('');
+
+  scroll.innerHTML = `
+    <div class="theme-symbol-large">${theme.symbol}</div>
+    <div class="theme-name">${escapeHtml(theme.name)}</div>
+    <div class="theme-subtitle">${escapeHtml(theme.subtitle)}</div>
+    <div class="theme-intro">${escapeHtml(theme.intro)}</div>
+
+    <div class="theme-dialogue">
+      <div class="theme-section-label">四种回答</div>
+      ${dialogue}
+    </div>
+
+    <div class="theme-concept-list">
+      <div class="theme-section-label">相关概念</div>
+      ${concepts}
+    </div>
+  `;
+
+  scroll.querySelectorAll('.theme-concept-row').forEach(row => {
+    row.addEventListener('click', () => {
+      haptic('light');
+      const conceptId = row.getAttribute('data-concept');
+      const phId = row.getAttribute('data-philosopher');
+      const philosopher = PHILOSOPHERS.find(p => p.id === phId);
+      if (philosopher) {
+        enterPhilosopher(philosopher).then(() => {
+          setTimeout(() => openStory(conceptId), 400);
+        });
+      }
+    });
+  });
+
+  showScreen('theme');
+}
+
+// Static concept name lookup (since concept data is lazy-loaded per philosopher)
+const CONCEPT_NAMES = {
+  'god-is-dead': '上帝之死', 'perspectivism': '视角主义', 'truth-as-fiction': '真理的虚构性',
+  'ressentiment': '怨恨', 'slave-morality': '奴隶道德', 'master-morality': '主人道德',
+  'will-to-power': '权力意志', 'apollonian-dionysian': '阿波罗与狄奥尼索斯',
+  'three-metamorphoses': '三种变形', 'free-spirit': '自由精神', 'amor-fati': '命运之爱',
+  'ubermensch': '超人', 'last-man': '末人', 'herd-animal': '群居动物', 'pity-danger': '同情的危险',
+  'eternal-return': '永恒轮回', 'nihilism': '虚无主义', 'bad-conscience': '坏良心',
+  'ascetic-ideal': '禁欲理想', 'genealogy': '谱系学', 'revaluation': '重估一切价值',
+  'pathos-of-distance': '距离的激情', 'gay-science': '快乐的科学', 'creator-solitude': '创造者的孤独',
+  'abyss': '深渊',
+  'dichotomy-of-control': '控制的二分法', 'logos': '逻各斯', 'virtue-as-sole-good': '唯德是善',
+  'apatheia': '不动心', 'premeditatio-malorum': '预想灾难', 'memento-mori': '勿忘有死',
+  'present-moment': '活在此刻', 'amor-fati-stoic': '命运之爱·斯多葛', 'inner-citadel': '内在堡垒',
+  'cosmopolitan': '世界公民', 'obstacle-is-way': '障碍即道路', 'voluntary-discomfort': '自愿受苦',
+  'absurd': '荒诞', 'philosophical-suicide': '哲学自杀', 'lucidity': '清醒', 'revolt': '反抗',
+  'sisyphus': '西西弗斯', 'indifference-of-world': '世界的冷漠', 'freedom-without-hope': '无望的自由',
+  'passion-quantity': '激情与数量', 'creation-absurd': '荒诞的创造', 'solidarity': '团结',
+  'discourse': '话语', 'power-knowledge': '权力-知识', 'archaeology': '知识考古学',
+  'normalization': '规训', 'panopticon': '全景监狱', 'biopower': '生命权力',
+  'governmentality': '治理术', 'technologies-of-self': '自我的技术', 'parrhesia': '直言',
+  'heterotopia': '异托邦',
+};
 
 function renderArchive() {
   if (!currentPhilosopher) return;
@@ -3400,6 +3785,11 @@ document.getElementById('nav-global-journal').addEventListener('click', () => {
   journalGlobal = true;
   renderJournal();
   showScreen('journal');
+});
+
+document.getElementById('theme-back-btn').addEventListener('click', () => {
+  renderHome();
+  showScreen('home');
 });
 
 document.getElementById('nav-archive').addEventListener('click', () => {
