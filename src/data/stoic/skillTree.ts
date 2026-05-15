@@ -1,0 +1,88 @@
+import { Concept } from '../types';
+
+export const concepts: Concept[] = [
+  {
+    id: 'dichotomy-of-control',
+    name: '控制的二分法',
+    original: 'Dikhotomia',
+    dependencies: [],
+    brief: '世界分两半：你能控制的，和你不能控制的——只在前者上用力',
+  },
+  {
+    id: 'logos',
+    name: '逻各斯',
+    original: 'Logos',
+    dependencies: [],
+    brief: '宇宙有一套理性秩序——你是它的一部分，不是它的对手',
+  },
+  {
+    id: 'virtue-as-sole-good',
+    name: '唯德是善',
+    original: 'Aretē',
+    dependencies: ['logos'],
+    brief: '财富、健康、名声都是"无关紧要的事"——唯有品德是真正的好',
+  },
+  {
+    id: 'apatheia',
+    name: '不动心',
+    original: 'Apatheia',
+    dependencies: ['dichotomy-of-control'],
+    brief: '不是没有感情，是不被感情拖着走——从被动反应变成主动选择',
+  },
+  {
+    id: 'premeditatio-malorum',
+    name: '预想灾难',
+    original: 'Praemeditatio malorum',
+    dependencies: ['dichotomy-of-control'],
+    brief: '提前想象最坏的结果——不是悲观，是让恐惧在想象中先死一次',
+  },
+  {
+    id: 'memento-mori',
+    name: '勿忘有死',
+    original: 'Memento mori',
+    dependencies: ['premeditatio-malorum'],
+    brief: '你会死——这不是诅咒，是让你今天就开始认真活的唯一理由',
+  },
+  {
+    id: 'present-moment',
+    name: '活在此刻',
+    original: 'Hic et nunc',
+    dependencies: ['memento-mori'],
+    brief: '过去已不可改，未来尚不存在——你唯一拥有的就是现在这一刻',
+  },
+  {
+    id: 'amor-fati-stoic',
+    name: '命运之爱·斯多葛',
+    original: 'Amor fati',
+    dependencies: ['dichotomy-of-control', 'logos'],
+    brief: '不只是接受发生的事——而是热爱它，因为它是宇宙秩序的一部分',
+  },
+  {
+    id: 'inner-citadel',
+    name: '内在堡垒',
+    original: 'Hegemonikon',
+    dependencies: ['apatheia', 'virtue-as-sole-good'],
+    brief: '你的内心是一座城堡——外面的一切只有你允许才能进来',
+  },
+  {
+    id: 'cosmopolitan',
+    name: '世界公民',
+    original: 'Kosmopolitēs',
+    dependencies: ['logos'],
+    brief: '你不只属于你的城市、你的国家——你属于整个人类共同体',
+  },
+  {
+    id: 'obstacle-is-way',
+    name: '障碍即道路',
+    original: 'Impedimentum via est',
+    dependencies: ['amor-fati-stoic', 'inner-citadel'],
+    brief: '挡住你的东西不是绕道的理由——它本身就是你要走的路',
+  },
+  {
+    id: 'voluntary-discomfort',
+    name: '自愿受苦',
+    original: 'Askēsis',
+    dependencies: ['premeditatio-malorum', 'apatheia'],
+    brief: '主动走进不舒服——不是自虐，是给自己的韧性做压力测试',
+  },
+];
