@@ -12,7 +12,34 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { height: 100%; background: #000; scroll-behavior: smooth; }
+html {
+  height: 100%;
+  background: #000;
+  scroll-behavior: smooth;
+  --accent: rgba(245,241,232,0.3);
+  --accent-soft: rgba(245,241,232,0.12);
+  --accent-strong: rgba(245,241,232,0.45);
+}
+html[data-philosopher="nietzsche"] {
+  --accent: rgba(196,164,105,0.45);
+  --accent-soft: rgba(196,164,105,0.15);
+  --accent-strong: rgba(220,185,120,0.6);
+}
+html[data-philosopher="stoic"] {
+  --accent: rgba(150,170,180,0.45);
+  --accent-soft: rgba(150,170,180,0.15);
+  --accent-strong: rgba(170,190,200,0.6);
+}
+html[data-philosopher="camus"] {
+  --accent: rgba(200,130,100,0.45);
+  --accent-soft: rgba(200,130,100,0.15);
+  --accent-strong: rgba(220,150,115,0.6);
+}
+html[data-philosopher="foucault"] {
+  --accent: rgba(165,140,185,0.45);
+  --accent-soft: rgba(165,140,185,0.15);
+  --accent-strong: rgba(185,160,205,0.6);
+}
 body {
   min-height: 100%;
   color: #f5f1e8;
@@ -23,9 +50,44 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── Screens ── */
-.screen { display: none; min-height: 100vh; }
-.screen.active { display: block; }
+/* ── Grain texture overlay ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── Screens with transitions ── */
+.screen { display: none; min-height: 100vh; opacity: 0; }
+.screen.active { display: block; animation: screenIn 0.5s ease-out forwards; }
+.screen.screen-exit { animation: screenOut 0.3s ease-in forwards; }
+@keyframes screenIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes screenOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Story slides in from right */
+#story-screen.active { animation: slideInRight 0.45s cubic-bezier(0.16,1,0.3,1) forwards; }
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Journal slides up */
+#journal-screen.active { animation: slideInUp 0.45s cubic-bezier(0.16,1,0.3,1) forwards; }
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 /* ── Map (concept list) ── */
 .map-header {
@@ -49,7 +111,7 @@ body {
 }
 .map-bar-fill {
   height: 100%;
-  background: rgba(245,241,232,0.3);
+  background: var(--accent);
   border-radius: 1px;
   transition: width 0.6s ease;
 }
@@ -91,20 +153,69 @@ body {
 }
 .concept-dot {
   display: inline-block;
-  width: 6px; height: 6px;
+  width: 7px; height: 7px;
   border-radius: 50%;
-  background: #f5f1e8;
-  margin-right: 10px;
+  border: 1px solid var(--accent-strong);
+  background: transparent;
+  margin-right: 12px;
   vertical-align: middle;
-  opacity: 0.3;
+  transition: background 0.3s, border-color 0.3s;
 }
-.concept-card:not(.locked) .concept-dot { opacity: 0.7; }
-.concept-card.read .concept-dot { opacity: 0.25; }
+/* Unlocked but not read: hollow circle */
+.concept-card:not(.locked):not(.read) .concept-dot {
+  border-color: var(--accent-strong);
+}
+/* Read: filled circle */
+.concept-card.read .concept-dot {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+/* Locked: dashed faint circle */
+.concept-card.locked .concept-dot {
+  border-color: rgba(245,241,232,0.15);
+  border-style: dashed;
+}
 .concept-card.depth-0 { padding-left: 28px; }
 .concept-card.depth-1 { padding-left: 44px; }
 .concept-card.depth-2 { padding-left: 60px; }
 .concept-card.depth-3 { padding-left: 76px; }
 .concept-card.depth-4 { padding-left: 92px; }
+
+/* Scroll-reveal: cards start invisible, JS adds .revealed */
+.concept-card {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s ease, background 0.6s ease;
+}
+.concept-card.revealed {
+  transform: translateY(0);
+}
+.concept-card.revealed:not(.locked) { opacity: 1; }
+.concept-card.revealed.locked { opacity: 0.2; }
+.concept-card.revealed.read { opacity: 0.5; }
+
+/* Newly-unlocked glow */
+.concept-card.just-unlocked {
+  background: rgba(245,241,232,0.04);
+  animation: unlockPulse 1.5s ease-out forwards;
+}
+@keyframes unlockPulse {
+  0% { background: rgba(245,241,232,0.08); }
+  100% { background: transparent; }
+}
+
+/* Tap ripple */
+.concept-card:not(.locked)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--tap-x,50%) var(--tap-y,50%), rgba(245,241,232,0.06) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.concept-card:not(.locked):active::after { opacity: 1; }
+.concept-card { position: relative; overflow: hidden; }
 
 /* ── Story reader ── */
 .story-back {
@@ -158,6 +269,33 @@ body {
   word-break: break-word;
 }
 .story-body p { margin-bottom: 1.2em; }
+.story-body p:first-child::first-letter {
+  font-size: 3.2em;
+  float: left;
+  line-height: 0.8;
+  margin: 6px 10px 0 -2px;
+  opacity: 0.85;
+  font-weight: 400;
+}
+
+/* ── Reading progress bar ── */
+.reading-progress {
+  position: fixed;
+  top: 0; left: 0;
+  width: 0%;
+  height: 2px;
+  background: rgba(245,241,232,0.2);
+  z-index: 50;
+  transition: width 0.15s linear;
+  pointer-events: none;
+}
+
+/* ── Reading time estimate ── */
+.story-reading-time {
+  font-size: 11px;
+  opacity: 0.15;
+  margin-top: 4px;
+}
 
 /* ── Layers ── */
 .layers-section {
@@ -186,8 +324,9 @@ body {
 }
 .layer-tab:focus { outline: none; }
 .layer-tab.active {
-  opacity: 0.9;
-  border-bottom-color: rgba(245,241,232,0.3);
+  opacity: 0.95;
+  border-bottom-color: var(--accent-strong);
+  color: #f5f1e8;
 }
 .layer-content {
   font-size: 15px;
@@ -227,9 +366,22 @@ body {
 /* ── Reflect ── */
 .reflect-section {
   margin-top: 60px;
-  padding-top: 40px;
-  border-top: 1px solid rgba(245,241,232,0.08);
-  padding-bottom: 120px;
+  padding: 32px 24px 28px;
+  border: 1px dashed var(--accent-soft);
+  border-radius: 4px;
+  margin-bottom: 60px;
+  position: relative;
+}
+.reflect-section::before {
+  content: '✎';
+  position: absolute;
+  top: -12px;
+  left: 20px;
+  background: #000;
+  padding: 0 8px;
+  font-size: 14px;
+  opacity: 0.4;
+  color: #f5f1e8;
 }
 .reflect-prompt {
   font-size: 15px;
@@ -275,10 +427,10 @@ body {
 .rendered strong { font-weight: 600; }
 .rendered em { font-style: italic; }
 .rendered blockquote {
-  border-left: 2px solid rgba(245,241,232,0.15);
-  padding-left: 16px;
+  border-left: 2px solid var(--accent);
+  padding-left: 18px;
   margin: 20px 0;
-  opacity: 0.75;
+  opacity: 0.78;
   font-style: italic;
 }
 .rendered ul {
@@ -322,15 +474,30 @@ body {
 
 /* ── Home screen ── */
 .home-header {
-  padding: calc(60px + env(safe-area-inset-top, 32px)) 28px 16px;
-  font-size: 13px;
-  opacity: 0.35;
-  letter-spacing: 0.15em;
+  padding: calc(72px + env(safe-area-inset-top, 32px)) 28px 8px;
+  font-size: 11px;
+  opacity: 0.2;
+  letter-spacing: 0.35em;
+}
+.home-title {
+  padding: 0 28px 6px;
+  font-size: 28px;
+  line-height: 1.4;
+  opacity: 0.85;
 }
 .home-subtitle {
-  padding: 0 28px 48px;
+  padding: 0 28px 12px;
   font-size: 12px;
   opacity: 0.12;
+}
+.home-quote {
+  padding: 0 28px 48px;
+  font-size: 13px;
+  line-height: 1.7;
+  opacity: 0.18;
+  font-style: italic;
+  max-width: 320px;
+  transition: opacity 0.8s ease;
 }
 .philosopher-list { padding: 0 0 80px; }
 .philosopher-card {
@@ -344,10 +511,12 @@ body {
   font-family: inherit;
   text-align: left;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, transform 0.2s, background 0.3s;
+  position: relative;
 }
 .philosopher-card:focus { outline: none; }
-.philosopher-card:active { opacity: 0.7; }
+.philosopher-card:active { opacity: 0.85; transform: scale(0.985); }
+.philosopher-card:hover { background: rgba(245,241,232,0.02); }
 .philosopher-name {
   font-size: 22px;
   line-height: 1.5;
@@ -380,6 +549,7 @@ body {
   background: rgba(245,241,232,0.06);
   border-radius: 1px;
   overflow: hidden;
+  max-width: 200px;
 }
 .philosopher-bar-fill {
   height: 100%;
@@ -387,6 +557,22 @@ body {
   border-radius: 1px;
   transition: width 0.4s ease;
 }
+.philosopher-card[data-philosopher] .philosopher-bar-fill { background: var(--card-accent, rgba(245,241,232,0.25)); }
+.philosopher-card[data-philosopher="nietzsche"] { --card-accent: rgba(196,164,105,0.45); }
+.philosopher-card[data-philosopher="stoic"] { --card-accent: rgba(150,170,180,0.45); }
+.philosopher-card[data-philosopher="camus"] { --card-accent: rgba(200,130,100,0.45); }
+.philosopher-card[data-philosopher="foucault"] { --card-accent: rgba(165,140,185,0.45); }
+.philosopher-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 50%;
+  width: 2px; height: 40px;
+  margin-top: -20px;
+  background: var(--card-accent, rgba(245,241,232,0.15));
+  opacity: 0.5;
+  transition: opacity 0.3s, height 0.3s;
+}
+.philosopher-card:hover::before { opacity: 0.9; height: 60px; margin-top: -30px; }
 
 /* ── Loading overlay ── */
 .loading-overlay {
@@ -488,6 +674,349 @@ body {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* Staggered fade-in for child elements */
+.stagger > :nth-child(1) { animation-delay: 0s; }
+.stagger > :nth-child(2) { animation-delay: 0.08s; }
+.stagger > :nth-child(3) { animation-delay: 0.16s; }
+.stagger > :nth-child(4) { animation-delay: 0.24s; }
+.stagger > :nth-child(5) { animation-delay: 0.32s; }
+.stagger > * { animation-fill-mode: backwards; }
+
+/* ── Swipe hint on story screen ── */
+.swipe-indicator {
+  position: fixed;
+  left: 0; top: 50%;
+  width: 4px; height: 48px;
+  margin-top: -24px;
+  background: rgba(245,241,232,0.08);
+  border-radius: 0 4px 4px 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 11;
+}
+.swipe-indicator.visible { opacity: 1; }
+
+/* ── Toast notification ── */
+.toast {
+  position: fixed;
+  bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(245,241,232,0.08);
+  color: #f5f1e8;
+  font-family: inherit;
+  font-size: 13px;
+  padding: 10px 24px;
+  border-radius: 20px;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+  pointer-events: none;
+  z-index: 200;
+  white-space: nowrap;
+}
+.toast.show {
+  opacity: 0.7;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── Onboarding ── */
+.onboarding {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.6s ease-out;
+}
+.onboarding-content {
+  text-align: center;
+  padding: 40px;
+  max-width: 480px;
+}
+.onboarding-text {
+  font-size: 22px;
+  line-height: 1.7;
+  opacity: 0.8;
+  margin-bottom: 80px;
+  min-height: 100px;
+  transition: opacity 0.4s;
+}
+.onboarding-text.fade { opacity: 0; }
+.onboarding-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+.onboarding-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(245,241,232,0.15);
+  transition: background 0.3s;
+}
+.onboarding-dot.active { background: rgba(245,241,232,0.5); }
+.onboarding-next {
+  background: transparent;
+  border: 1px solid rgba(245,241,232,0.2);
+  color: #f5f1e8;
+  font-family: inherit;
+  font-size: 14px;
+  padding: 12px 28px;
+  border-radius: 24px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.3s, border-color 0.3s;
+}
+.onboarding-next:hover { opacity: 1; border-color: rgba(245,241,232,0.4); }
+.onboarding-next:focus { outline: none; }
+
+/* ── Continue card ── */
+.continue-card {
+  margin: 0 28px 32px;
+  padding: 18px 20px;
+  border: 1px solid var(--accent-soft);
+  border-radius: 6px;
+  background: rgba(245,241,232,0.02);
+  cursor: pointer;
+  transition: background 0.3s, border-color 0.3s;
+  position: relative;
+}
+.continue-card:hover { background: rgba(245,241,232,0.04); border-color: var(--accent); }
+.continue-card-label {
+  font-size: 10px;
+  opacity: 0.3;
+  letter-spacing: 0.2em;
+  margin-bottom: 8px;
+}
+.continue-card-title {
+  font-size: 16px;
+  line-height: 1.5;
+  opacity: 0.85;
+  margin-bottom: 4px;
+}
+.continue-card-arrow {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.3;
+  font-size: 18px;
+}
+
+/* ── Daily wisdom ── */
+.daily-wisdom {
+  margin: 36px 28px 0;
+  padding: 24px 0;
+  border-top: 1px solid rgba(245,241,232,0.06);
+  border-bottom: 1px solid rgba(245,241,232,0.06);
+  cursor: pointer;
+}
+.daily-wisdom-label {
+  font-size: 10px;
+  opacity: 0.3;
+  letter-spacing: 0.2em;
+  margin-bottom: 12px;
+}
+.daily-wisdom-text {
+  font-size: 15px;
+  line-height: 1.75;
+  opacity: 0.55;
+  font-style: italic;
+  margin-bottom: 8px;
+}
+.daily-wisdom-source {
+  font-size: 11px;
+  opacity: 0.25;
+}
+
+/* ── Echo banner (after reading) ── */
+.echo-banner {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  padding: 20px 28px calc(20px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(to top, #000 60%, transparent);
+  transform: translateY(100%);
+  transition: transform 0.6s cubic-bezier(0.16,1,0.3,1), opacity 0.4s;
+  z-index: 80;
+  opacity: 0;
+  pointer-events: none;
+}
+.echo-banner.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+.echo-banner-text {
+  font-size: 14px;
+  line-height: 1.7;
+  opacity: 0.55;
+  font-style: italic;
+  max-width: 500px;
+}
+.echo-banner-label {
+  font-size: 10px;
+  opacity: 0.25;
+  letter-spacing: 0.2em;
+  margin-bottom: 6px;
+}
+
+/* ── Map stats footer ── */
+.map-stats {
+  padding: 24px 28px 80px;
+  text-align: center;
+  font-size: 11px;
+  opacity: 0.2;
+  letter-spacing: 0.1em;
+  line-height: 1.8;
+}
+
+/* ── Story epigraph ── */
+.story-epigraph {
+  margin: 0 0 36px;
+  padding: 16px 0 16px 18px;
+  border-left: 2px solid var(--accent);
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.7;
+  opacity: 0.6;
+}
+.story-epigraph-source {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  opacity: 0.6;
+  font-style: normal;
+}
+
+/* ── Re-read prompt ── */
+.reread-prompt {
+  margin: 0 0 28px;
+  padding: 14px 18px;
+  background: rgba(245,241,232,0.025);
+  border-radius: 4px;
+  font-size: 13px;
+  opacity: 0.6;
+  line-height: 1.6;
+}
+.reread-prompt-label {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  opacity: 0.5;
+  margin-bottom: 6px;
+}
+
+/* ── Cross-philosopher echo ── */
+.cross-echo {
+  margin-top: 36px;
+  padding: 18px;
+  border: 1px dashed var(--accent-soft);
+  border-radius: 4px;
+  font-size: 13px;
+  line-height: 1.75;
+  opacity: 0.7;
+}
+.cross-echo-label {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  opacity: 0.5;
+  margin-bottom: 8px;
+}
+
+/* ── Journal stats ── */
+.journal-stats {
+  font-size: 11px;
+  opacity: 0.25;
+  margin-bottom: 32px;
+  letter-spacing: 0.1em;
+}
+
+/* ── Journal entry actions ── */
+.journal-entry {
+  cursor: pointer;
+  transition: background 0.2s;
+  border-radius: 4px;
+  padding: 16px;
+  margin: 0 -16px 24px;
+}
+.journal-entry:hover { background: rgba(245,241,232,0.02); }
+.journal-entry-actions {
+  display: none;
+  gap: 16px;
+  margin-top: 12px;
+  font-size: 11px;
+  opacity: 0.4;
+}
+.journal-entry.editing .journal-entry-actions { display: flex; }
+.journal-entry-editor {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--accent-soft);
+  border-radius: 4px;
+  color: #f5f1e8;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.8;
+  padding: 12px;
+  resize: vertical;
+  min-height: 100px;
+  outline: none;
+}
+.journal-entry-editor:focus { border-color: var(--accent); }
+.journal-action-btn {
+  background: transparent;
+  border: none;
+  color: #f5f1e8;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 8px;
+  opacity: 0.8;
+}
+.journal-action-btn.danger { color: #c08070; }
+.journal-action-btn:focus { outline: none; }
+
+/* ── Section divider per philosopher ── */
+.philosopher-divider {
+  text-align: center;
+  font-size: 18px;
+  padding: 36px 0 12px;
+  opacity: 0.18;
+  letter-spacing: 1.5em;
+}
+
+/* ── Completion celebration ── */
+.celebration {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  z-index: 150;
+  opacity: 0;
+  animation: celebIn 1s ease-out forwards;
+}
+@keyframes celebIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.celebration-text {
+  font-size: 24px;
+  line-height: 1.6;
+  text-align: center;
+  opacity: 0.7;
+  padding: 0 40px;
+}
+.celebration-sub {
+  font-size: 13px;
+  opacity: 0.2;
+  margin-top: 16px;
+  letter-spacing: 0.1em;
+}
 </style>
 </head>
 <body>
@@ -497,11 +1026,40 @@ body {
   <div class="loading-dots">···</div>
 </div>
 
+<!-- ═══ Reading progress bar ═══ -->
+<div id="reading-progress" class="reading-progress"></div>
+
+<!-- ═══ Swipe indicator ═══ -->
+<div id="swipe-indicator" class="swipe-indicator"></div>
+
+<!-- ═══ Toast ═══ -->
+<div id="toast" class="toast"></div>
+
+<!-- ═══ Echo aftertaste banner ═══ -->
+<div id="echo-banner" class="echo-banner"></div>
+
+<!-- ═══ Onboarding ═══ -->
+<div id="onboarding" class="onboarding" style="display:none;">
+  <div class="onboarding-content">
+    <div class="onboarding-text" id="onboarding-text"></div>
+    <div class="onboarding-dots">
+      <span class="onboarding-dot active"></span>
+      <span class="onboarding-dot"></span>
+      <span class="onboarding-dot"></span>
+    </div>
+    <button class="onboarding-next" id="onboarding-next">继续 →</button>
+  </div>
+</div>
+
 <!-- ═══ Home Screen ═══ -->
 <div id="home-screen" class="screen active">
   <div class="home-header">ECHO</div>
-  <div class="home-subtitle">哲学的回声</div>
-  <div class="philosopher-list" id="philosopher-list"></div>
+  <div class="home-title">回声</div>
+  <div class="home-subtitle">哲学概念的故事化学习</div>
+  <div class="home-quote" id="home-quote"></div>
+  <div id="continue-card" class="continue-card" style="display:none;"></div>
+  <div class="philosopher-list stagger" id="philosopher-list"></div>
+  <div id="daily-wisdom" class="daily-wisdom" style="display:none;"></div>
   <div style="padding:0 28px 80px;">
     <button class="nav-btn" id="nav-global-journal" style="font-size:13px;">全部思考记录 →</button>
   </div>
@@ -517,6 +1075,7 @@ body {
   <div class="map-progress" id="map-progress"></div>
   <div class="map-bar"><div class="map-bar-fill" id="map-bar-fill"></div></div>
   <div class="concept-list" id="concept-list"></div>
+  <div id="map-stats" class="map-stats"></div>
 </div>
 
 <!-- ═══ Story Screen ═══ -->
@@ -548,6 +1107,7 @@ const PHILOSOPHERS = [
     dates: '1844 – 1900',
     question: '上帝死后，人如何为自己创造价值？',
     header: 'ZARATHUSTRA',
+    ornament: '✦',
     conceptsFile: 'concepts.js',
     storiesFile: 'stories.js',
   },
@@ -558,6 +1118,7 @@ const PHILOSOPHERS = [
     dates: '前 300 – 180',
     question: '你不能控制发生了什么，但你能控制你如何回应。',
     header: 'STOIC',
+    ornament: '◆',
     conceptsFile: 'stoic-concepts.js',
     storiesFile: 'stoic-stories.js',
   },
@@ -568,6 +1129,7 @@ const PHILOSOPHERS = [
     dates: '1913 – 1960',
     question: '世界没有意义——然后呢？',
     header: 'SISYPHE',
+    ornament: '○',
     conceptsFile: 'camus-concepts.js',
     storiesFile: 'camus-stories.js',
   },
@@ -578,10 +1140,53 @@ const PHILOSOPHERS = [
     dates: '1926 – 1984',
     question: '你以为的自由，有多少是被设计出来的？',
     header: 'PANOPTIQUE',
+    ornament: '▪',
     conceptsFile: 'foucault-concepts.js',
     storiesFile: 'foucault-stories.js',
   },
 ];
+
+// ═══ Epigraphs — 原典引言 (subset of key concepts) ═══
+const EPIGRAPHS = {
+  'god-is-dead': { text: '上帝死了！上帝真的死了！是我们杀死了他。', source: '《快乐的科学》§125' },
+  'eternal-return': { text: '设想有一天或某个夜里，一个魔鬼悄悄潜入你最孤独的孤独中说：「这种生活，你必须一遍又一遍地重过。」', source: '《快乐的科学》§341' },
+  'will-to-power': { text: '哪里有生命，哪里就有意志——不是求生的意志，而是权力意志。', source: '《查拉图斯特拉如是说》' },
+  'ubermensch': { text: '人是一根绳索，连接在动物与超人之间——一根悬在深渊上的绳索。', source: '《查拉图斯特拉如是说》前言' },
+  'amor-fati': { text: '我的爱的方式只有一种：amor fati——让该如此者成为我所爱者。', source: '《快乐的科学》§276' },
+  'three-metamorphoses': { text: '精神变成骆驼，骆驼变成狮子，最后狮子变成孩子。', source: '《查拉图斯特拉如是说》第一卷' },
+  'abyss': { text: '当你长久凝视深渊时，深渊也在凝视你。', source: '《善恶的彼岸》§146' },
+  'last-man': { text: '"我们发明了幸福"——末人说，眨着眼。', source: '《查拉图斯特拉如是说》前言' },
+
+  'dichotomy-of-control': { text: '有些事在我们控制之内，有些不在。', source: '爱比克泰德《手册》开篇' },
+  'memento-mori': { text: '你可能今晚就要离开人世——按照这个想法去说话、去行动、去思考。', source: '马可·奥勒留《沉思录》卷二' },
+  'amor-fati-stoic': { text: '不要寻求事情按你所愿发生，而是希望它按其所是发生。', source: '爱比克泰德《手册》§8' },
+  'obstacle-is-way': { text: '阻碍行动的东西推动了行动。挡在路上的成了道路本身。', source: '马可·奥勒留《沉思录》卷五' },
+  'present-moment': { text: '即使你将活三千年，乃至三万年——你失去的也不过是此刻。', source: '马可·奥勒留《沉思录》卷二' },
+
+  'absurd': { text: '只有一个真正严肃的哲学问题：那就是自杀。', source: '《西西弗神话》开篇' },
+  'sisyphus': { text: '必须想象西西弗斯是幸福的。', source: '《西西弗神话》结尾' },
+  'revolt': { text: '我反抗，故我们存在。', source: '《反抗者》' },
+  'lucidity': { text: '清醒——它使一切都变得不可弥补。', source: '《西西弗神话》' },
+
+  'panopticon': { text: '可见性是一个陷阱。', source: '《规训与惩罚》' },
+  'power-knowledge': { text: '权力与知识彼此包含——不存在不预设权力关系的知识。', source: '《规训与惩罚》' },
+  'biopower': { text: '一种致力于让生命增殖的权力。', source: '《性史》第一卷' },
+  'parrhesia': { text: '直言是一种风险——讲真话之人冒着一切风险讲出这种真理。', source: '《说真话的勇气》' },
+};
+
+// ═══ Cross-philosopher echoes ═══
+const CROSS_ECHOES = {
+  'amor-fati': '斯多葛说："不要寻求事情按你所愿发生"——这是爱比克泰德。加缪说："必须想象西西弗斯是幸福的"。三种语言，同一个姿态：在不能改变的事面前，把"接受"升级为"热爱"。',
+  'eternal-return': '加缪让西西弗斯永远推石头——这就是永恒轮回的另一个版本。区别在于：尼采问"你愿意吗"，加缪说"你别无选择，所以微笑"。',
+  'sisyphus': '尼采的"命运之爱"和加缪的"西西弗斯"是同一种姿态的两个名字——都是在认清世界本质后选择不逃避。',
+  'obstacle-is-way': '马可·奥勒留写下这句话的 1800 年后，尼采说："那不能杀死我的，使我更强大。"',
+  'amor-fati-stoic': '尼采几乎原封不动地继承了爱比克泰德——他自己的"amor fati"就是斯多葛思想的现代翻译。',
+  'panopticon': '尼采说"群居动物"用"大家都这样"取消个体判断——福柯把这种机制具体化了：你不需要被监视，你已经在监视自己。',
+  'herd-animal': '尼采看到的"群居动物"，福柯看到了它的运行机制——规训如何把人塑造成自己监管自己。',
+  'last-man': '尼采的"末人"和福柯的"规训社会"是同一现象的两面：一边是只想要舒适的人，一边是把人训练成只想要舒适的系统。',
+  'free-spirit': '尼采的"自由精神"和福柯的"自我的技术"都在追问同一件事：在被全面规训的世界里，自由如何还可能？',
+  'creator-solitude': '尼采说创造者必须离群——加缪说反抗者必须团结。这不是矛盾，是一个硬币的两面：先孤独地确认自己的反抗，再发现别人也在同样地反抗。',
+};
 
 // ═══ State ═══
 const v = Date.now();
@@ -591,9 +1196,51 @@ let storyMap = new Map();
 let progress = {};
 let reflections = {};
 let currentConceptId = null;
+let previouslyUnlocked = new Set(); // Track unlock states for glow effect
+
+// ═══ Quotes ═══
+const HOME_QUOTES = [
+  '那不能杀死我的，使我更强大。',
+  '你要搞清楚自己人生的剧本——不是你父母的续集，不是你子女的前传。',
+  '人是一根系在动物与超人之间的绳索。',
+  '当你凝视深渊时，深渊也在凝视你。',
+  '世界的温柔，是迟到的正义和最初的自由。',
+  '生命中真正重要的不是你遭遇了什么，而是你记住了哪些事，又是如何铭记的。',
+  '必须想象西西弗斯是幸福的。',
+  '人最终在乎的，不是自由本身，而是寻找自由的那条路。',
+];
+
+// ═══ Haptic feedback ═══
+function haptic(style = 'light') {
+  if (navigator.vibrate) {
+    if (style === 'light') navigator.vibrate(10);
+    else if (style === 'medium') navigator.vibrate(20);
+    else if (style === 'success') navigator.vibrate([10, 50, 10]);
+  }
+}
+
+// ═══ Toast ═══
+let toastTimer = null;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2000);
+}
 
 function storageKey(philosopher, type) {
   return `echo/${philosopher}/${type}`;
+}
+
+// ═══ Last visited tracking ═══
+function setLastVisited(philosopherId, conceptId) {
+  localStorage.setItem('echo/last-visited', JSON.stringify({
+    philosopherId, conceptId, at: Date.now()
+  }));
+}
+function getLastVisited() {
+  try { return JSON.parse(localStorage.getItem('echo/last-visited')); } catch { return null; }
 }
 function loadProgress() {
   if (!currentPhilosopher) return {};
@@ -644,35 +1291,130 @@ function showScreen(name) {
 const CONCEPT_COUNTS = { nietzsche: 25, stoic: 12, camus: 10, foucault: 10 };
 
 function renderHome() {
+  // Reset accent to default
+  document.documentElement.removeAttribute('data-philosopher');
+
+  // Rotating quote
+  const quoteEl = document.getElementById('home-quote');
+  quoteEl.textContent = HOME_QUOTES[Math.floor(Math.random() * HOME_QUOTES.length)];
+
+  // Continue card
+  renderContinueCard();
+
+  // Daily wisdom
+  renderDailyWisdom();
+
   const list = document.getElementById('philosopher-list');
   list.innerHTML = '';
-  PHILOSOPHERS.forEach(p => {
+  PHILOSOPHERS.forEach((p, idx) => {
     const card = document.createElement('button');
-    card.className = 'philosopher-card';
+    card.className = 'philosopher-card fade-in';
+    card.setAttribute('data-philosopher', p.id);
+    card.style.animationDelay = (idx * 0.08) + 's';
+    card.style.animationFillMode = 'backwards';
     let readCount = 0;
     const total = CONCEPT_COUNTS[p.id] || 0;
     try {
       const prog = JSON.parse(localStorage.getItem(storageKey(p.id, 'progress'))) || {};
       readCount = Object.keys(prog).filter(k => prog[k]).length;
     } catch {}
-    const progressText = readCount > 0 ? `${readCount} / ${total}` : '';
     const pct = total > 0 ? Math.round((readCount / total) * 100) : 0;
+    const progressLabel = readCount > 0
+      ? (pct === 100 ? '已完成' : `${readCount} / ${total}`)
+      : '开始探索';
     card.innerHTML = `
       <div class="philosopher-name">${p.name}<span class="philosopher-orig">${p.orig}</span></div>
       <div class="philosopher-dates">${p.dates}</div>
       <div class="philosopher-question">${p.question}</div>
-      <div class="philosopher-progress">${progressText}</div>
+      <div class="philosopher-progress">${progressLabel}</div>
       ${total > 0 ? `<div class="philosopher-bar"><div class="philosopher-bar-fill" style="width:${pct}%"></div></div>` : ''}
     `;
-    card.addEventListener('click', () => enterPhilosopher(p));
+    card.addEventListener('click', () => {
+      haptic('light');
+      enterPhilosopher(p);
+    });
     list.appendChild(card);
   });
+}
+
+function renderContinueCard() {
+  const card = document.getElementById('continue-card');
+  const lv = getLastVisited();
+  if (!lv) { card.style.display = 'none'; return; }
+  const philosopher = PHILOSOPHERS.find(p => p.id === lv.philosopherId);
+  if (!philosopher) { card.style.display = 'none'; return; }
+
+  // Check if philosopher is complete
+  try {
+    const prog = JSON.parse(localStorage.getItem(storageKey(philosopher.id, 'progress'))) || {};
+    const readCount = Object.keys(prog).filter(k => prog[k]).length;
+    if (readCount >= (CONCEPT_COUNTS[philosopher.id] || 0)) {
+      card.style.display = 'none';
+      return;
+    }
+  } catch {}
+
+  card.setAttribute('data-philosopher', philosopher.id);
+  document.documentElement.setAttribute('data-philosopher', philosopher.id);
+  card.innerHTML = `
+    <div class="continue-card-label">继续</div>
+    <div class="continue-card-title">${philosopher.name} · ${philosopher.ornament}</div>
+    <div class="continue-card-arrow">→</div>
+  `;
+  card.style.display = 'block';
+  card.onclick = () => {
+    haptic('light');
+    enterPhilosopher(philosopher);
+  };
+}
+
+function renderDailyWisdom() {
+  // Pick a random read concept across all philosophers
+  const allRead = [];
+  PHILOSOPHERS.forEach(p => {
+    try {
+      const prog = JSON.parse(localStorage.getItem(storageKey(p.id, 'progress'))) || {};
+      Object.keys(prog).forEach(id => {
+        if (prog[id]) allRead.push({ philosopherId: p.id, conceptId: id });
+      });
+    } catch {}
+  });
+  const el = document.getElementById('daily-wisdom');
+  if (allRead.length === 0) { el.style.display = 'none'; return; }
+
+  // Use date as seed so same wisdom shows all day
+  const today = new Date().toISOString().slice(0, 10);
+  const seed = today.split('-').join('') | 0;
+  const pick = allRead[seed % allRead.length];
+  const philosopher = PHILOSOPHERS.find(p => p.id === pick.philosopherId);
+
+  // Need to load concept brief — use cached version from CONCEPT_BRIEFS lookup or skip
+  // For simplicity, just check epigraph; fallback to skip
+  const ep = EPIGRAPHS[pick.conceptId];
+  if (!ep) { el.style.display = 'none'; return; }
+
+  el.innerHTML = `
+    <div class="daily-wisdom-label">今日回声</div>
+    <div class="daily-wisdom-text">"${ep.text}"</div>
+    <div class="daily-wisdom-source">— ${ep.source}</div>
+  `;
+  el.style.display = 'block';
+  el.onclick = () => {
+    haptic('light');
+    enterPhilosopher(philosopher).then(() => {
+      setTimeout(() => openStory(pick.conceptId), 500);
+    });
+  };
 }
 
 async function enterPhilosopher(p) {
   currentPhilosopher = p;
   progress = loadProgress();
   reflections = loadReflections();
+
+  // Apply philosopher accent
+  document.documentElement.setAttribute('data-philosopher', p.id);
+  setLastVisited(p.id, null);
 
   // Show loading
   const overlay = document.getElementById('loading-overlay');
@@ -728,16 +1470,28 @@ function renderMap() {
   const pct = concepts.length > 0 ? Math.round((readCount / concepts.length) * 100) : 0;
   document.getElementById('map-bar-fill').style.width = pct + '%';
 
+  // Track currently unlocked set
+  const currentUnlocked = new Set();
+
   const order = topologicalSort(concepts);
   const depthMap = getDepthMap(concepts);
 
-  order.forEach(concept => {
+  order.forEach((concept, idx) => {
     const card = document.createElement('button');
     const unlocked = isUnlocked(concept.id);
     const read = !!progress[concept.id];
     const depth = Math.min(depthMap.get(concept.id) || 0, 4);
 
-    card.className = 'concept-card depth-' + depth + (unlocked ? '' : ' locked') + (read ? ' read' : '');
+    if (unlocked) currentUnlocked.add(concept.id);
+
+    // Was this concept just unlocked? (wasn't in previous set)
+    const justUnlocked = unlocked && !read && previouslyUnlocked.size > 0 && !previouslyUnlocked.has(concept.id);
+
+    card.className = 'concept-card depth-' + depth
+      + (unlocked ? '' : ' locked')
+      + (read ? ' read' : '')
+      + (justUnlocked ? ' just-unlocked' : '');
+
     card.innerHTML = `
       <div class="concept-name">
         <span class="concept-dot"></span>${concept.name}${concept.original ? '<span class="concept-orig">' + concept.original + '</span>' : ''}
@@ -746,11 +1500,106 @@ function renderMap() {
     `;
 
     if (unlocked) {
-      card.addEventListener('click', () => openStory(concept.id));
+      card.addEventListener('click', () => {
+        haptic('light');
+        openStory(concept.id);
+      });
     }
 
     list.appendChild(card);
   });
+
+  // Update previously unlocked set
+  previouslyUnlocked = currentUnlocked;
+
+  // Map stats footer
+  const statsEl = document.getElementById('map-stats');
+  if (statsEl) {
+    const unlockedCount = currentUnlocked.size;
+    const reflectionCount = Object.values(reflections).filter(r => {
+      const text = typeof r === 'string' ? r : r?.text;
+      return text && text.trim();
+    }).length;
+    statsEl.innerHTML = `${currentPhilosopher.ornament} &nbsp; 已解锁 ${unlockedCount} · 已读 ${readCount} · 已记录 ${reflectionCount}`;
+  }
+
+  // Scroll-reveal with IntersectionObserver
+  requestAnimationFrame(() => {
+    const cards = list.querySelectorAll('.concept-card');
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
+      cards.forEach(c => observer.observe(c));
+    } else {
+      cards.forEach(c => c.classList.add('revealed'));
+    }
+  });
+
+  // Check for philosopher completion
+  if (readCount === concepts.length && concepts.length > 0) {
+    const celebKey = `echo/${currentPhilosopher.id}/celebrated`;
+    if (!localStorage.getItem(celebKey)) {
+      localStorage.setItem(celebKey, 'true');
+      setTimeout(() => showCelebration(currentPhilosopher), 300);
+    }
+  }
+}
+
+function showEchoAftertaste(conceptId, concept) {
+  // Pull a line from epigraph or layers.concept
+  let text = '';
+  const ep = EPIGRAPHS[conceptId];
+  if (ep) {
+    text = ep.text;
+  } else {
+    const story = storyMap.get(conceptId);
+    if (story && story.layers && story.layers.concept) {
+      // First sentence
+      const firstSentence = story.layers.concept.split(/[。！？\n]/)[0];
+      if (firstSentence && firstSentence.length > 5 && firstSentence.length < 100) {
+        text = firstSentence + '。';
+      }
+    }
+  }
+  if (!text) return;
+
+  const banner = document.getElementById('echo-banner');
+  banner.innerHTML = `
+    <div class="echo-banner-label">回声 · ${concept ? concept.name : ''}</div>
+    <div class="echo-banner-text">"${escapeHtml(text)}"</div>
+  `;
+  // Trigger reflow then show
+  requestAnimationFrame(() => {
+    banner.classList.add('show');
+    setTimeout(() => banner.classList.remove('show'), 4500);
+  });
+}
+
+function showCelebration(philosopher) {
+  haptic('success');
+  const overlay = document.createElement('div');
+  overlay.className = 'celebration';
+  overlay.innerHTML = `
+    <div class="celebration-text">${philosopher.name}的全部概念<br>已经走完</div>
+    <div class="celebration-sub">你听到了回声</div>
+  `;
+  overlay.addEventListener('click', () => {
+    overlay.style.transition = 'opacity 0.5s';
+    overlay.style.opacity = '0';
+    setTimeout(() => overlay.remove(), 500);
+  });
+  document.body.appendChild(overlay);
+  setTimeout(() => {
+    overlay.style.transition = 'opacity 0.5s';
+    overlay.style.opacity = '0';
+    setTimeout(() => overlay.remove(), 500);
+  }, 4000);
 }
 
 function topologicalSort(nodes) {
@@ -777,8 +1626,16 @@ function openStory(conceptId) {
   const story = storyMap.get(conceptId);
   if (!story) return;
 
+  // Track last visit
+  if (currentPhilosopher) {
+    setLastVisited(currentPhilosopher.id, conceptId);
+  }
+
   const concept = concepts.find(c => c.id === conceptId);
   document.getElementById('story-concept-label').textContent = concept ? concept.name : '';
+
+  // Reset reading progress
+  document.getElementById('reading-progress').style.width = '0%';
 
   const scroll = document.getElementById('story-scroll');
   scroll.innerHTML = '';
@@ -789,11 +1646,34 @@ function openStory(conceptId) {
   title.textContent = story.title;
   scroll.appendChild(title);
 
-  // Meta
+  // Meta + reading time
+  const charCount = (story.body || '').length;
+  const readingMin = Math.max(1, Math.round(charCount / 500));
   const meta = document.createElement('div');
   meta.className = 'story-meta fade-in';
-  meta.textContent = `${story.protagonist.name}，${story.protagonist.age}岁，${story.protagonist.occupation}`;
+  meta.innerHTML = `${story.protagonist.name}，${story.protagonist.age}岁，${story.protagonist.occupation}`
+    + `<div class="story-reading-time">约 ${readingMin} 分钟</div>`;
   scroll.appendChild(meta);
+
+  // Re-read prompt (if already read with a reflection)
+  const existingRefl = reflections[conceptId];
+  const wasRead = !!progress[conceptId];
+  if (wasRead && existingRefl) {
+    const reread = document.createElement('div');
+    reread.className = 'reread-prompt fade-in';
+    const oldText = typeof existingRefl === 'string' ? existingRefl : existingRefl.text;
+    reread.innerHTML = `<div class="reread-prompt-label">上次你写过</div>${escapeHtml(oldText.slice(0, 80))}${oldText.length > 80 ? '...' : ''}`;
+    scroll.appendChild(reread);
+  }
+
+  // Epigraph
+  const ep = EPIGRAPHS[conceptId];
+  if (ep) {
+    const epi = document.createElement('div');
+    epi.className = 'story-epigraph fade-in';
+    epi.innerHTML = `"${escapeHtml(ep.text)}"<span class="story-epigraph-source">— ${escapeHtml(ep.source)}</span>`;
+    scroll.appendChild(epi);
+  }
 
   // Body
   const body = document.createElement('div');
@@ -876,6 +1756,15 @@ function openStory(conceptId) {
     scroll.appendChild(linksSection);
   }
 
+  // Cross-philosopher echo
+  const crossText = CROSS_ECHOES[conceptId];
+  if (crossText) {
+    const cross = document.createElement('div');
+    cross.className = 'cross-echo';
+    cross.innerHTML = `<div class="cross-echo-label">回声</div>${escapeHtml(crossText)}`;
+    scroll.appendChild(cross);
+  }
+
   // Reflect
   const reflectSection = document.createElement('div');
   reflectSection.className = 'reflect-section';
@@ -902,10 +1791,13 @@ function openStory(conceptId) {
   reflectSkip.textContent = '读过了';
   reflectSkip.style.opacity = '0.25';
   reflectSkip.addEventListener('click', () => {
+    const wasUnread = !progress[conceptId];
     progress[conceptId] = true;
     saveProgress();
+    document.getElementById('reading-progress').style.width = '0%';
     showScreen('map');
     renderMap();
+    if (wasUnread) showEchoAftertaste(conceptId, concept);
   });
   btnRow.appendChild(reflectSkip);
 
@@ -914,6 +1806,7 @@ function openStory(conceptId) {
   reflectSave.textContent = '留下';
   reflectSave.addEventListener('click', () => {
     const text = reflectInput.value.trim();
+    const wasUnread = !progress[conceptId];
     if (text) {
       reflections[conceptId] = {
         text: text,
@@ -921,11 +1814,15 @@ function openStory(conceptId) {
         conceptName: concept ? concept.name : conceptId,
       };
       saveReflections();
+      haptic('success');
+      showToast('已记录');
     }
     progress[conceptId] = true;
     saveProgress();
+    document.getElementById('reading-progress').style.width = '0%';
     showScreen('map');
     renderMap();
+    if (wasUnread) showEchoAftertaste(conceptId, concept);
   });
   btnRow.appendChild(reflectSave);
 
@@ -967,18 +1864,17 @@ function renderJournal() {
   let allEntries = [];
 
   if (journalGlobal) {
-    // Gather from all philosophers
     PHILOSOPHERS.forEach(p => {
       try {
         const refs = JSON.parse(localStorage.getItem(storageKey(p.id, 'reflections'))) || {};
         Object.entries(refs).forEach(([id, val]) => {
-          allEntries.push({ id, val, philosopherName: p.name });
+          allEntries.push({ id, val, philosopherId: p.id, philosopherName: p.name });
         });
       } catch {}
     });
   } else {
     Object.entries(reflections).forEach(([id, val]) => {
-      allEntries.push({ id, val, philosopherName: currentPhilosopher?.name || '' });
+      allEntries.push({ id, val, philosopherId: currentPhilosopher?.id, philosopherName: currentPhilosopher?.name || '' });
     });
   }
 
@@ -1001,9 +1897,26 @@ function renderJournal() {
     return;
   }
 
-  allEntries.forEach(({ id, val, philosopherName }) => {
+  // Stats
+  const dates = allEntries
+    .map(e => typeof e.val === 'object' ? e.val.date : null)
+    .filter(Boolean)
+    .map(d => new Date(d));
+  const earliestDate = dates.length > 0
+    ? new Date(Math.min(...dates)).toLocaleDateString('zh-CN', { month: 'long', day: 'numeric' })
+    : '';
+  const stats = document.createElement('div');
+  stats.className = 'journal-stats';
+  stats.textContent = earliestDate
+    ? `${allEntries.length} 条思考 · 始于 ${earliestDate}`
+    : `${allEntries.length} 条思考`;
+  scroll.appendChild(stats);
+
+  allEntries.forEach(({ id, val, philosopherId, philosopherName }) => {
     const entry = document.createElement('div');
     entry.className = 'journal-entry fade-in';
+    entry.setAttribute('data-concept-id', id);
+    entry.setAttribute('data-philosopher-id', philosopherId);
 
     if (journalGlobal) {
       const pTag = document.createElement('div');
@@ -1034,6 +1947,85 @@ function renderJournal() {
     textEl.className = 'journal-entry-text';
     textEl.textContent = text;
     entry.appendChild(textEl);
+
+    // Actions row (hidden until clicked)
+    const actions = document.createElement('div');
+    actions.className = 'journal-entry-actions';
+
+    const editBtn = document.createElement('button');
+    editBtn.className = 'journal-action-btn';
+    editBtn.textContent = '编辑';
+    editBtn.onclick = (e) => {
+      e.stopPropagation();
+      // Replace text with textarea
+      const editor = document.createElement('textarea');
+      editor.className = 'journal-entry-editor';
+      editor.value = text;
+      textEl.replaceWith(editor);
+      editor.focus();
+      editBtn.style.display = 'none';
+      // Add save button
+      const saveBtn = document.createElement('button');
+      saveBtn.className = 'journal-action-btn';
+      saveBtn.textContent = '保存';
+      saveBtn.onclick = (ev) => {
+        ev.stopPropagation();
+        const newText = editor.value.trim();
+        if (newText) {
+          const refs = JSON.parse(localStorage.getItem(storageKey(philosopherId, 'reflections'))) || {};
+          if (typeof refs[id] === 'object') {
+            refs[id].text = newText;
+          } else {
+            refs[id] = { text: newText, date: new Date().toISOString(), conceptName };
+          }
+          localStorage.setItem(storageKey(philosopherId, 'reflections'), JSON.stringify(refs));
+          if (currentPhilosopher && currentPhilosopher.id === philosopherId) {
+            reflections = refs;
+          }
+          haptic('success');
+          showToast('已更新');
+          renderJournal();
+        }
+      };
+      actions.insertBefore(saveBtn, deleteBtn);
+    };
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'journal-action-btn danger';
+    deleteBtn.textContent = '删除';
+    let confirmTimer = null;
+    deleteBtn.onclick = (e) => {
+      e.stopPropagation();
+      if (deleteBtn.textContent === '删除') {
+        deleteBtn.textContent = '确定删除？';
+        confirmTimer = setTimeout(() => {
+          deleteBtn.textContent = '删除';
+        }, 3000);
+      } else {
+        clearTimeout(confirmTimer);
+        const refs = JSON.parse(localStorage.getItem(storageKey(philosopherId, 'reflections'))) || {};
+        delete refs[id];
+        localStorage.setItem(storageKey(philosopherId, 'reflections'), JSON.stringify(refs));
+        if (currentPhilosopher && currentPhilosopher.id === philosopherId) {
+          reflections = refs;
+        }
+        haptic('medium');
+        showToast('已删除');
+        renderJournal();
+      }
+    };
+
+    actions.appendChild(editBtn);
+    actions.appendChild(deleteBtn);
+    entry.appendChild(actions);
+
+    entry.addEventListener('click', () => {
+      // Close any other editing entries first
+      document.querySelectorAll('.journal-entry.editing').forEach(el => {
+        if (el !== entry) el.classList.remove('editing');
+      });
+      entry.classList.toggle('editing');
+    });
 
     scroll.appendChild(entry);
   });
@@ -1085,6 +2077,7 @@ function escapeHtml(s) {
 
 // ═══ Navigation ═══
 document.getElementById('back-btn').addEventListener('click', () => {
+  document.getElementById('reading-progress').style.width = '0%';
   showScreen('map');
   renderMap();
 });
@@ -1129,12 +2122,125 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+// ═══ Reading progress bar ═══
+window.addEventListener('scroll', () => {
+  const active = document.querySelector('.screen.active');
+  if (active?.id !== 'story-screen') return;
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+  document.getElementById('reading-progress').style.width = pct + '%';
+}, { passive: true });
+
+// ═══ Swipe-back gesture ═══
+let touchStartX = 0;
+let touchStartY = 0;
+let swiping = false;
+const swipeIndicator = document.getElementById('swipe-indicator');
+
+document.addEventListener('touchstart', (e) => {
+  const active = document.querySelector('.screen.active');
+  if (active?.id !== 'story-screen' && active?.id !== 'journal-screen') return;
+  const touch = e.touches[0];
+  if (touch.clientX < 30) { // Left edge
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+    swiping = true;
+    swipeIndicator.classList.add('visible');
+  }
+}, { passive: true });
+
+document.addEventListener('touchmove', (e) => {
+  if (!swiping) return;
+  const dx = e.touches[0].clientX - touchStartX;
+  const dy = Math.abs(e.touches[0].clientY - touchStartY);
+  if (dy > dx) { swiping = false; swipeIndicator.classList.remove('visible'); }
+}, { passive: true });
+
+document.addEventListener('touchend', (e) => {
+  if (!swiping) return;
+  swipeIndicator.classList.remove('visible');
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  swiping = false;
+  if (dx > 80) {
+    haptic('light');
+    const active = document.querySelector('.screen.active');
+    if (active?.id === 'story-screen') {
+      document.getElementById('reading-progress').style.width = '0%';
+      showScreen('map');
+      renderMap();
+    } else if (active?.id === 'journal-screen') {
+      if (journalGlobal) { renderHome(); showScreen('home'); }
+      else { showScreen('map'); renderMap(); }
+    }
+  }
+});
+
+// ═══ Onboarding ═══
+const ONBOARDING_SLIDES = [
+  '这不是教科书。',
+  '每一个概念，是一个故事。',
+  '读完，写下你想到的——\n它会成为你自己的回响。',
+];
+let onbIdx = 0;
+function showOnboarding() {
+  const ob = document.getElementById('onboarding');
+  const textEl = document.getElementById('onboarding-text');
+  const dots = document.querySelectorAll('.onboarding-dot');
+  const nextBtn = document.getElementById('onboarding-next');
+  onbIdx = 0;
+  textEl.textContent = ONBOARDING_SLIDES[0];
+  dots.forEach((d, i) => d.classList.toggle('active', i === 0));
+  nextBtn.textContent = '继续 →';
+  ob.style.display = 'flex';
+
+  nextBtn.onclick = () => {
+    haptic('light');
+    onbIdx++;
+    if (onbIdx >= ONBOARDING_SLIDES.length) {
+      localStorage.setItem('echo/onboarded', 'true');
+      ob.style.transition = 'opacity 0.6s';
+      ob.style.opacity = '0';
+      setTimeout(() => { ob.style.display = 'none'; ob.style.opacity = '1'; }, 600);
+      return;
+    }
+    textEl.classList.add('fade');
+    setTimeout(() => {
+      textEl.textContent = ONBOARDING_SLIDES[onbIdx];
+      textEl.classList.remove('fade');
+      dots.forEach((d, i) => d.classList.toggle('active', i === onbIdx));
+      if (onbIdx === ONBOARDING_SLIDES.length - 1) nextBtn.textContent = '开始 →';
+    }, 400);
+  };
+}
+
+// ═══ Keyboard shortcuts ═══
+document.addEventListener('keydown', (e) => {
+  // Only when no input is focused
+  if (document.activeElement && ['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+  const active = document.querySelector('.screen.active');
+  if (e.key === 'j' || e.key === 'J') {
+    if (active?.id === 'map-screen') {
+      journalGlobal = false; renderJournal(); showScreen('journal');
+    } else if (active?.id === 'home-screen') {
+      journalGlobal = true; renderJournal(); showScreen('journal');
+    }
+  }
+  if (active?.id === 'story-screen' && e.key === ' ') {
+    e.preventDefault();
+    window.scrollBy({ top: window.innerHeight * 0.8, behavior: 'smooth' });
+  }
+});
+
 // ═══ Service Worker ═══
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 
 // ═══ Init ═══
+if (!localStorage.getItem('echo/onboarded')) {
+  showOnboarding();
+}
 renderHome();
 showScreen('home');
 </script>
