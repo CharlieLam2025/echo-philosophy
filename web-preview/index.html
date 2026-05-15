@@ -956,6 +956,94 @@ body::after {
   letter-spacing: 0.15em;
 }
 
+/* ── Archive screen ── */
+.archive-scroll {
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.archive-name {
+  font-size: 28px;
+  opacity: 0.9;
+  margin-bottom: 4px;
+}
+.archive-orig {
+  font-size: 13px;
+  opacity: 0.4;
+  font-style: italic;
+  margin-bottom: 6px;
+}
+.archive-dates {
+  font-size: 11px;
+  opacity: 0.25;
+  margin-bottom: 28px;
+  letter-spacing: 0.1em;
+}
+.archive-bio {
+  font-size: 15px;
+  line-height: 1.85;
+  opacity: 0.75;
+  padding: 20px 0 32px;
+  border-top: 1px solid rgba(245,241,232,0.06);
+  border-bottom: 1px solid rgba(245,241,232,0.06);
+  margin-bottom: 40px;
+}
+.archive-section-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  opacity: 0.4;
+  margin-bottom: 24px;
+  color: var(--accent-strong);
+}
+
+.archive-timeline {
+  margin-bottom: 56px;
+}
+.timeline-row {
+  display: flex;
+  gap: 20px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(245,241,232,0.04);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.timeline-row:last-child { border-bottom: none; }
+.timeline-year {
+  flex-shrink: 0;
+  width: 80px;
+  opacity: 0.45;
+  font-feature-settings: 'tnum';
+}
+.timeline-event {
+  flex: 1;
+  opacity: 0.75;
+}
+
+.archive-passages {
+  margin-bottom: 40px;
+}
+.passage {
+  margin-bottom: 36px;
+  padding: 20px 22px;
+  background: rgba(245,241,232,0.02);
+  border-left: 2px solid var(--accent);
+  border-radius: 0 4px 4px 0;
+}
+.passage-source {
+  font-size: 11px;
+  opacity: 0.4;
+  letter-spacing: 0.1em;
+  margin-bottom: 14px;
+  color: var(--accent-strong);
+}
+.passage-text {
+  font-size: 15px;
+  line-height: 1.85;
+  opacity: 0.85;
+  white-space: pre-wrap;
+  font-style: italic;
+}
+
 /* ── Onboarding ── */
 .onboarding {
   position: fixed;
@@ -1353,7 +1441,10 @@ body::after {
   <div class="map-header" id="map-header">ZARATHUSTRA</div>
   <div class="map-nav">
     <button class="nav-btn" id="nav-home">← 返回</button>
-    <button class="nav-btn" id="nav-journal">日记本</button>
+    <div style="display:flex; gap:14px;">
+      <button class="nav-btn" id="nav-archive">档案</button>
+      <button class="nav-btn" id="nav-journal">日记本</button>
+    </div>
   </div>
   <div class="map-progress" id="map-progress"></div>
   <div class="map-bar"><div class="map-bar-fill" id="map-bar-fill"></div></div>
@@ -1368,6 +1459,15 @@ body::after {
     <span class="story-concept-label" id="story-concept-label"></span>
   </div>
   <div class="story-scroll" id="story-scroll"></div>
+</div>
+
+<!-- ═══ Archive Screen ═══ -->
+<div id="archive-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="archive-back-btn">←</button>
+    <span class="story-concept-label">档案</span>
+  </div>
+  <div class="archive-scroll" id="archive-scroll"></div>
 </div>
 
 <!-- ═══ Mind Screen ═══ -->
@@ -1840,6 +1940,137 @@ const DEEP_READS = {
   },
 };
 
+// ═══ 哲学家档案 ═══
+const PHILOSOPHER_ARCHIVES = {
+  nietzsche: {
+    bio: '出生于普鲁士小镇 Röcken 的一个新教牧师家庭，5 岁丧父。24 岁就任巴塞尔大学最年轻的语言学教授。35 岁因健康问题辞职，进入十年游荡式写作的爆发期。1889 年 1 月在都灵街头拥抱一匹被鞭打的马，精神崩溃，此后再未恢复神志。20 世纪所有重要思想家——海德格尔、福柯、德勒兹、维特根斯坦——都在和他对话。',
+    timeline: [
+      { year: '1844', event: '出生于普鲁士 Röcken 牧师家庭' },
+      { year: '1849', event: '父亲（路德派牧师）去世，5 岁' },
+      { year: '1865', event: '在莱比锡读到叔本华，"如遭电击"' },
+      { year: '1869', event: '24 岁就任巴塞尔大学语言学教授' },
+      { year: '1872', event: '《悲剧的诞生》——开启哲学生涯' },
+      { year: '1879', event: '因健康问题辞去教职' },
+      { year: '1881', event: '"永恒轮回"思想在瑞士西尔斯-玛丽亚袭来' },
+      { year: '1883–85', event: '在洛迦诺/尼斯/西尔斯写《查拉图斯特拉如是说》' },
+      { year: '1886', event: '《善恶的彼岸》' },
+      { year: '1887', event: '《道德的谱系》' },
+      { year: '1888', event: '一年内写出《偶像的黄昏》《反基督》《看哪这人》《瓦格纳事件》' },
+      { year: '1889.1', event: '都灵街头拥抱被鞭打的马，精神崩溃' },
+      { year: '1900.8', event: '在魏玛去世，44 岁起就被妹妹照料' },
+    ],
+    passages: [
+      {
+        source: '《查拉图斯特拉如是说》前言 §3',
+        text: '我教你们什么是超人。人是一种应当被超越的东西。你们做了什么来超越他？\n\n至今所有的存在物都创造过超出自己的东西——你们却愿意成为这巨流的退潮，宁可退回到野兽，也不愿超越人吗？\n\n猿对人是什么？一个笑柄，或者一种痛苦的耻辱。人对超人也将如此：一个笑柄，或者一种痛苦的耻辱。',
+      },
+      {
+        source: '《快乐的科学》§125 "疯子"',
+        text: '——你们没听过那个疯子的故事吗？他在大白天点亮一盏灯笼，跑到市场上，不停地喊："我寻找上帝！我寻找上帝！"\n\n——他冲进他们中间，用目光刺穿他们："上帝去哪儿了？"他喊道，"我来告诉你们。我们杀了他——你们和我。我们都是他的凶手。\n\n但我们是怎么做到的？我们怎么能喝干大海？谁给了我们海绵，让我们抹去整个地平线？当我们把这颗地球从它的太阳上松开锁链，我们究竟在做什么？"',
+      },
+      {
+        source: '《看哪这人》"为什么我是命运" §1',
+        text: '我知道我的命运。终有一天，我的名字将与某种可怕的回忆联系在一起——一场地上从未发生过的危机，一场最深刻的良心冲突。我不是人，我是炸药。\n\n但我也是开端——我是第一个不撒谎的人。我的真理是骇人的：因为人们至今把谎话叫做真理。重估一切价值：这是我对人类最高自我反思的公式。',
+      },
+    ],
+  },
+
+  stoic: {
+    bio: '斯多葛学派不是一个人，是一条思想链——始于公元前 4 世纪的雅典（芝诺在彩色门廊 Stoa Poikilē 讲学），延续到 2 世纪的罗马帝国。三位最伟大的实践者跨越所有社会阶层：一个奴隶（爱比克泰德）、一个被皇帝勒令自杀的官员（塞涅卡）、一个皇帝（马可·奥勒留）。500 年间它教人如何在不能控制的世界里活得有尊严。',
+    timeline: [
+      { year: '前 334', event: '芝诺在雅典彩色门廊创立学派' },
+      { year: '前 280', event: '克莱安修斯继承学派' },
+      { year: '前 232', event: '克吕西普执掌——系统化斯多葛逻辑' },
+      { year: '前 50', event: '斯多葛思想传入罗马' },
+      { year: '49', event: '塞涅卡成为尼禄的导师' },
+      { year: '65', event: '塞涅卡被尼禄勒令自杀，从容割腕' },
+      { year: '80 左右', event: '爱比克泰德（前奴隶）开始在尼科波利斯教学' },
+      { year: '108', event: '阿里安笔记《爱比克泰德手册》成书' },
+      { year: '121', event: '马可·奥勒留出生' },
+      { year: '161–180', event: '马可·奥勒留在位为罗马皇帝' },
+      { year: '170s', event: '马可在多瑙河战场用希腊语写《沉思录》' },
+      { year: '180', event: '马可去世——古典斯多葛传统的事实终结' },
+    ],
+    passages: [
+      {
+        source: '马可·奥勒留《沉思录》卷四 §3',
+        text: '人们寻找隐居处——乡间小屋、海边、山中——你也总渴望这些。但这完全是凡庸的，因为你随时可以退入自己之内。\n\n没有比一个人的灵魂更安静、更少被打扰的退隐之所。尤其当他在自己之中拥有那些只要凝视一下就立刻让他获得完全宁静的东西——而我说的宁静无非是井然有序。\n\n那么就经常允许自己这种退隐吧，更新自己。',
+      },
+      {
+        source: '爱比克泰德《手册》§1',
+        text: '在所有存在的事物中，有些在我们的掌控之内，有些不在。\n\n在我们掌控之内的是：我们的判断、我们的冲动、我们的欲望、我们的厌恶——一句话，凡是我们自己的活动。\n\n不在我们掌控之内的是：我们的身体、我们的财产、我们的名声、我们的官职——一句话，凡是不属于我们自己活动的。\n\n属于我们的天生自由、不受约束、不被阻碍；不属于我们的天生软弱、奴性、可被夺走。',
+      },
+      {
+        source: '塞涅卡《道德书简》§91',
+        text: '没有什么会比突然降临的事件更让我们震惊。\n\n所以我们必须让自己习惯每一种可能——把心思放在我们害怕的东西上。我们应该时常反思可能发生的事——不仅是经常发生的，还包括极少发生但确实可能的。\n\n大自然没有给我们任何东西能够躲避她的力量。即使在一片平静中，灾难也已经在路上。',
+      },
+    ],
+  },
+
+  camus: {
+    bio: '出生于法属阿尔及利亚的贫民窟，父亲在他周岁前死于一战。母亲是文盲，他是家族第一个上大学的人。17 岁查出肺结核——这一经验贯穿了他对死亡的思考。二战时主编地下报纸《Combat》，是法国抵抗运动的核心声音之一。1957 年 44 岁获诺贝尔文学奖（史上第二年轻）。1960 年 1 月 4 日死于车祸，口袋里有一张未使用的火车票。',
+    timeline: [
+      { year: '1913', event: '出生于阿尔及利亚 Mondovi' },
+      { year: '1914', event: '父亲死于马恩河战役' },
+      { year: '1930', event: '17 岁查出肺结核' },
+      { year: '1935', event: '加入法国共产党（两年后被开除）' },
+      { year: '1940', event: '在巴黎，《局外人》初稿完成' },
+      { year: '1942', event: '《局外人》《西西弗神话》同年问世' },
+      { year: '1943', event: '主编地下抵抗报纸《Combat》' },
+      { year: '1947', event: '《鼠疫》成为战后欧洲畅销书' },
+      { year: '1951', event: '《反抗者》——与萨特公开决裂' },
+      { year: '1957', event: '获诺贝尔文学奖，44 岁' },
+      { year: '1960.1.4', event: '车祸去世，46 岁' },
+    ],
+    passages: [
+      {
+        source: '《西西弗神话》开篇',
+        text: '真正严肃的哲学问题只有一个，那就是自杀。判断生命是否值得活——这是回答哲学的根本问题。其余的——世界是否有三个维度，精神有九个还是十二个范畴——都是次要的。\n\n那是游戏；首先必须回答的是这个。\n\n如果像尼采希望的那样，一个哲学家应当用榜样来教导，那他做出榜样的重要性就显而易见了——他必须能够给出回答，让这个回答先于他的行动出现。',
+      },
+      {
+        source: '《局外人》终章',
+        text: '看见这一切像兄弟一样向我走来，我感到自己曾经幸福，现在也仍然幸福。\n\n为了使一切都圆满，为了使我感到不那么孤独，我还希望我被处决的那天，有许多观众，他们都用愤恨的呼喊来迎接我。\n\n我向这个世界温柔的冷漠敞开了自己。',
+      },
+      {
+        source: '《西西弗神话》结尾',
+        text: '我把西西弗斯留在山脚下！人总能再找回他的负担。\n\n但西西弗斯教导我们：一种更高的忠诚——它否认神，举起石头。他也判断一切都是好的。从此对他而言，没有主宰的宇宙看起来既不贫瘠也不平庸。这块石头上的每一颗微粒、这布满夜色山峦的每一片矿石碎屑，本身就是一个世界。\n\n通往顶峰的奋斗本身足以充实人心。\n\n必须想象西西弗斯是幸福的。',
+      },
+    ],
+  },
+
+  foucault: {
+    bio: '出生于法国普瓦提埃一个外科医生家庭。巴黎高师哲学+心理学双料学生。同性恋身份在 1950 年代的法国是被规训的对象——这种切身经验渗透在他后来对权力的分析中。1970 年当选法兰西学院教授，自此每年的公开讲座（如《规训与惩罚》《必须保卫社会》）成为思想事件。1984 年因艾滋病并发症去世，57 岁。',
+    timeline: [
+      { year: '1926', event: '出生于普瓦提埃' },
+      { year: '1948', event: '进入巴黎高师' },
+      { year: '1950–55', event: '深受海德格尔、尼采、布朗肖影响' },
+      { year: '1961', event: '博士论文《疯狂史》出版' },
+      { year: '1963', event: '《临床医学的诞生》' },
+      { year: '1966', event: '《词与物》成为畅销书' },
+      { year: '1969', event: '《知识考古学》' },
+      { year: '1970', event: '当选法兰西学院教授' },
+      { year: '1975', event: '《规训与惩罚》出版' },
+      { year: '1976', event: '《性史》第一卷' },
+      { year: '1978–79', event: '法兰西学院讲座转向"治理术"和"生命权力"' },
+      { year: '1984.6.25', event: '在巴黎去世于艾滋病并发症，《性史》二、三卷在死前出版' },
+    ],
+    passages: [
+      {
+        source: '《规训与惩罚》"全景敞视主义"',
+        text: '边沁的全景监狱是这一构图的建筑形象：圆周一栋建筑，中心一座塔；塔上有大窗户，对着环形建筑的内侧。\n\n圆形建筑被分成许多牢房，每间贯穿建筑的整个厚度。每间有两扇窗户，一扇朝内，对着塔；另一扇朝外，让光透过单元。\n\n只需要在中心塔上放一个监视者——每个牢房就关一个疯人、病人、罪犯、工人、学生。借助逆光，可以从塔上观察到一间间牢房里囚徒清晰的剪影。\n\n可见性是一个陷阱。',
+      },
+      {
+        source: '《性史》第一卷 §5',
+        text: '从 17 世纪以来，权力与生命的关系发生了变化。\n\n生命变成了权力的对象——不再是"让人死或让人活"的旧主权，而是"让生命增殖、给生命排序、管理生命"的新权力。\n\n这种权力没有侩子手——它有医生、统计学家、教育家、心理学家。它不威胁要杀你——它要让你健康、生育、寿命达标。\n\n这就是生命权力——它比任何之前的权力都更深地进入身体。',
+      },
+      {
+        source: '法兰西学院讲座《主体解释学》1982',
+        text: '从希腊罗马晚期到基督教早期，发生了一个根本转变。\n\n古代的问题是："要认识自己"——但这种认识的目的是关照自己、塑造自己、把自己变成想成为的样子。"认识自己"服务于"关照自己"。\n\n基督教反过来：关照自己变得可疑——那是自爱、自负——只有放弃自己，认识自己（认识自己有多么罪恶）才被允许。\n\n现代继承了基督教这一翻转：我们觉得"自我提升"理所当然，但忘了那本来是为了关照自己——而不是把自己交给一个又一个的"应当"。',
+      },
+    ],
+  },
+};
+
 // ═══ 批判与反思 ═══
 const CRITIQUES = {
   // ── Nietzsche
@@ -2162,6 +2393,44 @@ function buildRadarSVG(stats, size = 200) {
   }).join('');
 
   return `<svg class="mind-radar" width="${size}" height="${size + 20}" viewBox="0 -10 ${size} ${size + 20}">${bgPolys}${axes}${statPoly}${dots}${labels}</svg>`;
+}
+
+function renderArchive() {
+  if (!currentPhilosopher) return;
+  const archive = PHILOSOPHER_ARCHIVES[currentPhilosopher.id];
+  const scroll = document.getElementById('archive-scroll');
+  if (!archive) {
+    scroll.innerHTML = '<div style="opacity:0.3; font-size:14px;">档案暂未整理。</div>';
+    return;
+  }
+  const timeline = archive.timeline.map(t => `
+    <div class="timeline-row">
+      <span class="timeline-year">${escapeHtml(t.year)}</span>
+      <span class="timeline-event">${escapeHtml(t.event)}</span>
+    </div>
+  `).join('');
+  const passages = archive.passages.map(p => `
+    <div class="passage">
+      <div class="passage-source">${escapeHtml(p.source)}</div>
+      <div class="passage-text">${escapeHtml(p.text)}</div>
+    </div>
+  `).join('');
+  scroll.innerHTML = `
+    <div class="archive-name">${currentPhilosopher.name}</div>
+    <div class="archive-orig">${currentPhilosopher.orig}</div>
+    <div class="archive-dates">${currentPhilosopher.dates}</div>
+    <div class="archive-bio">${escapeHtml(archive.bio)}</div>
+
+    <div class="archive-timeline">
+      <div class="archive-section-label">年 表</div>
+      ${timeline}
+    </div>
+
+    <div class="archive-passages">
+      <div class="archive-section-label">原典选段</div>
+      ${passages}
+    </div>
+  `;
 }
 
 function renderMindCardHome() {
@@ -3131,6 +3400,17 @@ document.getElementById('nav-global-journal').addEventListener('click', () => {
   journalGlobal = true;
   renderJournal();
   showScreen('journal');
+});
+
+document.getElementById('nav-archive').addEventListener('click', () => {
+  haptic('light');
+  renderArchive();
+  showScreen('archive');
+});
+
+document.getElementById('archive-back-btn').addEventListener('click', () => {
+  showScreen('map');
+  renderMap();
 });
 
 document.getElementById('mind-back-btn').addEventListener('click', () => {
