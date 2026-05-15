@@ -956,6 +956,138 @@ body::after {
   letter-spacing: 0.15em;
 }
 
+/* ── Scenarios list screen ── */
+.scenarios-scroll {
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.scenarios-title {
+  font-size: 28px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.scenarios-subtitle {
+  font-size: 12px;
+  opacity: 0.35;
+  font-style: italic;
+  margin-bottom: 40px;
+}
+.scenario-card {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(245,241,232,0.05);
+  color: #f5f1e8;
+  font-family: inherit;
+  text-align: left;
+  padding: 20px 0;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.scenario-card:active { opacity: 0.7; transform: translateX(3px); }
+.scenario-card:focus { outline: none; }
+.scenario-tags {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.scenario-tag {
+  font-size: 10px;
+  opacity: 0.35;
+  padding: 2px 8px;
+  border: 1px solid rgba(245,241,232,0.08);
+  border-radius: 8px;
+}
+.scenario-card-title {
+  font-size: 17px;
+  opacity: 0.9;
+  margin-bottom: 4px;
+}
+.scenario-card-question {
+  font-size: 13px;
+  opacity: 0.55;
+  font-style: italic;
+}
+
+/* ── Scenario detail screen ── */
+.scenario-detail-scroll {
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.sd-title {
+  font-size: 26px;
+  opacity: 0.9;
+  margin-bottom: 12px;
+}
+.sd-setup {
+  font-size: 15px;
+  line-height: 1.9;
+  opacity: 0.82;
+  padding: 22px 24px;
+  background: rgba(245,241,232,0.025);
+  border-radius: 4px;
+  margin-bottom: 28px;
+  white-space: pre-wrap;
+}
+.sd-question {
+  font-size: 17px;
+  opacity: 0.85;
+  font-style: italic;
+  text-align: center;
+  padding: 16px 0;
+  margin-bottom: 28px;
+  border-top: 1px solid rgba(245,241,232,0.08);
+  border-bottom: 1px solid rgba(245,241,232,0.08);
+}
+.sd-applies {
+  margin-bottom: 28px;
+}
+.sd-applies-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  opacity: 0.4;
+  margin-bottom: 12px;
+}
+.sd-apply-chip {
+  display: inline-block;
+  background: transparent;
+  border: 1px solid rgba(245,241,232,0.1);
+  font-size: 13px;
+  padding: 5px 12px;
+  margin: 0 6px 6px 0;
+  border-radius: 14px;
+  opacity: 0.75;
+}
+.sd-section {
+  margin-bottom: 32px;
+}
+.sd-section-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  opacity: 0.45;
+  margin-bottom: 14px;
+  color: rgba(245,241,232,0.55);
+}
+.sd-analysis {
+  font-size: 15px;
+  line-height: 1.9;
+  opacity: 0.82;
+  white-space: pre-wrap;
+}
+.sd-suggestion {
+  font-size: 15px;
+  line-height: 1.85;
+  opacity: 0.85;
+  padding: 18px 22px;
+  border-left: 2px solid var(--accent);
+  border-radius: 0 4px 4px 0;
+  background: rgba(245,241,232,0.02);
+  font-style: italic;
+}
+
 /* ── Dialogues list screen ── */
 .dialogues-scroll {
   padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
@@ -2094,6 +2226,7 @@ body::after {
     <button class="nav-btn" id="nav-thinkers" style="font-size:13px;">现代思想 →</button>
     <button class="nav-btn" id="nav-events" style="font-size:13px;">哲学史事件 →</button>
     <button class="nav-btn" id="nav-dialogues" style="font-size:13px;">对话录 →</button>
+    <button class="nav-btn" id="nav-scenarios" style="font-size:13px;">应用题 →</button>
   </div>
 </div>
 
@@ -2120,6 +2253,24 @@ body::after {
     <span class="story-concept-label" id="story-concept-label"></span>
   </div>
   <div class="story-scroll" id="story-scroll"></div>
+</div>
+
+<!-- ═══ Scenarios List Screen ═══ -->
+<div id="scenarios-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="scenarios-back-btn">←</button>
+    <span class="story-concept-label">应用题</span>
+  </div>
+  <div class="scenarios-scroll" id="scenarios-scroll"></div>
+</div>
+
+<!-- ═══ Scenario Detail Screen ═══ -->
+<div id="scenario-detail-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="scenario-detail-back-btn">←</button>
+    <span class="story-concept-label" id="scenario-detail-label">应用题</span>
+  </div>
+  <div class="scenario-detail-scroll" id="scenario-detail-scroll"></div>
 </div>
 
 <!-- ═══ Dialogues List Screen ═══ -->
@@ -2672,6 +2823,160 @@ const DEEP_READS = {
     apply: '识别你生活中的"异托邦"——夜晚的便利店、失眠的微信对话、深夜大排档——这些缝隙时刻是你呼吸的地方。',
   },
 };
+
+// ═══ 哲学应用题 ═══
+const SCENARIOS = [
+  {
+    id: 'late-night-work',
+    title: '凌晨两点还在加班',
+    tags: ['工作', '自欺'],
+    setup: '凌晨两点，你还在写明天的报告。同事问"为什么不走"，你说："因为我是负责的人。"\n\n第二天你跟朋友复述这件事时，语气里有一丝骄傲——你比其他人更投入。',
+    question: '"我必须"是真的吗？',
+    applies: ['萨特的自欺', '韩炳哲的成就社会', '尼采的奴隶道德'],
+    analysis: '萨特会指出："我必须"是自欺——把自己塞进"负责的人"这个角色，就不用承担选择的重量了。真相是你选择了留下。\n\n韩炳哲走得更远：你选择留下，因为成就社会让你停不下来。"你应该多做一点"是外部命令；"你能做更好的自己"是内部命令——后者更难拒绝。\n\n尼采看到了第三层：把"我能"翻译成"我应该"——这是奴隶道德的核心机制。',
+    suggestion: '试一次：今晚就走。看看明天真的会塌掉，还是只是你害怕塌掉。',
+  },
+  {
+    id: 'laid-off',
+    title: '被裁员的两种反应',
+    tags: ['命运', '反抗'],
+    setup: 'A 被裁那天，发了一条朋友圈："这不公平。"\nB 被裁那天，发了一条朋友圈："幸亏发生了。"\n\n几个月后，A 还在抱怨。B 已经做了新的事。',
+    question: '哪种反应更"正确"？',
+    applies: ['尼采的命运之爱', '加缪的反抗', '斯多葛的控制二分法'],
+    analysis: '斯多葛会说：A 在抗拒已发生的事——这是浪费在不能控制上的精力。\n\n尼采会说：B 在做"命运之爱"——把被强加的事变成自己想要的事。\n\n但加缪会警告：B 的"幸亏"如果是为了让自己舒服而说的，那是哲学自杀——用"答案"消灭了荒诞。真正的反抗是先看清楚——"这就是不公平"——然后还行动。',
+    suggestion: '先承认坏事就是坏事（清醒），再决定怎么用它（命运之爱）。两步不能跳。',
+  },
+  {
+    id: 'wechat-envy',
+    title: '看到同学晒娃的失眠',
+    tags: ['怨恨', '社交媒体'],
+    setup: '凌晨刷朋友圈，看到大学同学晒小孩考上重点小学。\n\n你回到床上，想睡，睡不着。脑子里冒出："那种鸡娃我看不上。"——但你知道自己只是够不着。',
+    question: '这种感觉是嫉妒吗？',
+    applies: ['尼采的怨恨', '尼采的距离的激情', '福柯的规训'],
+    analysis: '尼采会说：这不是嫉妒——是怨恨。怨恨更狡猾——它会发明一套道德：把"我没有"翻译成"那个东西本来就不好"。\n\n"距离的激情"是健康的对立面——不用别人的尺度衡量自己，但不需要贬低别人。\n\n福柯加一句：你不是自然就用"重点小学"作为成功标准的——这是规训。你被这个标准捏过，所以才被刺到。',
+    suggestion: '允许自己想要够不着的东西——但不要把它说成"不好"。把"我看不上"换成"我没有"——立刻清醒一点。',
+  },
+  {
+    id: 'meeting-nod',
+    title: '领导画饼时点头',
+    tags: ['工作', '权力'],
+    setup: '会议上，领导讲完愿景：「这是改变行业的机会，我们一起冲。」\n\n你心里：完全不信。但你点了头。',
+    question: '为什么你点头？',
+    applies: ['萨特的自欺', '福柯的话语', '福柯的 parrhesia (直言)'],
+    analysis: '萨特会说：你"必须"点头吗？不。是你选择不冒风险。说"我必须"是自欺。\n\n福柯会说：会议本身是一种"话语装置"——它已经把"可以说什么"框定好了。在那个框架里，"我不信"不是一个被允许的发言。\n\n但福柯也会说："直言"必须冒风险——对没权力的人说真话不算 parrhesia，对老板说才算。你"敢说"的地方往往是没权力的地方——这不是勇气。',
+    suggestion: '不必每次都直言（代价太大）。但要清醒——知道你在点头，知道你为什么不直言。这本身就是不被吞掉的方式。',
+  },
+  {
+    id: 'xiaohongshu-buying',
+    title: '小红书种草后下单',
+    tags: ['消费', '拟像'],
+    setup: '刷一晚上小红书，买了「必入的清晨咖啡套装」——磨豆机、手冲壶、有重量的杯子。\n\n两周后这套东西堆在角落。你想起来时主要是为了拍照。',
+    question: '你买的是什么？',
+    applies: ['鲍德里亚的拟像', '尼采的末人'],
+    analysis: '鲍德里亚会说：你买的不是咖啡，是"清晨咖啡"的符号。你享用这个符号的方式——拍照、发圈、看人点赞——比你喝它的方式更长。\n\n咖啡是现实，"清晨咖啡的生活方式"是拟像。整个消费社会都建立在这种符号-现实脱钩上。\n\n尼采会说：这是末人的"幸福"——发明出来的小确幸，让你不再思考更大的问题。',
+    suggestion: '下次种草前问一句："如果不能发圈，我还想买吗？" — 答案常常是不。',
+  },
+  {
+    id: 'career-pivot',
+    title: '30 岁的择业焦虑',
+    tags: ['职业', '本真'],
+    setup: '你 30 岁，现在的工作有钱，但你不喜欢。你想换，又怕"重新开始"——8 年经验白费了。\n\n你每天对自己说"再忍一年"。已经说了 3 年。',
+    question: '换 = 重新开始吗？',
+    applies: ['海德格尔的本真', '德勒兹的块茎', '加缪的反抗'],
+    analysis: '德勒兹会说：你想的是"树状思维"——有根、有干，离开就是连根拔起。但你的能力是"块茎"——任意一点都可以长出新的。8 年经验不会白费——它会以新方式重新连接。\n\n海德格尔会说：你说"再忍一年"是非本真的——把自己的选择推给"应当"。本真是承认这是你的选择。\n\n加缪：你的"再忍"是哲学自杀的微型版——用"以后"消灭"现在"。',
+    suggestion: '不要问"换 vs 不换"。问："如果只能再活 5 年，我现在做的事还想做吗？"',
+  },
+  {
+    id: 'parents-marriage-pressure',
+    title: '父母催婚说"为你好"',
+    tags: ['家庭', '权力'],
+    setup: '过年回家，妈说："你都 32 了，再不结婚以后怎么办？我们也是为你好。"\n\n你想反驳，但说不出口——因为她确实是为你好。',
+    question: '为什么"为你好"最难反驳？',
+    applies: ['福柯的生命权力', '尼采的群居动物'],
+    analysis: '福柯说：现代权力的核心形式不是"压迫"，是"为你好"。它管你的婚姻、健康、寿命、生育——把你的人生纳入"人口管理"。它温柔得多，也更难拒绝。\n\n尼采说：催婚背后是群居动物的判断本能——"大家都这样"代替了你的个体判断。妈不是在伤害你，她是在替你完成"正常人"的剧本。',
+    suggestion: '不要否认她的爱（那是真的）。但要分清："爱"和"按某个模板塑造我"是两件事。',
+  },
+  {
+    id: 'breakup-three-months',
+    title: '分手 3 个月还在反复想',
+    tags: ['情绪', '清醒'],
+    setup: '分手 3 个月了。你以为自己走出来了。但每次刷到他的微博、听到那首歌，又陷进去。\n\n你恨自己——"为什么这么久还不行"。',
+    question: '为什么你"出不来"？',
+    applies: ['加缪的清醒', '尼采的怨恨', '斯多葛的预想灾难'],
+    analysis: '斯多葛会问：你预想过这种"长时间走不出"吗？没有。你以为 3 个月该好——这个"应当"本身就是不切实际的。\n\n加缪会说：你不是没走出来——你只是不愿意承认"这就是这样"。你保留着"应该不是这样"的期待——这就是哲学自杀的微型版。\n\n尼采加一句：你对自己的恨——"为什么这么久还不行"——是怨恨转向自身。',
+    suggestion: '允许自己 1 年走不出来。把"我应该好了"换成"我没有好"。这反而是出来的开始。',
+  },
+  {
+    id: 'online-rage',
+    title: '在评论区怼人后的"爽"',
+    tags: ['网络', '怨恨'],
+    setup: '你在某个评论区怼了一个陌生人。对方拉黑你了。\n\n你感觉很爽——一整天心情都不一样。',
+    question: '这种"爽"是哪里来的？',
+    applies: ['尼采的怨恨', '福柯的全景监狱'],
+    analysis: '尼采会说：这是怨恨的释放。你恨不了真正让你不爽的人（老板、父母、社会），所以转向不会反击的陌生人。\n\n福柯加一层：网络是新的全景监狱——你说话时，所有人都可能看到，所有人都不在那里。匿名让你说出在线下不敢说的，因为风险被稀释了。但这不是"勇气"，是规训的副产品。',
+    suggestion: '骂之前问："我真正想骂的是谁？" — 答案常常不是你正要骂的那个人。',
+  },
+  {
+    id: 'ai-replacing-you',
+    title: 'AI 取代你的工作',
+    tags: ['AI', '本真'],
+    setup: '你的工作是写文案。ChatGPT 出来后，你的产出被替代了大半。\n\n你不想看这件事。每天还在做同样的事，假装没发生。',
+    question: '为什么你拒绝看？',
+    applies: ['加缪的哲学自杀', '海德格尔的本真', '尼采的禁欲理想'],
+    analysis: '加缪说：拒绝看是哲学自杀。你用"明天再想"消灭"今天的清醒"。\n\n海德格尔说：这是不本真的——你用"我已经是文案"这个角色，回避了"我要选择成为什么"的开放。\n\n反过来——一旦看清，反抗的方式不是抵抗 AI（无效），是重新设计自己（什么是 AI 替代不了的？品味、关系、判断、姿态）。',
+    suggestion: '今天就花 30 分钟想这个问题：AI 替代不了的我的部分，是什么？不要回避。',
+  },
+  {
+    id: 'fitness-quit',
+    title: '健身打卡 100 天后突然弃坑',
+    tags: ['自律', '倦怠'],
+    setup: '连续打卡 100 天健身。第 101 天，你突然不想动了。\n\n你陷入自我厌恶——"果然我没有意志力。"',
+    question: '你"没有意志力"吗？',
+    applies: ['韩炳哲的成就社会', '福柯的自我技术', '尼采的禁欲理想'],
+    analysis: '韩炳哲会说：打卡本身就是成就社会的规训。"100 天" 是数字，不是你的需要——你被驱使去完成数字。第 101 天的"不想"，是身体的反抗。\n\n福柯会说：你以为"打卡"是工具，但工具也在塑造你——你被塑造成"靠打卡活的人"。停下来时，"自我"就出问题。\n\n尼采加一句：你的自责是禁欲理想的微型版——为了"自律"而否定自己。',
+    suggestion: '把"我应该打卡"换成"我想运动"——前者是规训，后者是想要。它们不一样。',
+  },
+  {
+    id: 'imposter-syndrome',
+    title: '冒名顶替综合征',
+    tags: ['自我', '奴隶道德'],
+    setup: '你升职了。但每次开会，你都觉得"我配不上"——好像自己是个骗子，迟早会被拆穿。',
+    question: '"配不上"的尺度从哪里来？',
+    applies: ['尼采的奴隶道德', '福柯的主体形成', '萨特的自欺'],
+    analysis: '尼采会问："配得上"是谁定义的？这是奴隶道德的核心机制——用一个外部标准评估自己。\n\n福柯说：你的"我"已经被规训塑造好了——它包含了"我应该是什么样的"。冒名顶替感不是个人毛病，是装置生产出来的副产品。\n\n萨特说：感到"我配不上"也是自欺——好像有一个客观的"我"，比你现在的位置低。其实没有客观的"我"——你做什么，你就是什么。',
+    suggestion: '把"我配不上"换成"我在做这件事"——感受立刻变了。因为前者是判断，后者是事实。',
+  },
+  {
+    id: 'death-silence',
+    title: '饭桌上提"死亡"的尴尬',
+    tags: ['死亡', '现代性'],
+    setup: '聚餐时有人说："如果明天就走了，我可能后悔..."\n\n全场静了 3 秒。然后有人立刻转话题。',
+    question: '为什么死亡话题让人尴尬？',
+    applies: ['海德格尔的向死而在', '斯多葛的勿忘有死', '福柯的生命权力'],
+    analysis: '福柯会说：现代社会通过生命权力管理死亡——把它藏到医院、殡仪馆、专业人员手里。日常生活变成"无死亡区"。\n\n但海德格尔说：拒绝面对死亡的代价是不本真——你的所有"重要"都漂浮在没被认真对待的有限性上。\n\n斯多葛会说：你的尴尬本身就是诊断。每天提醒自己会死的人，听到这话只会点头。',
+    suggestion: '每周允许自己想一次："如果明天就走，今天我会做什么不一样的？" — 不必告诉别人。',
+  },
+  {
+    id: 'ai-better-writer',
+    title: 'AI 写得比你好',
+    tags: ['创造', 'AI'],
+    setup: '你写一篇文章写了 8 小时。然后你把同一个题目给 ChatGPT，它 30 秒写出了更好的版本。\n\n你想"那我还写什么"。',
+    question: '"留下作品"是创造的全部目的吗？',
+    applies: ['尼采的创造者的孤独', '加缪的荒诞的创造', '鲍德里亚的拟像'],
+    analysis: '加缪说：荒诞的创造不是为了留下作品——是在虚无前做出一个姿态。作品消失了，姿态还在。这不是文采的问题——是你愿不愿意做这个姿态的问题。\n\n尼采说：创造者必须能孤独——能在没人比较、没人评价的旷野里做。如果你只在被评比的赛场上创造，AI 让你 30 秒就被淘汰。\n\n鲍德里亚补一刀：AI 生产的是符号，不是经验。它能写得好，但它没活过。',
+    suggestion: '问自己：如果一个字都不会发表，我还想写吗？答案是的——那就是真正的创造。',
+  },
+  {
+    id: 'lost-attention',
+    title: '再也无法专注 30 分钟',
+    tags: ['注意力', '倦怠'],
+    setup: '你想读一本书，连 30 分钟都坚持不下来。30 秒就想刷手机。\n\n3 年前你还能连续工作 4 小时。',
+    question: '你"不行了"吗？',
+    applies: ['韩炳哲的倦怠社会', '福柯的规训'],
+    analysis: '韩炳哲说：这不是你"不行"——是注意力经济的产物。短视频、社交媒体、推送通知——每个都在训练你"15 秒就要新刺激"。你的大脑被规训了。\n\n福柯加一层：你不需要外人来管你的注意力——你自己刷新页面、自己检查微信、自己点开通知。规训已经在你内部了。\n\n好消息：注意力是肌肉。它被破坏了，也能恢复——但需要时间和有意识的"离开装置"。',
+    suggestion: '一周内：手机不进卧室、不进吃饭桌。看一本纸质书。30 天后你会发现 30 分钟变得可能。',
+  },
+];
 
 // ═══ 跨学派对话录 ═══
 const DIALOGUES = [
@@ -3725,6 +4030,60 @@ function buildRadarSVG(stats, size = 200) {
   }).join('');
 
   return `<svg class="mind-radar" width="${size}" height="${size + 20}" viewBox="0 -10 ${size} ${size + 20}">${bgPolys}${axes}${statPoly}${dots}${labels}</svg>`;
+}
+
+function renderScenarios() {
+  const scroll = document.getElementById('scenarios-scroll');
+  const cards = SCENARIOS.map(s => `
+    <button class="scenario-card" data-scenario="${s.id}">
+      <div class="scenario-tags">
+        ${s.tags.map(t => `<span class="scenario-tag">${escapeHtml(t)}</span>`).join('')}
+      </div>
+      <div class="scenario-card-title">${escapeHtml(s.title)}</div>
+      <div class="scenario-card-question">${escapeHtml(s.question)}</div>
+    </button>
+  `).join('');
+  scroll.innerHTML = `
+    <div class="scenarios-title">应用题</div>
+    <div class="scenarios-subtitle">把概念放回真实的处境里</div>
+    ${cards}
+  `;
+  scroll.querySelectorAll('.scenario-card').forEach(card => {
+    card.addEventListener('click', () => {
+      haptic('light');
+      openScenario(card.getAttribute('data-scenario'));
+    });
+  });
+}
+
+function openScenario(sId) {
+  const s = SCENARIOS.find(x => x.id === sId);
+  if (!s) return;
+  document.getElementById('scenario-detail-label').textContent = s.title;
+  const scroll = document.getElementById('scenario-detail-scroll');
+  const applies = s.applies.map(a => `<span class="sd-apply-chip">${escapeHtml(a)}</span>`).join('');
+  scroll.innerHTML = `
+    <div class="sd-title">${escapeHtml(s.title)}</div>
+    <div class="sd-setup">${escapeHtml(s.setup)}</div>
+    <div class="sd-question">${escapeHtml(s.question)}</div>
+
+    <div class="sd-applies">
+      <div class="sd-applies-label">涉及概念</div>
+      ${applies}
+    </div>
+
+    <div class="sd-section">
+      <div class="sd-section-label">分析</div>
+      <div class="sd-analysis">${escapeHtml(s.analysis)}</div>
+    </div>
+
+    <div class="sd-section">
+      <div class="sd-section-label">建议</div>
+      <div class="sd-suggestion">${escapeHtml(s.suggestion)}</div>
+    </div>
+  `;
+  showScreen('scenario-detail');
+  window.scrollTo(0, 0);
 }
 
 function renderDialogues() {
@@ -5096,6 +5455,22 @@ document.getElementById('nav-global-journal').addEventListener('click', () => {
   journalGlobal = true;
   renderJournal();
   showScreen('journal');
+});
+
+document.getElementById('nav-scenarios').addEventListener('click', () => {
+  haptic('light');
+  renderScenarios();
+  showScreen('scenarios');
+});
+
+document.getElementById('scenarios-back-btn').addEventListener('click', () => {
+  renderHome();
+  showScreen('home');
+});
+
+document.getElementById('scenario-detail-back-btn').addEventListener('click', () => {
+  renderScenarios();
+  showScreen('scenarios');
 });
 
 document.getElementById('nav-dialogues').addEventListener('click', () => {
