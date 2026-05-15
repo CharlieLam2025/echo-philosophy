@@ -956,6 +956,160 @@ body::after {
   letter-spacing: 0.15em;
 }
 
+/* ── Thinkers list screen ── */
+.thinkers-scroll {
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.thinkers-title {
+  font-size: 28px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.thinkers-subtitle {
+  font-size: 12px;
+  opacity: 0.35;
+  font-style: italic;
+  margin-bottom: 40px;
+  letter-spacing: 0.05em;
+}
+.thinker-card {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(245,241,232,0.05);
+  color: #f5f1e8;
+  font-family: inherit;
+  text-align: left;
+  padding: 20px 0;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.thinker-card:active { opacity: 0.7; transform: translateX(3px); }
+.thinker-card:focus { outline: none; }
+.thinker-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+.thinker-name {
+  font-size: 18px;
+  opacity: 0.9;
+}
+.thinker-orig {
+  font-size: 13px;
+  opacity: 0.4;
+  font-style: italic;
+}
+.thinker-dates {
+  font-size: 11px;
+  opacity: 0.25;
+  letter-spacing: 0.05em;
+}
+.thinker-tradition {
+  font-size: 11px;
+  opacity: 0.3;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+.thinker-keyc {
+  font-size: 14px;
+  opacity: 0.6;
+  line-height: 1.6;
+}
+.thinker-keyc-name { opacity: 0.85; }
+
+/* ── Thinker detail screen ── */
+.thinker-detail-scroll {
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.td-name {
+  font-size: 30px;
+  opacity: 0.9;
+  margin-bottom: 4px;
+}
+.td-orig {
+  font-size: 14px;
+  opacity: 0.4;
+  font-style: italic;
+  margin-bottom: 4px;
+}
+.td-meta {
+  font-size: 11px;
+  opacity: 0.3;
+  letter-spacing: 0.1em;
+  margin-bottom: 28px;
+}
+.td-bio {
+  font-size: 14px;
+  line-height: 1.85;
+  opacity: 0.75;
+  padding: 20px 0 28px;
+  border-top: 1px solid rgba(245,241,232,0.06);
+  border-bottom: 1px solid rgba(245,241,232,0.06);
+  margin-bottom: 40px;
+}
+.td-keyc-section {
+  margin-bottom: 40px;
+}
+.td-keyc-label {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  opacity: 0.35;
+  margin-bottom: 10px;
+}
+.td-keyc-name {
+  font-size: 24px;
+  opacity: 0.9;
+  margin-bottom: 4px;
+}
+.td-keyc-orig {
+  font-size: 13px;
+  opacity: 0.4;
+  font-style: italic;
+  margin-bottom: 24px;
+}
+.td-section {
+  margin-bottom: 36px;
+}
+.td-section-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  opacity: 0.45;
+  margin-bottom: 16px;
+  color: rgba(245,241,232,0.55);
+}
+.td-text {
+  font-size: 15px;
+  line-height: 1.9;
+  opacity: 0.78;
+  white-space: pre-wrap;
+}
+.td-scene {
+  padding: 22px 24px;
+  background: rgba(245,241,232,0.02);
+  border-left: 2px solid rgba(245,241,232,0.15);
+  border-radius: 0 4px 4px 0;
+  font-size: 15px;
+  line-height: 1.85;
+  opacity: 0.82;
+  white-space: pre-wrap;
+}
+.td-connection {
+  font-size: 14px;
+  line-height: 1.85;
+  opacity: 0.7;
+  font-style: italic;
+  padding: 18px 0;
+  border-top: 1px solid rgba(245,241,232,0.05);
+}
+
 /* ── Lexicon screen ── */
 .lexicon-scroll {
   padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
@@ -1703,6 +1857,7 @@ body::after {
   <div style="padding:0 28px 80px; display:flex; gap:24px; flex-wrap:wrap;">
     <button class="nav-btn" id="nav-global-journal" style="font-size:13px;">全部思考记录 →</button>
     <button class="nav-btn" id="nav-lexicon" style="font-size:13px;">辞海 →</button>
+    <button class="nav-btn" id="nav-thinkers" style="font-size:13px;">现代思想 →</button>
   </div>
 </div>
 
@@ -1729,6 +1884,24 @@ body::after {
     <span class="story-concept-label" id="story-concept-label"></span>
   </div>
   <div class="story-scroll" id="story-scroll"></div>
+</div>
+
+<!-- ═══ Thinkers List Screen ═══ -->
+<div id="thinkers-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="thinkers-back-btn">←</button>
+    <span class="story-concept-label">现代思想</span>
+  </div>
+  <div class="thinkers-scroll" id="thinkers-scroll"></div>
+</div>
+
+<!-- ═══ Thinker Detail Screen ═══ -->
+<div id="thinker-detail-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="thinker-detail-back-btn">←</button>
+    <span class="story-concept-label" id="thinker-detail-label">思想家</span>
+  </div>
+  <div class="thinker-detail-scroll" id="thinker-detail-scroll"></div>
 </div>
 
 <!-- ═══ Lexicon Screen ═══ -->
@@ -2227,6 +2400,140 @@ const DEEP_READS = {
     apply: '识别你生活中的"异托邦"——夜晚的便利店、失眠的微信对话、深夜大排档——这些缝隙时刻是你呼吸的地方。',
   },
 };
+
+// ═══ 现代思想家短篇集 ═══
+const THINKERS = [
+  {
+    id: 'arendt',
+    name: '阿伦特',
+    orig: 'Hannah Arendt',
+    dates: '1906 – 1975',
+    tradition: '政治哲学 · 犹太裔美国',
+    keyConcept: '平庸之恶',
+    keyOrig: 'Banality of Evil',
+    bio: '生于德国，1933 年纳粹上台后流亡法国，1941 年到美国。1961 年她以记者身份旁听耶路撒冷的艾希曼审判——这次审判改变了她对"恶"的理解，也改变了 20 世纪的政治哲学。',
+    essence: '艾希曼是纳粹屠犹的主要执行者，负责将数百万犹太人送进集中营。阿伦特预期看到一个怪物——一个明显的施虐狂或狂热分子。她看到的是一个让她震惊的人：极其平庸。\n\n艾希曼说话使用空洞的官僚用语，反复引用"职责"和"程序"。他不恨犹太人。他只是按命令做事，做得很好。\n\n阿伦特发明了"平庸之恶"——最大的恶不是来自恶魔般的恶意，而是来自"不思考"。艾希曼的罪不是"想得太邪恶"，是"根本没在想"。',
+    scene: '公司年会上播放裁员名单时，HR 微笑着念出每个名字。她不恨那些被裁的人，她只是在执行流程。会议结束后她和姐妹淘约饭，照样开心。\n\n"我只是在做我的工作"——这就是平庸之恶。',
+    connection: '尼采早预见了这种"末人"——只想完成程序、不再思考的人。福柯的"规训"提供了机制：现代权力不需要狂热分子，它需要尽职的小齿轮。',
+  },
+  {
+    id: 'heidegger',
+    name: '海德格尔',
+    orig: 'Martin Heidegger',
+    dates: '1889 – 1976',
+    tradition: '现象学 · 德国',
+    keyConcept: '被抛',
+    keyOrig: 'Geworfenheit',
+    bio: '改变了 20 世纪哲学方向：从"什么存在"转向"存在的意味"。他与纳粹的合作至今争议——但他对存在的分析渗透了从存在主义到解构主义的几乎一切。',
+    essence: '你没有选择被生下。没有选择父母、出生地、母语、童年。当你"醒来"——开始意识到自己——你已经在某个具体处境里。\n\n海德格尔把这叫"被抛"（Geworfenheit）——你被扔进一个未经你同意的世界。\n\n但被抛不只是事实，还是结构。每一刻你都已经"在某处"——总有一组前置条件你没选过，却必须从中开始。',
+    scene: '凌晨三点醒来，突然意识到——你的工作、城市、关系、价值观，没有一个是你最初设计的。它们都是从某个早就开始的故事里继承的。\n\n这一刻，你看见了"被抛"。然后呢？海德格尔说，正是从"看见被抛"开始，你才有可能"本真地"活——把继承的东西变成你选择的东西。',
+    connection: '尼采的"重估一切价值"是被抛的回应；加缪的"荒诞"是被抛在没有上帝的世界中的版本；福柯的"主体的形成"是把被抛进一步社会化为"你怎么被塑造的"。',
+  },
+  {
+    id: 'wittgenstein',
+    name: '维特根斯坦',
+    orig: 'Ludwig Wittgenstein',
+    dates: '1889 – 1951',
+    tradition: '分析哲学 · 奥地利-英国',
+    keyConcept: '语言游戏',
+    keyOrig: 'Sprachspiel',
+    bio: '他写了两本书，每本都开创了一个时代——而且两本互相矛盾。维特根斯坦相信哲学问题的源头是"语言的混乱"，他一辈子都在试图清理。',
+    essence: '晚期维特根斯坦放弃了"语言对应现实"的想法。他说语言不是图像，是工具——是各种各样的"游戏"。\n\n下棋有下棋的规则，做饭有做饭的规则，安慰朋友有安慰朋友的规则。一个词的"意思"，就是它在某个具体游戏中怎么用。\n\n问"自由是什么"等于问"棋子是什么"——答案取决于哪个游戏。在自由市场的游戏里、在哲学讨论的游戏里、在亲密关系的游戏里——"自由"完全不同。',
+    scene: '你和朋友吵架，他说"你不爱我"。你说"我爱"，他说"你没说出来"。\n\n吵架的源头不是事实——是你们在玩两个不同的"爱的游戏"。他的游戏里"爱 = 说出来"，你的游戏里"爱 = 做出来"。\n\n无论谁更对，问题不会消失，除非你们承认——你们在玩不同的游戏。',
+    connection: '与尼采的"视角主义"是亲戚——都拒绝"上帝视角"。与福柯的"话语"也接近——但维特根斯坦更注重日常语言，福柯更注重制度化的话语。',
+  },
+  {
+    id: 'sartre',
+    name: '萨特',
+    orig: 'Jean-Paul Sartre',
+    dates: '1905 – 1980',
+    tradition: '存在主义 · 法国',
+    keyConcept: '自欺',
+    keyOrig: 'Mauvaise foi',
+    bio: '和加缪是密友又决裂的对手。萨特是 20 世纪存在主义最响亮的声音——"存在先于本质"这句话基本来自他。',
+    essence: '萨特的中心问题是：人是绝对自由的——这是诅咒还是祝福？\n\n他说人在面对绝对自由时会逃跑。逃的方式是"自欺"：假装自己不是自由的。说"我不能"代替"我不愿意"，说"是我的角色让我这样"代替"是我选择这样"。\n\n经典例子：咖啡馆服务员。萨特看着他过分仔细地端盘子、过分礼貌地说话——他在"扮演"服务员，把自己当成"一个服务员"，而不是"一个正在做服务员工作的人"。\n\n把自己变成一个角色，就不用承担选择的重量了。',
+    scene: '凌晨，你坐在公司加班。同事问"为什么不走"，你说"因为我是负责的人"。\n\n但"负责的人"是一个角色——是你把自己塞进去的容器。真相是：你选择留下。你可以选择走。\n\n说"我必须"是自欺。',
+    connection: '和尼采的"奴隶道德"是双胞胎——都识别"我不能"如何被翻译成"我应该"。和福柯的"自我的技术"形成对照——萨特说"自由是诅咒"，福柯说"自由是被生产的"。',
+  },
+  {
+    id: 'baudrillard',
+    name: '鲍德里亚',
+    orig: 'Jean Baudrillard',
+    dates: '1929 – 2007',
+    tradition: '后现代主义 · 法国',
+    keyConcept: '拟像',
+    keyOrig: 'Simulacre',
+    bio: '诊断了媒介时代的核心病症：现实被符号取代。如果你看过《黑客帝国》——它整部电影就是鲍德里亚《拟像与仿真》的隐喻。',
+    essence: '鲍德里亚说符号经历了四个阶段：\n\n1. 复制——画一幅画，是真东西的影子\n2. 掩饰——画一幅画，让你以为它是真的\n3. 掩盖虚无——符号背后什么都没有，但还假装有\n4. 拟像——符号和现实完全脱钩，符号自己就是现实\n\n第四阶段就是我们所在的时代。',
+    scene: '你刷完一晚上小红书种草，去买了一个"必入的清晨咖啡套装"。你享用它的方式——拍照、发圈、看人点赞——比你喝它的方式更长。\n\n咖啡是现实，"清晨咖啡"是拟像。你享用的不是咖啡，是"清晨咖啡这个符号"。\n\n整个消费社会都是拟像——你买的不是产品，是符号；爱的不是人，是关系的符号；活的不是生活，是生活的拟像。',
+    connection: '尼采的"真理是虚构"和鲍德里亚的拟像有家族相似——都拒绝符号对应现实。福柯的"话语生产现实"也接近——但福柯关注权力机制，鲍德里亚关注符号本身的逻辑。',
+  },
+  {
+    id: 'deleuze',
+    name: '德勒兹',
+    orig: 'Gilles Deleuze',
+    dates: '1925 – 1995',
+    tradition: '后结构主义 · 法国',
+    keyConcept: '块茎',
+    keyOrig: 'Rhizome',
+    bio: '和加塔利合写的《资本主义与精神分裂》改变了 20 世纪末的人文研究。德勒兹一生反对"树状思维"——他说哲学应该像草，不是像树。',
+    essence: '树有根、有干、有枝、有叶——有等级、有中心、有起点。\n\n块茎（土豆、姜根）没有中心、没有起点——任意一点都可以长出新的，被砍断的部分继续生长。\n\n德勒兹说，主流思维是树状的——非此即彼、有正确答案、有等级。但生命是块茎——多元、流动、没有中心。\n\n"游牧"是配套的姿态——不在一个地方扎根，而是跨越，永远在重新连接。',
+    scene: '你在一家公司干了 8 年，每天想着"如果换行业一切重来"。但德勒兹会说——你已经在重来了。\n\n你在公司学到的能力可以接到健身、写作、教学、心理学——它们都是节点，你可以从任何一点重新生长。\n\n"换行业=重头开始"是树状思维。"换行业=重新连接已有节点"是块茎思维。',
+    connection: '尼采的"权力意志"在德勒兹这里变成"生成"——不要问"我是谁"，问"我正在生成什么"。福柯的"权力网络"也是块茎——没有中心，到处都是节点。',
+  },
+  {
+    id: 'lyotard',
+    name: '利奥塔',
+    orig: 'Jean-François Lyotard',
+    dates: '1924 – 1998',
+    tradition: '后现代主义 · 法国',
+    keyConcept: '宏大叙事的怀疑',
+    keyOrig: 'Incrédulité envers les métarécits',
+    bio: '1979 年他写了《后现代状况》——一本帮政府报告写的小书，意外成了 20 世纪末最重要的诊断。',
+    essence: '利奥塔说现代性靠"宏大叙事"运转：\n\n· 历史叙事——历史向着进步前进\n· 解放叙事——人类正在解放自己\n· 知识叙事——科学正在揭示真理\n· 革命叙事——某场革命会带来新世界\n\n这些"大故事"给所有小事赋意义。\n\n后现代的特征是——大家不再相信这些故事。不是反对，是失去了热情。剩下的是"小叙事"——具体的、局部的、暂时的故事。',
+    scene: '90 年代你父亲那代相信"改革开放会让所有人都好起来"——这是宏大叙事。\n\n现在你不相信任何关于"未来一切会更好"的版本——也不相信"未来一定崩塌"的版本。你只对"这周的工作怎么搞定"有感觉。\n\n这不是你变冷漠了——这是你已经在后现代里。',
+    connection: '尼采的"上帝之死"是宏大叙事的第一声丧钟。加缪的"哲学自杀"批评——任何"宏大叙事"都是逃避荒诞。福柯的"局部斗争"是利奥塔同时代的回响——放弃宏大革命，做"具体的反抗"。',
+  },
+  {
+    id: 'butler',
+    name: '巴特勒',
+    orig: 'Judith Butler',
+    dates: '1956 –',
+    tradition: '酷儿理论 · 美国',
+    keyConcept: '性别表演',
+    keyOrig: 'Gender Performativity',
+    bio: '1990 年的《性别麻烦》改变了性别研究——以及无数人理解自己的方式。巴特勒接续福柯，但走得更远。',
+    essence: '通常我们以为：先有"男性"或"女性"的本质，然后我们去表现它。\n\n巴特勒说反了：表演在先，"本质"是表演的产物。\n\n每天你做的所有"作为某性别"的动作——坐姿、说话方式、对什么感兴趣、为什么烦恼——这些动作累积制造出"我是某性别"的感觉。\n\n性别不是一个东西——是一个动词，一个不停发生的"做"。',
+    scene: '15 岁的男生第一次在朋友面前哭——他立刻停住，"擦"了下脸，开始讲笑话。\n\n没人告诉他"男生不哭"——但他已经知道了。\n\n这不是他"有男性本质"，是他每天的每一个动作累积形成了"男性"——而那个"男性"开始管制他。',
+    connection: '巴特勒直接继承了福柯——"主体是被生产的"。但她比福柯走得更远——指出连最"自然"的身份（性别）也是表演。尼采的"群居动物"也在场——群体的判断本能塑造了个体的判断本能。',
+  },
+  {
+    id: 'agamben',
+    name: '阿甘本',
+    orig: 'Giorgio Agamben',
+    dates: '1942 –',
+    tradition: '政治哲学 · 意大利',
+    keyConcept: '例外状态',
+    keyOrig: 'Stato di eccezione',
+    bio: '9/11 之后他的工作变得高度相关：他几乎预言了 21 世纪权力的形态。阿甘本接续福柯的"生命权力"，把它推向更黑暗的方向。',
+    essence: '主权的本质，不是"制定法律"，是"在必要时悬置法律"。当政府宣布"紧急状态"——某些法律被暂停——它才显现真正的权力。\n\n阿甘本说现代政治越来越像"永久例外状态"。9/11 后的反恐法、疫情期间的紧急权力、各种"特殊时期"——它们从来没真正结束。例外正在变成常态。\n\n在例外状态里，人成为"赤裸生命"——失去政治权利、被简化为生物性存在。',
+    scene: '机场安检，你被脱光鞋袜、过 X 光、查行李、问目的。在那一刻，你不是公民，不是博士，不是父亲——你只是一具需要被扫描的身体。\n\n这本来是临时安全措施。现在它成了所有人每次出行的常态。\n\n例外已经变成日常。',
+    connection: '阿甘本直接延续了福柯的"生命权力"——但更黑暗：管理生命的终极形式是把生命简化为可管理的物。尼采的"末人"在这里有新版本——不仅放弃自我超越，还放弃了政治存在。',
+  },
+  {
+    id: 'han',
+    name: '韩炳哲',
+    orig: 'Byung-Chul Han',
+    dates: '1959 –',
+    tradition: '当代批判理论 · 韩裔德国',
+    keyConcept: '倦怠社会',
+    keyOrig: 'Müdigkeitsgesellschaft',
+    bio: '21 世纪初他的小书《倦怠社会》成为全球畅销——因为他给了一个时代病一个名字。',
+    essence: '韩说：21 世纪不再是"规训社会"（福柯的诊断），是"成就社会"。\n\n规训社会用"你应当"管你。成就社会用"你能"管你。"你应该多锻炼"是外部命令——"你能做更好的自己"是内部命令。后者更难拒绝。\n\n结果是：每个人变成自己的剥削者。没人逼你卷，是你逼自己卷。所以倦怠——不是被外力压垮的累，是被"积极性"耗竭的累。\n\n抑郁、焦虑、慢性疲劳——这些都是成就社会的标志性病症。',
+    scene: '你在床上躺着刷手机，已经凌晨一点。明知道应该睡，但你"还想再做一点"——回个工作消息、看个学习视频、规划明天的清单。\n\n没人逼你。所以你停不下来。\n\n这就是积极性的暴力。',
+    connection: '韩炳哲明确接续福柯——把规训社会的诊断更新到 21 世纪。同时尼采的"末人"在这里也再现：不是"只想舒适"，而是"被自我提升耗尽"的人——结果一样，都是失去了真正的生命力。',
+  },
+];
 
 // ═══ 辞海 (关键术语) ═══
 const LEXICON = [
@@ -2911,6 +3218,68 @@ function buildRadarSVG(stats, size = 200) {
   }).join('');
 
   return `<svg class="mind-radar" width="${size}" height="${size + 20}" viewBox="0 -10 ${size} ${size + 20}">${bgPolys}${axes}${statPoly}${dots}${labels}</svg>`;
+}
+
+function renderThinkers() {
+  const scroll = document.getElementById('thinkers-scroll');
+  const cards = THINKERS.map(t => `
+    <button class="thinker-card" data-thinker="${t.id}">
+      <div class="thinker-head">
+        <span class="thinker-name">${escapeHtml(t.name)}</span>
+        <span class="thinker-orig">${escapeHtml(t.orig)}</span>
+        <span class="thinker-dates">${escapeHtml(t.dates)}</span>
+      </div>
+      <div class="thinker-tradition">${escapeHtml(t.tradition)}</div>
+      <div class="thinker-keyc">核心 · <span class="thinker-keyc-name">${escapeHtml(t.keyConcept)}</span> <span style="opacity:0.5; font-style:italic;">${escapeHtml(t.keyOrig)}</span></div>
+    </button>
+  `).join('');
+  scroll.innerHTML = `
+    <div class="thinkers-title">现代思想</div>
+    <div class="thinkers-subtitle">20–21 世纪批判理论 · 短篇集</div>
+    ${cards}
+  `;
+  scroll.querySelectorAll('.thinker-card').forEach(card => {
+    card.addEventListener('click', () => {
+      haptic('light');
+      openThinker(card.getAttribute('data-thinker'));
+    });
+  });
+}
+
+function openThinker(thinkerId) {
+  const t = THINKERS.find(x => x.id === thinkerId);
+  if (!t) return;
+  document.getElementById('thinker-detail-label').textContent = t.name;
+  const scroll = document.getElementById('thinker-detail-scroll');
+  scroll.innerHTML = `
+    <div class="td-name">${escapeHtml(t.name)}</div>
+    <div class="td-orig">${escapeHtml(t.orig)}</div>
+    <div class="td-meta">${escapeHtml(t.dates)} · ${escapeHtml(t.tradition)}</div>
+    <div class="td-bio">${escapeHtml(t.bio)}</div>
+
+    <div class="td-keyc-section">
+      <div class="td-keyc-label">核心概念</div>
+      <div class="td-keyc-name">${escapeHtml(t.keyConcept)}</div>
+      <div class="td-keyc-orig">${escapeHtml(t.keyOrig)}</div>
+    </div>
+
+    <div class="td-section">
+      <div class="td-section-label">本质</div>
+      <div class="td-text">${escapeHtml(t.essence)}</div>
+    </div>
+
+    <div class="td-section">
+      <div class="td-section-label">现代场景</div>
+      <div class="td-scene">${escapeHtml(t.scene)}</div>
+    </div>
+
+    <div class="td-section">
+      <div class="td-section-label">与四位的关联</div>
+      <div class="td-connection">${escapeHtml(t.connection)}</div>
+    </div>
+  `;
+  showScreen('thinker-detail');
+  window.scrollTo(0, 0);
 }
 
 let lexiconFilter = 'all';
@@ -4118,6 +4487,22 @@ document.getElementById('nav-global-journal').addEventListener('click', () => {
   journalGlobal = true;
   renderJournal();
   showScreen('journal');
+});
+
+document.getElementById('nav-thinkers').addEventListener('click', () => {
+  haptic('light');
+  renderThinkers();
+  showScreen('thinkers');
+});
+
+document.getElementById('thinkers-back-btn').addEventListener('click', () => {
+  renderHome();
+  showScreen('home');
+});
+
+document.getElementById('thinker-detail-back-btn').addEventListener('click', () => {
+  renderThinkers();
+  showScreen('thinkers');
 });
 
 document.getElementById('nav-lexicon').addEventListener('click', () => {
