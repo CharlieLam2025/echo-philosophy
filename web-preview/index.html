@@ -2227,6 +2227,7 @@ body::after {
     <button class="nav-btn" id="nav-events" style="font-size:13px;">哲学史事件 →</button>
     <button class="nav-btn" id="nav-dialogues" style="font-size:13px;">对话录 →</button>
     <button class="nav-btn" id="nav-scenarios" style="font-size:13px;">应用题 →</button>
+    <button class="nav-btn" id="nav-oriental" style="font-size:13px;">东方思想 →</button>
   </div>
 </div>
 
@@ -2253,6 +2254,23 @@ body::after {
     <span class="story-concept-label" id="story-concept-label"></span>
   </div>
   <div class="story-scroll" id="story-scroll"></div>
+</div>
+<!-- ═══ Oriental Thinkers List Screen ═══ -->
+<div id="oriental-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="oriental-back-btn">←</button>
+    <span class="story-concept-label">东方思想</span>
+  </div>
+  <div class="thinkers-scroll" id="oriental-scroll"></div>
+</div>
+
+<!-- ═══ Oriental Thinker Detail Screen ═══ -->
+<div id="oriental-detail-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="oriental-detail-back-btn">←</button>
+    <span class="story-concept-label" id="oriental-detail-label">思想家</span>
+  </div>
+  <div class="thinker-detail-scroll" id="oriental-detail-scroll"></div>
 </div>
 
 <!-- ═══ Scenarios List Screen ═══ -->
@@ -2823,6 +2841,88 @@ const DEEP_READS = {
     apply: '识别你生活中的"异托邦"——夜晚的便利店、失眠的微信对话、深夜大排档——这些缝隙时刻是你呼吸的地方。',
   },
 };
+
+// ═══ 东方思想 ═══
+const ORIENTAL_THINKERS = [
+  {
+    id: 'zhuangzi',
+    name: '庄子',
+    orig: '莊周',
+    dates: '前 369? – 前 286?',
+    tradition: '道家 · 战国',
+    keyConcept: '齐物',
+    keyOrig: '齐物论',
+    bio: '战国时代蒙地（今河南）人。具体生平不详——历史上能确认他做过漆园吏。著作《庄子》分内篇、外篇、杂篇，内篇可能是他亲笔。"庄周梦蝶"是世界文学史上最深的隐喻之一。',
+    essence: '庄子说，万物原本无分别——分别是人加上去的。\n\n你说"美丑"——但美丑相对于看的位置。你说"是非"——但是非相对于立场。你说"大小"——但大小相对于参照。\n\n把所有相对的二元都看穿，你就回到了"齐物"——一切平等。\n\n更激进：连"我"和"非我"也是分别。庄周梦蝶——醒来后他不知道是庄周梦见自己变成蝴蝶，还是蝴蝶梦见自己变成庄周。',
+    scene: '你在跟人争论谁对谁错。争了一个小时，发现没人能说服谁。\n\n庄子会问：你们争"对错"，但"对错"从哪里出发？如果你从他的位置出发，他对；如果他从你的位置出发，你对。\n\n这不是相对主义——是看穿"分别"本身。',
+    connection: '庄子的"齐物"和尼采的"视角主义"惊人地相似——相隔两千多年，都拒绝"上帝视角"。但庄子比尼采走得更远——尼采还在追问"哪个视角更强"，庄子说"问\'更强\'本身就是分别"。\n\n也与德勒兹的"块茎"相通——两人都拒绝中心化的等级结构。',
+  },
+  {
+    id: 'confucius',
+    name: '孔子',
+    orig: '孔丘',
+    dates: '前 551 – 前 479',
+    tradition: '儒家 · 春秋',
+    keyConcept: '仁',
+    keyOrig: '仁',
+    bio: '春秋鲁国人。"吾十有五而志于学，三十而立，四十而不惑，五十而知天命，六十而耳顺，七十而从心所欲不逾矩。"一生周游列国希望恢复礼乐——失败。回到鲁国教学。学生记录了他的言行，成为《论语》。',
+    essence: '"仁"是孔子的核心，但他从未给出定义——他给了几十种描述。\n\n"仁者爱人"——但这"爱"不是抽象普爱，是从具体的人际关系出发：先爱父母、再爱兄弟、再爱朋友、再爱陌生人。这叫"差等之爱"。\n\n"仁"也是一种状态——能够在每个具体处境里做"对的事"。这不是规则——是品格。规则是"应该这样"，仁是"自然会这样"。',
+    scene: '你妈跟你说"你妹现在工作不好，你要多帮她"。你想说"她是她，我是我"。\n\n孔子会说：你这里就漏了"仁"——亲缘关系不是负担，是仁的起点。\n\n但孔子也不会说"必须帮"——他会说"看具体情况"。仁不是规则。',
+    connection: '孔子的"差等之爱"和加缪的"团结"是两种不同的伦理基础——孔子从具体亲缘扩展，加缪从抽象荒诞共担。两条路径都拒绝抽象的"博爱"——都坚持具体性。',
+  },
+  {
+    id: 'laozi',
+    name: '老子',
+    orig: '老聃',
+    dates: '前 6 世纪',
+    tradition: '道家 · 春秋',
+    keyConcept: '无为',
+    keyOrig: '无为',
+    bio: '据传是周朝守藏室之史，但其人是否存在至今争议。《道德经》5000 字——中国最早、最深的哲学文本之一。它影响了从佛教禅宗到 20 世纪西方反主流文化的几乎一切。',
+    essence: '"无为"不是不做事——是不强为。\n\n如水：它不强行抵抗，但它最终穿透岩石。如风：它不抵抗树叶，但它能把整棵树推倒。\n\n"无为而无不为"——正是因为不强为，所以什么都做成了。\n\n更深的是"反者道之动"——道的运动是反向的。你越想要什么，越得不到。你越紧握，越流失。最强的状态是看起来最弱的。',
+    scene: '你在追求一个 offer/一段关系/一个目标，越追越紧，对方越远。\n\n老子会说：你的"紧"本身就是问题。试着松。不是放弃——是真的让出空间。\n\n常常你松开的瞬间，那个东西就来了。',
+    connection: '老子的"无为"和斯多葛的"控制二分法"在精神上接近——都让人放下不能控制的。但老子更激进——他不只是放下"不能控制的"，他怀疑"控制"本身是错误的认知。\n\n也与海德格尔晚期"让存在"（Gelassenheit）惊人地相似。',
+  },
+  {
+    id: 'nagarjuna',
+    name: '龙树',
+    orig: 'Nāgārjuna · नागार्जुन',
+    dates: '约 150 – 250',
+    tradition: '中观佛教 · 印度',
+    keyConcept: '空性',
+    keyOrig: 'Śūnyatā · शून्यता',
+    bio: '印度大乘佛教中观学派的创立者。原本是婆罗门学者，后来转入佛教。其《中论》用 27 章的辩证拆解，证明一切现象都是"空"——但"空"也不是有。这是世界辩证法史上最锋利的工作之一。',
+    essence: '"空性"不是说"什么都不存在"——这是错误理解。\n\n龙树说：一切现象都是依其他现象而生（缘起），没有"自性"——没有"它自己"的核心。\n\n但"空"也不是另一个"实在"。"空"也是空的。\n"色即是空，空即是色。"\n\n更要紧的是"八不偈"——不生不灭、不常不断、不一不异、不来不去。每个二元对立都被拒绝。',
+    scene: '你说"我抑郁"。\n\n龙树会问：这个"抑郁"是从哪里来的？是工作？是关系？是天气？是化学物质？是过去？还是它们的总和？\n\n如果你解开，"抑郁"就找不到一个核心。它依其他东西而生——它没有"自己"。\n\n这不是说你的痛苦不存在——是说它不是一个固定的"东西"。它在流动。',
+    connection: '龙树的"空"和德里达的"解构"几乎是同一种工作——都拒绝任何"实体"概念。龙树的辩证法早于黑格尔 1500 年。\n\n中观和当代西方反基础主义（包括福柯的"主体的形成"）在结构上同形——都拒绝寻找一个不动的核心。',
+  },
+  {
+    id: 'huineng',
+    name: '慧能',
+    orig: '惠能 · 禪宗六祖',
+    dates: '638 – 713',
+    tradition: '禅宗 · 唐',
+    keyConcept: '顿悟',
+    keyOrig: '頓悟',
+    bio: '禅宗六祖。文盲，砍柴为生。听到《金刚经》一句"应无所住而生其心"开悟。后来在黄梅寺，作偈"菩提本无树，明镜亦非台，本来无一物，何处惹尘埃"，被五祖弘忍秘密传位。从此禅宗分南北，慧能南宗"顿悟"成为禅宗主流。',
+    essence: '北宗禅说渐悟——修行多年慢慢通透。慧能说顿悟——觉醒是瞬间的事，不能积累。\n\n为什么？因为"开悟"不是获得什么新的——是放下你"以为自己有"的东西。放下不需要时间。\n\n"本来无一物"——你以为你是的那个"我"，本来就不在。意识到这一点不需要 30 年——它是一个瞬间。\n\n但要走到能瞬间放下的位置，可能需要 30 年。',
+    scene: '你为了"找到自己"，做了无数自我探索——心理咨询、冥想、辟谷、各种自我提升课程。\n\n慧能会笑：你越找，越找不到。因为没有一个"自己"等你找——那个"自己"就是你找的过程本身。\n\n不要再找了。停。在停里看。',
+    connection: '慧能的"顿悟"和加缪的"清醒"有意外的家族相似——都不是"通过努力获得"，而是"在瞬间看见"。\n\n但慧能更彻底——他怀疑"我"本身的实在性，加缪保留了反抗的"我"。',
+  },
+  {
+    id: 'wangyangming',
+    name: '王阳明',
+    orig: '王守仁',
+    dates: '1472 – 1529',
+    tradition: '心学 · 明',
+    keyConcept: '知行合一',
+    keyOrig: '知行合一',
+    bio: '明代思想家、军事家。本是程朱理学的学生，35 岁被贬到贵州龙场——在洞穴里冥想，悟出"心即理"。后来平定多次叛乱，是少有的同时是哲学家、政治家、军事家、教育家的人。临终留下八字："此心光明，亦复何言。"',
+    essence: '朱熹说"先知后行"——先弄明白，再去做。王阳明说："不对。"\n\n"知而不行，只是未知。"——你说你"知道"应该锻炼，但没去锻炼？那你根本不知道。"知道"本身就包含了行动。\n\n更深的是"心即理"——道理不在外面（朱熹说理在万物中需要"格"），道理就在你心里。所谓"致良知"就是恢复心本来的样子。',
+    scene: '你"知道"应该早睡。但每晚刷手机到两点。\n\n王阳明会说：你不是"知道但没做到"——你根本不知道。如果你真的知道"晚睡害我"，你早就放下手机了。\n\n"知道而没做到"是骗局——真正的知必然行。如果你没行，问题不是意志力，是你还没真的看见。',
+    connection: '王阳明和萨特的某些主张惊人接近——都拒绝"知道但没做"这种自欺。萨特说："你说\'我必须\'是骗局——真相是你选择不做。"王阳明说："你说\'我知道但没做到\'是骗局——真相是你还没真知道。"\n\n两人相隔 500 年，指向同一种诚实。',
+  },
+];
 
 // ═══ 哲学应用题 ═══
 const SCENARIOS = [
@@ -4030,6 +4130,68 @@ function buildRadarSVG(stats, size = 200) {
   }).join('');
 
   return `<svg class="mind-radar" width="${size}" height="${size + 20}" viewBox="0 -10 ${size} ${size + 20}">${bgPolys}${axes}${statPoly}${dots}${labels}</svg>`;
+}
+
+function renderOriental() {
+  const scroll = document.getElementById('oriental-scroll');
+  const cards = ORIENTAL_THINKERS.map(t => `
+    <button class="thinker-card" data-thinker="${t.id}">
+      <div class="thinker-head">
+        <span class="thinker-name">${escapeHtml(t.name)}</span>
+        <span class="thinker-orig">${escapeHtml(t.orig)}</span>
+        <span class="thinker-dates">${escapeHtml(t.dates)}</span>
+      </div>
+      <div class="thinker-tradition">${escapeHtml(t.tradition)}</div>
+      <div class="thinker-keyc">核心 · <span class="thinker-keyc-name">${escapeHtml(t.keyConcept)}</span> <span style="opacity:0.5; font-style:italic;">${escapeHtml(t.keyOrig)}</span></div>
+    </button>
+  `).join('');
+  scroll.innerHTML = `
+    <div class="thinkers-title">东方思想</div>
+    <div class="thinkers-subtitle">齐物 · 仁 · 无为 · 空性 · 顿悟 · 知行合一</div>
+    ${cards}
+  `;
+  scroll.querySelectorAll('.thinker-card').forEach(card => {
+    card.addEventListener('click', () => {
+      haptic('light');
+      openOrientalThinker(card.getAttribute('data-thinker'));
+    });
+  });
+}
+
+function openOrientalThinker(id) {
+  const t = ORIENTAL_THINKERS.find(x => x.id === id);
+  if (!t) return;
+  document.getElementById('oriental-detail-label').textContent = t.name;
+  const scroll = document.getElementById('oriental-detail-scroll');
+  scroll.innerHTML = `
+    <div class="td-name">${escapeHtml(t.name)}</div>
+    <div class="td-orig">${escapeHtml(t.orig)}</div>
+    <div class="td-meta">${escapeHtml(t.dates)} · ${escapeHtml(t.tradition)}</div>
+    <div class="td-bio">${escapeHtml(t.bio)}</div>
+
+    <div class="td-keyc-section">
+      <div class="td-keyc-label">核心概念</div>
+      <div class="td-keyc-name">${escapeHtml(t.keyConcept)}</div>
+      <div class="td-keyc-orig">${escapeHtml(t.keyOrig)}</div>
+    </div>
+
+    <div class="td-section">
+      <div class="td-section-label">本质</div>
+      <div class="td-text">${escapeHtml(t.essence)}</div>
+    </div>
+
+    <div class="td-section">
+      <div class="td-section-label">现代场景</div>
+      <div class="td-scene">${escapeHtml(t.scene)}</div>
+    </div>
+
+    <div class="td-section">
+      <div class="td-section-label">与西方哲学的关联</div>
+      <div class="td-connection">${escapeHtml(t.connection)}</div>
+    </div>
+  `;
+  showScreen('oriental-detail');
+  window.scrollTo(0, 0);
 }
 
 function renderScenarios() {
@@ -5455,6 +5617,22 @@ document.getElementById('nav-global-journal').addEventListener('click', () => {
   journalGlobal = true;
   renderJournal();
   showScreen('journal');
+});
+
+document.getElementById('nav-oriental').addEventListener('click', () => {
+  haptic('light');
+  renderOriental();
+  showScreen('oriental');
+});
+
+document.getElementById('oriental-back-btn').addEventListener('click', () => {
+  renderHome();
+  showScreen('home');
+});
+
+document.getElementById('oriental-detail-back-btn').addEventListener('click', () => {
+  renderOriental();
+  showScreen('oriental');
 });
 
 document.getElementById('nav-scenarios').addEventListener('click', () => {
