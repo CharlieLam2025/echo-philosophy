@@ -956,6 +956,125 @@ body::after {
   letter-spacing: 0.15em;
 }
 
+/* ── Contemporary issues screens ── */
+.contemporary-scroll, .contemporary-detail-scroll {
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
+  max-width: 680px;
+  margin: 0 auto;
+}
+.contemporary-title {
+  font-size: 28px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.contemporary-subtitle {
+  font-size: 12px;
+  opacity: 0.35;
+  font-style: italic;
+  margin-bottom: 40px;
+}
+.contemporary-card {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(245,241,232,0.05);
+  color: #f5f1e8;
+  font-family: inherit;
+  text-align: left;
+  padding: 22px 0;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.contemporary-card:active { opacity: 0.7; transform: translateX(3px); }
+.contemporary-card:focus { outline: none; }
+.cp-card-tags {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.cp-card-tag {
+  font-size: 10px;
+  opacity: 0.35;
+  padding: 2px 8px;
+  border: 1px solid rgba(245,241,232,0.08);
+  border-radius: 8px;
+}
+.cp-card-title {
+  font-size: 22px;
+  opacity: 0.95;
+  margin-bottom: 6px;
+}
+.cp-card-question {
+  font-size: 13px;
+  opacity: 0.55;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+/* Detail */
+.cp-title {
+  font-size: 30px;
+  opacity: 0.95;
+  margin-bottom: 18px;
+}
+.cp-phenomenon {
+  font-size: 15px;
+  line-height: 1.9;
+  opacity: 0.82;
+  padding: 22px 24px;
+  background: rgba(245,241,232,0.025);
+  border-radius: 4px;
+  margin-bottom: 24px;
+}
+.cp-question {
+  font-size: 17px;
+  opacity: 0.9;
+  font-style: italic;
+  text-align: center;
+  padding: 18px 0;
+  margin-bottom: 32px;
+  border-top: 1px solid rgba(245,241,232,0.08);
+  border-bottom: 1px solid rgba(245,241,232,0.08);
+}
+.cp-section-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  opacity: 0.45;
+  margin-bottom: 18px;
+  color: rgba(245,241,232,0.55);
+}
+.cp-lens {
+  margin-bottom: 22px;
+  padding: 18px 22px;
+  background: rgba(245,241,232,0.02);
+  border-left: 2px solid rgba(245,241,232,0.15);
+  border-radius: 0 4px 4px 0;
+}
+.cp-lens-who {
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  opacity: 0.6;
+  margin-bottom: 8px;
+  color: var(--accent-strong);
+}
+.cp-lens-text {
+  font-size: 14px;
+  line-height: 1.85;
+  opacity: 0.85;
+}
+.cp-synthesis {
+  margin-top: 32px;
+  padding: 22px 24px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  background: var(--accent-soft);
+  font-size: 15px;
+  line-height: 1.85;
+  opacity: 0.92;
+  font-style: italic;
+}
+
 /* ── Arguments screens ── */
 .arguments-scroll, .argument-detail-scroll {
   padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
@@ -2588,6 +2707,7 @@ body::after {
     <button class="nav-btn" id="nav-fake-qs" style="font-size:13px;">伪命题 →</button>
     <button class="nav-btn" id="nav-quotes" style="font-size:13px;">金句 →</button>
     <button class="nav-btn" id="nav-arguments" style="font-size:13px;">核心论证 →</button>
+    <button class="nav-btn" id="nav-contemporary" style="font-size:13px;">当代议题 →</button>
   </div>
 </div>
 
@@ -2615,6 +2735,24 @@ body::after {
   </div>
   <div class="story-scroll" id="story-scroll"></div>
 </div>
+<!-- ═══ Contemporary Issues List Screen ═══ -->
+<div id="contemporary-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="contemporary-back-btn">←</button>
+    <span class="story-concept-label">当代议题</span>
+  </div>
+  <div class="contemporary-scroll" id="contemporary-scroll"></div>
+</div>
+
+<!-- ═══ Contemporary Issue Detail Screen ═══ -->
+<div id="contemporary-detail-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="contemporary-detail-back-btn">←</button>
+    <span class="story-concept-label">议题</span>
+  </div>
+  <div class="contemporary-detail-scroll" id="contemporary-detail-scroll"></div>
+</div>
+
 <!-- ═══ Arguments List Screen ═══ -->
 <div id="arguments-screen" class="screen">
   <div class="journal-header">
@@ -3246,6 +3384,178 @@ const DEEP_READS = {
     apply: '识别你生活中的"异托邦"——夜晚的便利店、失眠的微信对话、深夜大排档——这些缝隙时刻是你呼吸的地方。',
   },
 };
+
+// ═══ 当代议题透镜 ═══
+const CONTEMPORARY = [
+  {
+    id: 'involution',
+    title: '内卷',
+    tags: ['工作', '社会'],
+    phenomenon: '所有人都在加倍努力，但整体没有更好——只是把"标准"推得更高。读了 985 还不够，要 211；读了硕士还不够，要海归博士。每个人多跑一步，所有人退回原地。',
+    question: '为什么没人逼你，你停不下来？',
+    lenses: [
+      { who: '韩炳哲', text: '成就社会的极致。规训社会是"你应当"——外部命令。成就社会是"你能"——内部命令。"你能做更好的自己"比"你应该加班"更难拒绝。结果是每个人成为自己的剥削者。' },
+      { who: '福柯', text: '规训已经内化。学校的考试、公司的 KPI、社会的排名——你 18 年浸泡在这些机制里，最后你不需要被排名，你自己在排自己。' },
+      { who: '尼采', text: '奴隶道德的新版本。把"我应该"装得越来越满——不是因为你信，是因为你不敢不信。"卷"是把"我做不到"翻译成"我必须做到"。' },
+      { who: '庄子', text: '"用"本身是陷阱。你越追求"有用"，就越被"用"塑造。无用之用——一棵树没用所以能长大；一个人不必有用，所以能成为自己。' },
+    ],
+    synthesis: '内卷不是"你不努力"——是整个系统让"努力"变成强迫症。出路不是"更卷"——是看穿"卷"这个游戏。',
+  },
+  {
+    id: 'lying-flat',
+    title: '躺平',
+    tags: ['工作', '虚无'],
+    phenomenon: '年轻人说"我躺平了"——不结婚、不买房、不奋斗、不消费。表面是退出竞争，深处是对所有"应该"的拒绝。',
+    question: '躺平是反抗还是哲学自杀？',
+    lenses: [
+      { who: '加缪', text: '可能是真反抗——看清荒诞游戏后选择不参与，这就是反抗。但也可能是哲学自杀——用"无所谓"消灭看清的勇气，假装问题不存在。区别在于: 你是清醒地躺，还是闭眼躺。' },
+      { who: '尼采', text: '要分清主动虚无（"我创造新的"）和被动虚无（"我放弃旧的"）。真正的躺平是后者——是没有创造力的虚无主义。' },
+      { who: '老子', text: '无为不是不为——是不强为。如果你的"躺平"是"我不再被那些应当推着走"，那是无为。如果是"我什么也不做"，那是逃避。' },
+      { who: '福柯', text: '躺平也可能是规训的产物——成就社会用"卷"塑造你，"躺平"是反向同一种被塑造。真正的自由不在"卷或躺"——在看穿这二元。' },
+    ],
+    synthesis: '"躺平"不是简单的好或坏。问自己: 我躺平的是什么？我留下的是什么？前者是退出游戏，后者才是答案。',
+  },
+  {
+    id: 'ai-replacing',
+    title: 'AI 取代人',
+    tags: ['AI', '未来'],
+    phenomenon: 'ChatGPT、Midjourney、Sora——AI 在写作、画画、编程、做视频上都开始取代人。"我们的工作还会存在吗"——所有人都在焦虑。',
+    question: '什么是 AI 替代不了的？',
+    lenses: [
+      { who: '鲍德里亚', text: '拟像的极致——符号自己生产符号。AI 生成的不是"内容"，是符号的自循环。但这意味着: "经验"成了 AI 无法替代的——它没活过。' },
+      { who: '海德格尔', text: '技术框定（Gestell）——人也变成了"待用资源"。AI 加剧这一点——你被评估为"能产出什么"。出路是回到"本真"——你是谁，不只是你产出什么。' },
+      { who: '加缪', text: '创造不是为了留下作品——是在虚无前做出姿态。AI 可以生成作品，但它不能做姿态——姿态需要主体。' },
+      { who: '庄子', text: '担心"被超越"本身假设了等级。如果有 AI 比你"聪明"——只是另一个分别。庄周梦蝶——你是不是 AI 的梦？' },
+    ],
+    synthesis: 'AI 不替代你的"产出"——它逼你看清: 你只是"产出"吗？如果是，被替代是公平的。如果不是，是时候活出那个"不是"。',
+  },
+  {
+    id: 'short-video',
+    title: '短视频成瘾',
+    tags: ['注意力', '现代性'],
+    phenomenon: '你打算刷 10 分钟，结果 2 小时过去了。30 秒就要切换，1 分钟就觉得长。3 年前你能连续读书 4 小时——现在 30 分钟都坚持不下来。',
+    question: '为什么你停不下来？',
+    lenses: [
+      { who: '韩炳哲', text: '注意力被规训成 15 秒。短视频不是"娱乐"——是注意力训练。它训练你的大脑：每 15 秒需要一次新刺激。3 年后你失去了延长的能力。' },
+      { who: '鲍德里亚', text: '拟像消费——你不是在看视频，是在消费"刷"的符号。每个视频都不被记住，但"刷"本身在生产某种身份感。' },
+      { who: '福柯', text: '自我的技术——但管错了方向。你自己在管理自己的注意力。但你管理的方向是"不停下来"——这是规训的内化。' },
+      { who: '斯多葛', text: '此刻被外部劫持。马可·奥勒留: "即使你将活三千年，你失去的也不过是此刻。" 短视频偷的不是时间——是此刻。' },
+    ],
+    synthesis: '短视频成瘾不是"意志力问题"——是注意力经济的产物。修复需要的不是自律——是离开装置一段时间。',
+  },
+  {
+    id: 'thirty-five',
+    title: '35 岁危机',
+    tags: ['年龄', '焦虑'],
+    phenomenon: '"35 岁找不到工作"成了集体噩梦。互联网公司不要 35 岁以上的人。你 30 岁就开始担心，34 岁开始失眠。',
+    question: '35 岁为什么是"危机"？',
+    lenses: [
+      { who: '福柯', text: '年龄是规训——现代社会把人生切成段（学生、工作、家庭、退休），并赋予每段具体"应当"。"35 岁焦虑"不是你的——是被植入的剧本。' },
+      { who: '海德格尔', text: '被抛——你被扔进一个用"年龄"评估你的世界。但被抛之后还有本真选择: 你接受这个评估系统，还是不接受。' },
+      { who: '加缪', text: '为什么 35 岁就该有"危机"？这预设了"理想轨迹"——但理想轨迹是别人画的。荒诞就在这里: 你为别人画的轨迹焦虑。' },
+      { who: '王阳明', text: '你不是"过了"什么——你在每个当下做选择。35 岁不是分水岭——是 35 个一年的总和，每个都是一个新选择。' },
+    ],
+    synthesis: '"35 岁危机"是一个被生产出来的焦虑。问自己: 焦虑的是"我"，还是被植入的"35 岁应当怎样"？',
+  },
+  {
+    id: 'tiger-parenting',
+    title: '鸡娃',
+    tags: ['家庭', '教育'],
+    phenomenon: '5 岁学编程，6 岁奥数，8 岁雅思——孩子的童年被填满"竞争性活动"。父母说"为他好"。',
+    question: '"为他好"是真的为他好吗？',
+    lenses: [
+      { who: '福柯', text: '生命权力的家庭化——你在管理下一代的全部生命。这不是"教育"——是把人口管理逻辑搬到家庭。' },
+      { who: '尼采', text: '把孩子当成你"末人"形象的延伸——你想让他舒适、安全、达标。你以为这是爱，其实是把孩子塑造成你想要的"成功末人"。' },
+      { who: '阿伦特', text: '"为他好"是平庸之恶的家庭版——你不思考自己在做什么，因为有"程序"——"大家都这样鸡娃"。' },
+      { who: '老子', text: '反者道之动——你越推，孩子越远。无为不是不教——是不强迫塑造。让孩子的"道"自己展开。' },
+    ],
+    synthesis: '"鸡娃"的核心问题不是"该不该卷"——是你在用孩子完成你的剧本，还是让他写他的剧本。',
+  },
+  {
+    id: 'matching-market',
+    title: '相亲市场',
+    tags: ['亲密关系', '消费'],
+    phenomenon: '相亲网站上人变成可量化的条件——身高、学历、收入、户口、车房。"匹配"成为找伴侣的核心词。',
+    question: '你找的是伴侣还是符号组合？',
+    lenses: [
+      { who: '鲍德里亚', text: '人变成可交易符号。你不是在找一个具体的人——你在搜索一组属性。整个相亲市场是拟像经济的延伸: 人被简化为符号包。' },
+      { who: '福柯', text: '婚姻是治理装置——你以为是个人选择，其实在执行人口管理的程序: 适龄、匹配、生育、稳定。' },
+      { who: '萨特', text: '"他人即地狱"——尤其相亲场合，你被简化为对方的目光下的"对象"。你怎么坐、怎么笑、说什么——都是表演。' },
+      { who: '加缪', text: '把"匹配"当意义就是哲学自杀——你用一个"答案"（匹配成功就幸福）消灭了真问题（怎么和另一个具体的人共度一生）。' },
+    ],
+    synthesis: '相亲市场不是"找伴侣"——是参与一种符号交易。真正的关系开始于离开这套语言之后。',
+  },
+  {
+    id: 'side-hustle',
+    title: '副业焦虑',
+    tags: ['工作', '焦虑'],
+    phenomenon: '主业之外要做副业。下班后再开个小红书账号、做个咨询、卖个课。"睡后收入"成为新的成功标志。',
+    question: '为什么连下班时间也要"产出"？',
+    lenses: [
+      { who: '韩炳哲', text: '成就社会再加成——你的所有时间都必须"产出"。资本不再用 8 小时占有你——它用"睡后收入"概念让你 24 小时为它工作。' },
+      { who: '福柯', text: '自我的技术——把你变成"创业的我"。"个人品牌" "副业" "睡后收入"——这些不是机会，是新的规训语言。' },
+      { who: '庄子', text: '无用之用——为什么所有事都要"有用"？真正自由的人有大量"无用"的时间。副业焦虑暴露了你被"用"统治得多彻底。' },
+      { who: '斯多葛', text: '控制二分——副业的收入不在你控制内（市场、平台算法）。但你的时间和注意力在你控制内。把它们花在不可控的事上，是结构性错配。' },
+    ],
+    synthesis: '副业焦虑不是"你不上进"——是你被"必须更多"的逻辑捕获。真正的稀缺不是收入——是没被产出占据的时间。',
+  },
+  {
+    id: 'filter-bubble',
+    title: '信息茧房',
+    tags: ['媒介', '真理'],
+    phenomenon: '你看到的"世界"是算法选过的——它推送你点过的、看过的、喜欢的。慢慢地，你看到的世界就是你已经相信的世界。',
+    question: '你是在"了解世界"，还是在"被推送"？',
+    lenses: [
+      { who: '福柯', text: '话语装置——你看到的"世界"是算法选过的。这是新型权力: 不审查你能说什么，而是决定你能看什么。' },
+      { who: '尼采', text: '视角主义——但你只看到一个视角。视角主义不是"什么都对"——是"每个视角都从某个位置出发"。算法把你锁在一个位置里，让你以为这是全景。' },
+      { who: '维特根斯坦', text: '你以为在玩"了解世界"的游戏——其实在玩"被推送"的游戏。这两个游戏的规则完全不同。' },
+      { who: '阿伦特', text: '不思考的现代版本——算法替你思考。艾希曼说"我只是在执行程序"——你说"算法给我看的就是世界"。同一种平庸。' },
+    ],
+    synthesis: '走出茧房不需要"什么都看"——需要看清"我现在看到的是被选过的"。这种清醒本身就是走出。',
+  },
+  {
+    id: 'depression-anxiety',
+    title: '抑郁焦虑流行',
+    tags: ['心理', '现代性'],
+    phenomenon: '20 年前抑郁焦虑是少数。现在身边一半人都在吃药或谈话。"心理咨询"成为日常对话。',
+    question: '是个人变弱了，还是时代变病了？',
+    lenses: [
+      { who: '韩炳哲', text: '成就社会的标志性病症——抑郁不是被外力压垮，是被"积极性"耗竭。它是被"你能"无限索取的产物。' },
+      { who: '福柯', text: '现代心理学也是规训装置——它把痛苦定义为"病"，需要"治疗"。但有时候，痛苦是对装置的正确反应——你不该痊愈到能继续被装置利用。' },
+      { who: '加缪', text: '荒诞被压抑——你不允许自己看清"它就是无意义"，于是用"我有病"代替"系统有病"。抑郁是被错位的清醒。' },
+      { who: '龙树', text: '抑郁没有"自性"——它依其他东西而起（工作、关系、化学物质、社会、过去）。把它当成"我的"实体，就被它困住。它是关系，不是物。' },
+    ],
+    synthesis: '现代抑郁焦虑流行不是个人问题——是时代结构的反映。治疗不等于回到"正常"——有时候要质疑"正常"是什么。',
+  },
+  {
+    id: 'gender-war',
+    title: '男权女权对立',
+    tags: ['性别', '社会'],
+    phenomenon: '网上的男女议题越来越激烈。任何讨论都迅速变成"男的都" vs "女的都"。双方都觉得自己受害。',
+    question: '为什么对话变成了战争？',
+    lenses: [
+      { who: '巴特勒', text: '性别是表演——双方都在维护一个错误的二元。每次"男vs女"的对立都强化了这个二元，让"性别"看起来比实际更固定。' },
+      { who: '福柯', text: '话语装置——这种对立本身是被生产的。算法奖励冲突，媒介需要立场——所以"男vs女"的话语被无限放大。' },
+      { who: '尼采', text: '怨恨——双方都在用怨恨发明新道德。"男的都"和"女的都"是对称的怨恨结构，都把"我没有"翻译成"那个东西本来就不好"。' },
+      { who: '庄子', text: '齐物——分别本身是后加的。男女在生理上有差异，但"男的应该" "女的应该" 是社会发明的——这些"应该"才是问题，不是性别本身。' },
+    ],
+    synthesis: '"男权女权对立"是被生产的剧本。真正的工作不是站队——是看穿"对立"本身的剧场性。',
+  },
+  {
+    id: 'fitness-check',
+    title: '健身打卡',
+    tags: ['身体', '自律'],
+    phenomenon: '朋友圈晒健身打卡的人，比真去健身房的人多。"自律改变命运" "100 天 vs 自己" 成为口号。',
+    question: '"自律"是自由还是奴役？',
+    lenses: [
+      { who: '韩炳哲', text: '经典自我剥削形式——你既是奴隶又是主人。打卡机制把"运动"变成"完成数字"——身体被工具化为达标对象。' },
+      { who: '福柯', text: '自我的技术——身体被纳入治理。健身 App、配速、体脂率——你把身体交给了一整套量化系统。它在塑造你，不只是你在塑造它。' },
+      { who: '尼采', text: '禁欲理想的现代版——把否定身体包装成"自律"。"对自己狠一点"——为什么需要狠？谁定的这种狠？' },
+      { who: '斯多葛', text: '自愿受苦还是自虐？要分清。斯多葛的 askēsis（修炼）是为了从外部世界中解放——当代健身打卡是为了被外部世界更好评估。形式相似，方向相反。' },
+    ],
+    synthesis: '健身没问题——但"为了打卡而健身"就把自由变成了奴役。真正的运动是: 身体想动。',
+  },
+];
 
 // ═══ 核心论证 ═══
 const ARGUMENTS = [
@@ -4961,6 +5271,55 @@ function buildRadarSVG(stats, size = 200) {
   return `<svg class="mind-radar" width="${size}" height="${size + 20}" viewBox="0 -10 ${size} ${size + 20}">${bgPolys}${axes}${statPoly}${dots}${labels}</svg>`;
 }
 
+function renderContemporary() {
+  const scroll = document.getElementById('contemporary-scroll');
+  const cards = CONTEMPORARY.map(c => `
+    <button class="contemporary-card" data-issue="${c.id}">
+      <div class="cp-card-tags">
+        ${c.tags.map(t => `<span class="cp-card-tag">${escapeHtml(t)}</span>`).join('')}
+      </div>
+      <div class="cp-card-title">${escapeHtml(c.title)}</div>
+      <div class="cp-card-question">${escapeHtml(c.question)}</div>
+    </button>
+  `).join('');
+  scroll.innerHTML = `
+    <div class="contemporary-title">当代议题</div>
+    <div class="contemporary-subtitle">用 4 位哲学家的透镜看今天</div>
+    ${cards}
+  `;
+  scroll.querySelectorAll('.contemporary-card').forEach(card => {
+    card.addEventListener('click', () => {
+      haptic('light');
+      openContemporary(card.getAttribute('data-issue'));
+    });
+  });
+}
+
+function openContemporary(id) {
+  const c = CONTEMPORARY.find(x => x.id === id);
+  if (!c) return;
+  const scroll = document.getElementById('contemporary-detail-scroll');
+  const lenses = c.lenses.map(l => `
+    <div class="cp-lens">
+      <div class="cp-lens-who">${escapeHtml(l.who)}</div>
+      <div class="cp-lens-text">${escapeHtml(l.text)}</div>
+    </div>
+  `).join('');
+  scroll.innerHTML = `
+    <div class="cp-title">${escapeHtml(c.title)}</div>
+    <div class="cp-phenomenon">${escapeHtml(c.phenomenon)}</div>
+    <div class="cp-question">${escapeHtml(c.question)}</div>
+
+    <div class="cp-section-label">四种透镜</div>
+    ${lenses}
+
+    <div class="cp-section-label" style="margin-top:36px;">综合</div>
+    <div class="cp-synthesis">${escapeHtml(c.synthesis)}</div>
+  `;
+  showScreen('contemporary-detail');
+  window.scrollTo(0, 0);
+}
+
 function renderArguments() {
   const scroll = document.getElementById('arguments-scroll');
   const cards = ARGUMENTS.map(a => `
@@ -6624,6 +6983,22 @@ document.getElementById('nav-global-journal').addEventListener('click', () => {
   journalGlobal = true;
   renderJournal();
   showScreen('journal');
+});
+
+document.getElementById('nav-contemporary').addEventListener('click', () => {
+  haptic('light');
+  renderContemporary();
+  showScreen('contemporary');
+});
+
+document.getElementById('contemporary-back-btn').addEventListener('click', () => {
+  renderHome();
+  showScreen('home');
+});
+
+document.getElementById('contemporary-detail-back-btn').addEventListener('click', () => {
+  renderContemporary();
+  showScreen('contemporary');
 });
 
 document.getElementById('nav-arguments').addEventListener('click', () => {
