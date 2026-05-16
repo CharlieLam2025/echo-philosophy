@@ -2825,6 +2825,7 @@ body::after {
     <button class="nav-btn" id="nav-arguments" style="font-size:13px;">核心论证 →</button>
     <button class="nav-btn" id="nav-contemporary" style="font-size:13px;">当代议题 →</button>
     <button class="nav-btn" id="nav-practices" style="font-size:13px;">7 天实践 →</button>
+    <button class="nav-btn" id="nav-forgotten" style="font-size:13px;">被忽视的视角 →</button>
   </div>
 </div>
 
@@ -2852,6 +2853,24 @@ body::after {
   </div>
   <div class="story-scroll" id="story-scroll"></div>
 </div>
+<!-- ═══ Forgotten Thinkers List Screen ═══ -->
+<div id="forgotten-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="forgotten-back-btn">←</button>
+    <span class="story-concept-label">被忽视的视角</span>
+  </div>
+  <div class="thinkers-scroll" id="forgotten-scroll"></div>
+</div>
+
+<!-- ═══ Forgotten Thinker Detail Screen ═══ -->
+<div id="forgotten-detail-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="forgotten-detail-back-btn">←</button>
+    <span class="story-concept-label" id="forgotten-detail-label">思想家</span>
+  </div>
+  <div class="thinker-detail-scroll" id="forgotten-detail-scroll"></div>
+</div>
+
 <!-- ═══ Practices List Screen ═══ -->
 <div id="practices-screen" class="screen">
   <div class="journal-header">
@@ -3519,6 +3538,140 @@ const DEEP_READS = {
     apply: '识别你生活中的"异托邦"——夜晚的便利店、失眠的微信对话、深夜大排档——这些缝隙时刻是你呼吸的地方。',
   },
 };
+
+// ═══ 被忽视的视角 (10 位) ═══
+const FORGOTTEN = [
+  {
+    id: 'pascal',
+    name: '帕斯卡',
+    orig: 'Blaise Pascal',
+    dates: '1623 – 1662',
+    tradition: '法国 · 17 世纪',
+    keyConcept: '分心',
+    keyOrig: 'Divertissement',
+    bio: '法国数学家、物理学家、神学家。31 岁神秘体验后转向宗教。一生病弱，39 岁去世。《思想录》是未完成的笔记，却成了 17 世纪最深刻的著作。',
+    essence: '帕斯卡说: 人之所以不幸，是因为他不能独自坐在房间里。\n\n所有的"娱乐"、"工作"、"野心"、"战争"——本质都是同一种东西: 分心。我们害怕的不是死亡——是直面自己的虚无。\n\n国王不停跳舞、商人不停做生意、士兵不停打仗——不是因为他们享受这些——是因为停下来就要面对一个可怕的事实: 没有它们我就什么都不是。',
+    scene: '你晚上回家，刚把手机放下 5 分钟，立刻又拿起来。不是因为有什么紧急的事——是因为不刷手机就要面对自己。\n\n帕斯卡 350 年前预言了这件事。',
+    connection: '加缪的"荒诞"是帕斯卡"分心"的世俗版——加缪去掉了上帝，但保留了"人逃避自己"的洞察。韩炳哲的"倦怠社会"也接续这一谱系——分心成了系统化的产业。',
+  },
+  {
+    id: 'montaigne',
+    name: '蒙田',
+    orig: 'Michel de Montaigne',
+    dates: '1533 – 1592',
+    tradition: '法国 · 文艺复兴',
+    keyConcept: '"我知道什么？"',
+    keyOrig: 'Que sais-je?',
+    bio: '法国贵族、市长、思想家。退休后躲到自己的塔楼里，写笔记。这些笔记成了《随笔集》——发明了一种新的文体（essai = 尝试），也发明了一种新的哲学姿态。',
+    essence: '蒙田是世界上第一个真正承认"我不知道"的哲学家。\n\n他在塔楼的房梁上刻着希腊语 epoche（悬置）。他写了几千页 essai——不是为了得出结论，是为了观察自己怎么变。\n\n"如果一个人不能保证今天的他和昨天的他是同一个人，他怎么能保证人类有共同的本性？"\n\n不确定不是哲学的失败——是诚实的家。',
+    scene: '别人问你"你是什么样的人"——你应该回答什么？\n\n蒙田说: Que sais-je? 我知道什么？\n\n500 年前他比你更诚实。',
+    connection: '笛卡尔说"我思故我在"——这是对蒙田的回应。蒙田说"我不知道"，笛卡尔害怕了，发明了"至少我在思考"作为底线。现代哲学是从害怕蒙田开始的。',
+  },
+  {
+    id: 'kierkegaard',
+    name: '克尔凯郭尔',
+    orig: 'Søren Kierkegaard',
+    dates: '1813 – 1855',
+    tradition: '丹麦 · 存在主义之父',
+    keyConcept: '焦虑',
+    keyOrig: 'Angst',
+    bio: '丹麦哲学家。一生未婚，孤独，与丹麦国教搏斗。42 岁去世前在街上崩溃。被认为是存在主义之父——但他自己说他是基督徒。',
+    essence: '克尔凯郭尔说: 焦虑不是病。\n\n恐惧是"怕某个具体的东西"——怕黑、怕蛇。焦虑不一样——焦虑是怕"什么都没有"——怕自由本身。\n\n当你站在悬崖边，你怕的不是摔下去——是你"可以"跳下去。这种"我可以"的开放性，本身就是焦虑。\n\n焦虑因此是自由的标志。一个没有焦虑的人，要么是动物（不知道自由），要么是被规训得太彻底（不再感受自由）。',
+    scene: '你做了一个重大选择前的夜里，无法入睡——心跳、出汗、空虚。\n\n这不是病——这是自由在你身上工作。',
+    connection: '海德格尔的"被抛"和"向死而在"几乎完全继承自克尔凯郭尔。但海德格尔去掉了上帝。克尔凯郭尔说"信仰的跳跃"——海德格尔说"本真的决断"——结构上同形。',
+  },
+  {
+    id: 'weil',
+    name: '西蒙娜·薇依',
+    orig: 'Simone Weil',
+    dates: '1909 – 1943',
+    tradition: '法国 · 神秘政治哲学',
+    keyConcept: '注意力',
+    keyOrig: "L'attention",
+    bio: '法国哲学家、神秘主义者、政治活动家。出身犹太家庭，转向天主教但拒绝受洗。为工人参与西班牙内战，最后在二战期间绝食死亡（为了与法国被占的同胞保持一致）。34 岁。',
+    essence: '薇依说: 注意力是最稀缺的精神资源——它也是祷告的本质。\n\n不是"想着上帝"是祷告——是把全部注意力放在一件事上的那种状态本身就是祷告。同样，"看见"一个人——真正看见他——比"帮助"他更重要、更困难。\n\n她区分两种"看": 占有式的（"我看到那个苹果，我要吃它"）和等待式的（"我让那个苹果对我显现"）。前者是欲望，后者是注意力。',
+    scene: '朋友找你倾诉。你"听着"，但其实你在想下面怎么回应——这不是注意力，这是占有。\n\n真正的注意力是: 你只听，不准备回应。',
+    connection: '加缪深受薇依影响——他在《反抗者》中多次引用她。福柯的"自我的关照"也接近薇依的"注意力"——都是一种主动的、训练过的觉察。',
+  },
+  {
+    id: 'beauvoir',
+    name: '波伏娃',
+    orig: 'Simone de Beauvoir',
+    dates: '1908 – 1986',
+    tradition: '法国 · 存在主义女性主义',
+    keyConcept: '"女人不是天生的，是变成的"',
+    keyOrig: "On ne naît pas femme, on le devient",
+    bio: '法国哲学家、作家、社会理论家。与萨特终身伴侣（但拒绝结婚）。1949 年《第二性》开创了现代女性主义。她比萨特活得更长，是 20 世纪后半最有影响力的法国知识分子之一。',
+    essence: '这一句改变了 20 世纪。\n\n波伏娃说: 你的"女性气质"——温柔、被动、关注外表、母性——没有一项是天生的。它们是社会一天天教给你的。\n\n更重要的是: 每一种"女人特质"都对应一种"非主体性"——女性被定义为"他者"。男人是"我"，女人是"另一个"。\n\n这不是简单的"歧视"——是整个现代主体性概念的不对称结构。',
+    scene: '你 8 岁时第一次被告知"女孩子不要这样疯"。\n\n从那一刻起，"女孩子"开始管制你。\n\n这不是你的天性——这是你被教的。',
+    connection: '巴特勒的"性别表演性"直接继承自波伏娃——把"becomes"细化成"做"。福柯的"主体生产"也是同源——都怀疑"天生本质"。',
+  },
+  {
+    id: 'levinas',
+    name: '列维纳斯',
+    orig: 'Emmanuel Levinas',
+    dates: '1906 – 1995',
+    tradition: '法国 · 伦理学第一哲学',
+    keyConcept: '他者的面容',
+    keyOrig: "Le visage d'autrui",
+    bio: '立陶宛裔法国哲学家。犹太人。二战期间被关在劳改营。家人在大屠杀中被杀。这段经历彻底改变了他对哲学的理解——他认为西方哲学（包括他的老师海德格尔）需要彻底重置。',
+    essence: '列维纳斯说: 所有西方哲学都是从"我"开始的——笛卡尔的"我思"、海德格尔的"此在"。这是错的。\n\n哲学应该从他者开始——从我面对的那张具体面孔开始。\n\n当你看着另一个人的脸，你被迫做一个决定: 我是回应他，还是不回应？无论选哪个，你已经被卷入了伦理。\n\n伦理不是抽象的原则——是面对面那一刻的不可逃避。',
+    scene: '街上一个流浪汉看了你一眼。你立刻避开——为什么？\n\n因为那张脸让你必须做选择。\n\n逃避目光本身已经是回应。',
+    connection: '列维纳斯是对海德格尔最深的批判。海德格尔说"存在先于伦理"——列维纳斯说"伦理先于存在"。这场争论塑造了 20 世纪后半的法国哲学。',
+  },
+  {
+    id: 'benjamin',
+    name: '本雅明',
+    orig: 'Walter Benjamin',
+    dates: '1892 – 1940',
+    tradition: '德国 · 法兰克福学派',
+    keyConcept: '灵晕',
+    keyOrig: 'Aura',
+    bio: '德国-犹太裔思想家。法兰克福学派外围成员。一生没有正式学术职位。1940 年逃避纳粹时在西班牙边境绝望自杀，48 岁。他的笔记和文章在死后被整理出版，成了 20 世纪最重要的文化批评工作之一。',
+    essence: '本雅明说: 每件原创艺术品都有"灵晕"——它在某时某地存在的"此处此刻"。蒙娜丽莎之所以让你站在卢浮宫前震撼，不是因为它好——是因为它是"那一幅"。\n\n机械复制（照片、电影、印刷）摧毁了灵晕。复制品可以无限多，没有"原本"。\n\n这不只是艺术问题——这是经验本身的转变。在 AI 时代，灵晕的最后残余也在消失。',
+    scene: '你在卢浮宫看蒙娜丽莎——挤在 200 个游客中间，看了 30 秒。你拍了照。\n\n你的体验就是那张照片——不是那幅画。\n\n本雅明 100 年前就描述了这个现象。',
+    connection: '鲍德里亚的"拟像"是本雅明"灵晕消失"的极致版本。两人都诊断了同一种现代经验——只是从不同的深度。',
+  },
+  {
+    id: 'adorno',
+    name: '阿多诺',
+    orig: 'Theodor Adorno',
+    dates: '1903 – 1969',
+    tradition: '德国 · 法兰克福学派',
+    keyConcept: '文化工业',
+    keyOrig: 'Kulturindustrie',
+    bio: '德国-犹太裔哲学家、音乐学家、社会理论家。法兰克福学派核心。流亡美国时震惊于美国的"娱乐文化"——这成了他后来"文化工业"理论的素材。',
+    essence: '阿多诺说: "大众文化"是个骗局——它不是大众生产的，是工业生产给大众消费的。\n\n电影、流行歌、电视剧——它们看起来多样，但骨架是同一套。它们让你"放松"，但其实是在给你休息以便明天继续工作。\n\n文化工业的可怕之处不是"低俗"——是它生产了一种"愿意接受低俗"的人。',
+    scene: '你下班后刷一小时短视频"放松"。但醒来还是累。\n\n因为这不是真休息——这是工业给你的休息形式，让你"恢复"到能继续生产。',
+    connection: '韩炳哲的"倦怠社会"是阿多诺"文化工业"的当代版。福柯的"规训"也共享同一谱系——现代权力通过"为你好"的形式运作。',
+  },
+  {
+    id: 'lacan',
+    name: '拉康',
+    orig: 'Jacques Lacan',
+    dates: '1901 – 1981',
+    tradition: '法国 · 结构精神分析',
+    keyConcept: '欲望',
+    keyOrig: "Le désir est désir de l'Autre",
+    bio: '法国精神分析家。重读弗洛伊德，引入索绪尔的结构主义和黑格尔的辩证法。每周三的研讨班是 20 世纪后半巴黎最重要的知识场所。他的写作出了名地难懂——但他的影响渗透了几乎所有当代理论。',
+    essence: '拉康说: 你的欲望不是"你的"——是大他者（社会、语言、文化）借你的位置欲望的。\n\n你想要那辆车、那个工作、那段关系——为什么？因为你看到别人想要，所以你想要。你想要的，永远是"别人想要"这个事实本身。\n\n这是为什么"得到了不快乐"——你得到的是物，但你欲望的是"想要这个物的状态"——而这种状态需要"还没得到"才能维持。',
+    scene: '你拼命想要的那个 offer，拿到之后却空虚。\n\n拉康会说: 你欲望的不是那个工作——是"想要这个工作"的位置。位置失去了，欲望就崩塌了。',
+    connection: '鲍德里亚的"符号消费"直接继承拉康——你买的不是物，是"想要这个物"的符号。福柯的"主体被生产"在拉康这里有更精细的版本——"我"是被语言生产的位置。',
+  },
+  {
+    id: 'jameson',
+    name: '詹姆逊',
+    orig: 'Fredric Jameson',
+    dates: '1934 –',
+    tradition: '美国 · 马克思主义文化批评',
+    keyConcept: '后现代 = 晚期资本主义的文化逻辑',
+    keyOrig: 'Postmodernism, or, the Cultural Logic of Late Capitalism',
+    bio: '美国马克思主义文化批评家。耶鲁、杜克大学教授。1984 年的论文《后现代主义，或晚期资本主义的文化逻辑》成为后现代研究的奠基文献。',
+    essence: '詹姆逊说: 后现代不是某种"风格"——是资本主义某个阶段的文化形态。\n\n现代主义还相信"深度"——表面之下有真实。后现代放弃了深度——只剩表面、引用、拼贴、反讽。\n\n为什么？因为晚期资本主义把所有东西都商品化了——包括"反抗"、"批判"、"另类"。所有"深度"都立刻被回收为商品。剩下的，是无限的表面循环。',
+    scene: '你买了一件"反消费主义"的 T 恤。它在淘宝上 79 元。\n\n詹姆逊会说: 欢迎来到后现代——连"反"也是商品。',
+    connection: '鲍德里亚的"拟像"、本雅明的"灵晕消失"、阿多诺的"文化工业"——都汇聚到詹姆逊这里。他给出了系统化的诊断: 所有这些都是"晚期资本主义"的症状。',
+  },
+];
 
 // ═══ 7 天实践 ═══
 const PRACTICES = [
@@ -5570,6 +5723,68 @@ function buildRadarSVG(stats, size = 200) {
   return `<svg class="mind-radar" width="${size}" height="${size + 20}" viewBox="0 -10 ${size} ${size + 20}">${bgPolys}${axes}${statPoly}${dots}${labels}</svg>`;
 }
 
+function renderForgotten() {
+  const scroll = document.getElementById('forgotten-scroll');
+  const cards = FORGOTTEN.map(t => `
+    <button class="thinker-card" data-thinker="${t.id}">
+      <div class="thinker-head">
+        <span class="thinker-name">${escapeHtml(t.name)}</span>
+        <span class="thinker-orig">${escapeHtml(t.orig)}</span>
+        <span class="thinker-dates">${escapeHtml(t.dates)}</span>
+      </div>
+      <div class="thinker-tradition">${escapeHtml(t.tradition)}</div>
+      <div class="thinker-keyc">核心 · <span class="thinker-keyc-name">${escapeHtml(t.keyConcept)}</span> <span style="opacity:0.5; font-style:italic;">${escapeHtml(t.keyOrig)}</span></div>
+    </button>
+  `).join('');
+  scroll.innerHTML = `
+    <div class="thinkers-title">被忽视的视角</div>
+    <div class="thinkers-subtitle">填补主线 4 位之外的关键空白</div>
+    ${cards}
+  `;
+  scroll.querySelectorAll('.thinker-card').forEach(card => {
+    card.addEventListener('click', () => {
+      haptic('light');
+      openForgotten(card.getAttribute('data-thinker'));
+    });
+  });
+}
+
+function openForgotten(id) {
+  const t = FORGOTTEN.find(x => x.id === id);
+  if (!t) return;
+  document.getElementById('forgotten-detail-label').textContent = t.name;
+  const scroll = document.getElementById('forgotten-detail-scroll');
+  scroll.innerHTML = `
+    <div class="td-name">${escapeHtml(t.name)}</div>
+    <div class="td-orig">${escapeHtml(t.orig)}</div>
+    <div class="td-meta">${escapeHtml(t.dates)} · ${escapeHtml(t.tradition)}</div>
+    <div class="td-bio">${escapeHtml(t.bio)}</div>
+
+    <div class="td-keyc-section">
+      <div class="td-keyc-label">核心概念</div>
+      <div class="td-keyc-name">${escapeHtml(t.keyConcept)}</div>
+      <div class="td-keyc-orig">${escapeHtml(t.keyOrig)}</div>
+    </div>
+
+    <div class="td-section">
+      <div class="td-section-label">本质</div>
+      <div class="td-text">${escapeHtml(t.essence)}</div>
+    </div>
+
+    <div class="td-section">
+      <div class="td-section-label">现代场景</div>
+      <div class="td-scene">${escapeHtml(t.scene)}</div>
+    </div>
+
+    <div class="td-section">
+      <div class="td-section-label">与主线四位的关联</div>
+      <div class="td-connection">${escapeHtml(t.connection)}</div>
+    </div>
+  `;
+  showScreen('forgotten-detail');
+  window.scrollTo(0, 0);
+}
+
 function renderPractices() {
   const scroll = document.getElementById('practices-scroll');
   const cards = PRACTICES.map(p => `
@@ -7327,6 +7542,22 @@ document.getElementById('nav-global-journal').addEventListener('click', () => {
   journalGlobal = true;
   renderJournal();
   showScreen('journal');
+});
+
+document.getElementById('nav-forgotten').addEventListener('click', () => {
+  haptic('light');
+  renderForgotten();
+  showScreen('forgotten');
+});
+
+document.getElementById('forgotten-back-btn').addEventListener('click', () => {
+  renderHome();
+  showScreen('home');
+});
+
+document.getElementById('forgotten-detail-back-btn').addEventListener('click', () => {
+  renderForgotten();
+  showScreen('forgotten');
 });
 
 document.getElementById('nav-practices').addEventListener('click', () => {
