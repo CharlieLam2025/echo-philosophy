@@ -956,6 +956,122 @@ body::after {
   letter-spacing: 0.15em;
 }
 
+/* ── Practices screens ── */
+.practices-scroll, .practice-detail-scroll {
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
+  max-width: 680px;
+  margin: 0 auto;
+}
+.practices-title {
+  font-size: 28px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.practices-subtitle {
+  font-size: 12px;
+  opacity: 0.35;
+  font-style: italic;
+  margin-bottom: 40px;
+}
+.practice-card {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(245,241,232,0.05);
+  color: #f5f1e8;
+  font-family: inherit;
+  text-align: left;
+  padding: 22px 0;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+  position: relative;
+}
+.practice-card:active { opacity: 0.7; transform: translateX(3px); }
+.practice-card:focus { outline: none; }
+.practice-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 50%;
+  width: 2px; height: 28px;
+  margin-top: -14px;
+  opacity: 0.6;
+}
+.practice-card[data-color="nietzsche"]::before { background: rgba(196,164,105,0.6); }
+.practice-card[data-color="stoic"]::before     { background: rgba(150,170,180,0.6); }
+.practice-card[data-color="camus"]::before     { background: rgba(200,130,100,0.6); }
+.practice-card[data-color="foucault"]::before  { background: rgba(165,140,185,0.6); }
+.pr-card-who {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  opacity: 0.4;
+  margin-bottom: 4px;
+  padding-left: 14px;
+}
+.pr-card-title {
+  font-size: 19px;
+  opacity: 0.95;
+  margin-bottom: 6px;
+  padding-left: 14px;
+}
+.pr-card-intro {
+  font-size: 13px;
+  opacity: 0.55;
+  font-style: italic;
+  line-height: 1.6;
+  padding-left: 14px;
+}
+
+/* Detail */
+.pr-title {
+  font-size: 30px;
+  opacity: 0.95;
+  margin-bottom: 6px;
+}
+.pr-who {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  opacity: 0.4;
+  margin-bottom: 20px;
+}
+.pr-intro {
+  font-size: 15px;
+  line-height: 1.9;
+  opacity: 0.82;
+  padding: 18px 0 24px;
+  border-top: 1px solid rgba(245,241,232,0.06);
+  border-bottom: 1px solid rgba(245,241,232,0.06);
+  margin-bottom: 32px;
+}
+.pr-day {
+  position: relative;
+  padding: 22px 0 22px 80px;
+  border-bottom: 1px solid rgba(245,241,232,0.04);
+}
+.pr-day:last-child { border-bottom: none; }
+.pr-day-number {
+  position: absolute;
+  left: 0; top: 22px;
+  width: 60px;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  opacity: 0.55;
+  text-align: right;
+  color: var(--accent-strong);
+}
+.pr-day-task {
+  font-size: 16px;
+  line-height: 1.7;
+  opacity: 0.92;
+  margin-bottom: 8px;
+}
+.pr-day-why {
+  font-size: 12px;
+  opacity: 0.5;
+  font-style: italic;
+  line-height: 1.6;
+}
+
 /* ── Contemporary issues screens ── */
 .contemporary-scroll, .contemporary-detail-scroll {
   padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
@@ -2708,6 +2824,7 @@ body::after {
     <button class="nav-btn" id="nav-quotes" style="font-size:13px;">金句 →</button>
     <button class="nav-btn" id="nav-arguments" style="font-size:13px;">核心论证 →</button>
     <button class="nav-btn" id="nav-contemporary" style="font-size:13px;">当代议题 →</button>
+    <button class="nav-btn" id="nav-practices" style="font-size:13px;">7 天实践 →</button>
   </div>
 </div>
 
@@ -2735,6 +2852,24 @@ body::after {
   </div>
   <div class="story-scroll" id="story-scroll"></div>
 </div>
+<!-- ═══ Practices List Screen ═══ -->
+<div id="practices-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="practices-back-btn">←</button>
+    <span class="story-concept-label">7 天实践</span>
+  </div>
+  <div class="practices-scroll" id="practices-scroll"></div>
+</div>
+
+<!-- ═══ Practice Detail Screen ═══ -->
+<div id="practice-detail-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="practice-detail-back-btn">←</button>
+    <span class="story-concept-label">实践</span>
+  </div>
+  <div class="practice-detail-scroll" id="practice-detail-scroll"></div>
+</div>
+
 <!-- ═══ Contemporary Issues List Screen ═══ -->
 <div id="contemporary-screen" class="screen">
   <div class="journal-header">
@@ -3384,6 +3519,170 @@ const DEEP_READS = {
     apply: '识别你生活中的"异托邦"——夜晚的便利店、失眠的微信对话、深夜大排档——这些缝隙时刻是你呼吸的地方。',
   },
 };
+
+// ═══ 7 天实践 ═══
+const PRACTICES = [
+  {
+    id: 'stoic-week',
+    title: '斯多葛 7 天',
+    philosopher: '斯多葛',
+    color: 'stoic',
+    intro: '一周完整体验斯多葛实践——不是阅读，是练习。每天一个具体动作。',
+    days: [
+      { day: 1, task: '列两栏清单：今天我能控制的 / 我焦虑但控制不了的。只投入第一栏。', why: '控制二分法的入口——把精力收到能动的地方。' },
+      { day: 2, task: '写下你这周最害怕发生的事。详细写。"如果它真的发生，我会..."', why: '预想灾难——让恐惧在脑里先死一次。' },
+      { day: 3, task: '想象自己 80 岁回看今天。哪些焦虑会显得可笑？哪些选择会显得重要？', why: '勿忘有死——用终点看现在。' },
+      { day: 4, task: '今天洗冷水澡，或者不开空调一天，或者只吃简单的食物。', why: '自愿受苦——给韧性做压力测试。' },
+      { day: 5, task: '找出三件挡你路的事。把"如果没有 X 我就能 Y"换成"X 就是 Y"。', why: '障碍即道路——绕过的事会再来。' },
+      { day: 6, task: '一天不看手机。完整地在此刻。', why: '活在此刻——你唯一拥有的就是现在。' },
+      { day: 7, task: '给本周最糟的事写一封感谢信。不是讽刺——真的感谢它。', why: '命运之爱——把发生的事变成你想要的事。' },
+    ],
+  },
+  {
+    id: 'absurd-week',
+    title: '荒诞 7 天',
+    philosopher: '加缪',
+    color: 'camus',
+    intro: '加缪不是教你接受荒诞——是教你清醒地反抗。一周让你练习"看清但不闭眼"。',
+    days: [
+      { day: 1, task: '写下你今天对什么"假装看不见"。任何事——工作、关系、健康、政治。', why: '清醒的开始——先承认你在假装。' },
+      { day: 2, task: '哲学自杀检查：你用什么消灭荒诞？"反正都是命" "宇宙自有安排" "等明天再说"——找出来。', why: '识别你给荒诞的假答案。' },
+      { day: 3, task: '今天不允许自己"想开"任何事。所有"算了"全部停掉。', why: '加缪的清醒不是中立——是英雄行为。' },
+      { day: 4, task: '做一件完全"没用"的事——写一首没人会读的诗、走一段没目的的路、画一幅没人会看的画。', why: '反抗的姿态——做就是答案。' },
+      { day: 5, task: '识别你的"石头"——那件你不能停下来推的事。问自己: 我能把它变成"我的"吗？', why: '西西弗斯式的胜利——在过程里找到姿势。' },
+      { day: 6, task: '做一件你从来没做过的事——任何事。规模不重要。', why: '激情与数量——活得"更多"是对荒诞的回答。' },
+      { day: 7, task: '帮助一个具体的、不需要你帮助的人。不是因为他可怜——是因为你们都被荒诞砸到。', why: '团结——我反抗，故我们存在。' },
+    ],
+  },
+  {
+    id: 'eternal-return-week',
+    title: '永恒轮回 7 天',
+    philosopher: '尼采',
+    color: 'nietzsche',
+    intro: '尼采的永恒轮回不是宇宙学——是测试。一周让你用这个测试看清自己的人生。',
+    days: [
+      { day: 1, task: '今晚问自己："这一天，如果将重复一万次，我愿意吗？" 写下诚实的答案。', why: '诊断今天的质量——你的反应就是答案。' },
+      { day: 2, task: '找出这个月你"愿意重复"的 3 件事。具体到细节。', why: '看清什么真的让你想要活着。' },
+      { day: 3, task: '找出这个月你"绝对不愿重复"的 3 件事。', why: '看清什么在消耗你。' },
+      { day: 4, task: '昨天列的不愿重复的——你为什么还在做？写下三个借口。', why: '看见你的自欺。' },
+      { day: 5, task: '从不愿重复的清单里，删除一件。今天就开始不做。', why: '把诊断变成行动。' },
+      { day: 6, task: '从愿意重复的清单里，今天增加一次。', why: '主动多做你真的想要的。' },
+      { day: 7, task: '一周后重新问那个问题: "今天如果重复一万次..." 答案有没有不同？', why: '永恒轮回不是一次性问——是反复问的尺。' },
+    ],
+  },
+  {
+    id: 'foucault-week',
+    title: '看穿权力 7 天',
+    philosopher: '福柯',
+    color: 'foucault',
+    intro: '福柯说权力无处不在——但看不见才让它生效。一周让你看见。',
+    days: [
+      { day: 1, task: '找出今天 3 个"为你好"——父母、同事、品牌、政府都算。', why: '识别生命权力的温柔形式。' },
+      { day: 2, task: '每个"为你好"问一句"谁需要我这样"。', why: '为你好背后总站着一个利益。' },
+      { day: 3, task: '注意你今天的"自我管理"——打卡、计步、复盘、KPI。它们在塑造你成什么样？', why: '自我的技术——工具也在塑造你。' },
+      { day: 4, task: '今天故意"打卡失败"一次。看看会怎样。', why: '识别你被规训得多深——发现"罪疚感"的位置。' },
+      { day: 5, task: '注意所有"大家都"开头的句子——网络评论、家庭聚会、朋友圈。', why: '规范化的入口——"大家都"代替了你的判断。' },
+      { day: 6, task: '做一件"不正常"的小事——穿不符合场合的衣服、走错方向、回答非标准答案。', why: '在规范的缝隙里找回呼吸。' },
+      { day: 7, task: '问自己: 我这一周最大的自由在哪里？最深的不自由在哪里？', why: '福柯不教你"逃离权力"——教你看清自己在什么位置。' },
+    ],
+  },
+  {
+    id: 'wuwei-week',
+    title: '无为 7 天',
+    philosopher: '老子',
+    color: 'stoic',
+    intro: '老子的无为不是不为——是不强为。一周让你练习"松手"。',
+    days: [
+      { day: 1, task: '找一件你在"强为"的事——一段关系、一个目标、一个习惯。', why: '识别紧握——所有紧握都在流失。' },
+      { day: 2, task: '今天对那件事松手一天。不主动推进。看会怎样。', why: '无为的开始——让出空间。' },
+      { day: 3, task: '想三个"越追越远"的例子——爱情、机会、平静。问: 当时你做对了什么？', why: '反者道之动——道的运动是反向的。' },
+      { day: 4, task: '今天一天不主动联系任何人。回应可以，主动联系不行。', why: '体验"不发起"——很多关系靠这个滋养。' },
+      { day: 5, task: '做一件完全"无用"的事——什么都不学的散步、什么都不达成的下午。', why: '无用之用——一棵树没用所以能长大。' },
+      { day: 6, task: '像水一样——让一件事自然发生。不计划、不催促、不评估。', why: '水穿石不是因为强——是因为不停。' },
+      { day: 7, task: '写下你这周松手得到了什么。常常: 你强迫它来的，它不来；你松开的，它自己来了。', why: '"无为而无不为"。' },
+    ],
+  },
+  {
+    id: 'qiwu-week',
+    title: '齐物 7 天',
+    philosopher: '庄子',
+    color: 'stoic',
+    intro: '庄子说分别本身是后加的。一周让你看穿"分别"。',
+    days: [
+      { day: 1, task: '找一个你"鄙视"的人。具体写下他可能正确的 3 件事。', why: '看穿"鄙视"背后的怨恨。' },
+      { day: 2, task: '找一个你"崇拜"的人。具体写下他可能错的 3 件事。', why: '崇拜和鄙视都是分别。' },
+      { day: 3, task: '听一个完全相反的观点 1 小时——不反驳，认真听。', why: '让另一个视角进入。' },
+      { day: 4, task: '用对方的位置写一段话——"如果我是他，我会..."', why: '齐物的练习——离开自己的位置。' },
+      { day: 5, task: '你今天有什么"分别"是后加的？"我喜欢/讨厌" "我会/不会" "我属于/不属于"——找一个看穿。', why: '分别是发明的——发明者是你。' },
+      { day: 6, task: '做一件不分对错的事——散步、做饭、发呆。不评估，只做。', why: '不分对错本身是一种自由。' },
+      { day: 7, task: '庄周梦蝶——这一周你是哪个？醒着的庄周，还是飞着的蝴蝶？', why: '识别"我"的边界本来就是流动的。' },
+    ],
+  },
+  {
+    id: 'bad-faith-week',
+    title: '看见自欺 7 天',
+    philosopher: '萨特',
+    color: 'camus',
+    intro: '萨特说"我必须"是骗局。一周让你识破自己每天的自欺。',
+    days: [
+      { day: 1, task: '今天找出 5 个你说"我必须"的时刻。具体记录。', why: '把自欺的瞬间标出来。' },
+      { day: 2, task: '每个"我必须"换成"我选择"。看感受怎么变。', why: '语言的转换揭示真相。' },
+      { day: 3, task: '哪一个选择你不愿意承认是你做的？', why: '自欺最深的地方是不愿承认选择。' },
+      { day: 4, task: '做一件你"必须"做但不愿做的事——但承认你选择了。', why: '不是要你停止——是要你停止假装。' },
+      { day: 5, task: '做一件你"不能"做但其实想做的事——证明你能。规模不重要。', why: '"不能"也是自欺。' },
+      { day: 6, task: '给你的"角色"标签——你正在扮演谁？"负责的人" "好妈妈" "好员工" "理性的人"——列出来。', why: '看清你穿着哪些戏服。' },
+      { day: 7, task: '哪个标签今天可以拿下？拿下一天，看看真实的你在哪里。', why: '自由 = 不被你扮演的角色定义。' },
+    ],
+  },
+  {
+    id: 'arendt-week',
+    title: '平庸之恶检查 7 天',
+    philosopher: '阿伦特',
+    color: 'foucault',
+    intro: '阿伦特说恶的核心是"不思考"。一周让你练习"思考"——真正的思考。',
+    days: [
+      { day: 1, task: '找出今天 3 个你"只是在执行"的时刻——工作流程、家庭程序、社会期待。', why: '识别你的"艾希曼时刻"。' },
+      { day: 2, task: '每个时刻停一下问: 我赞同我执行的吗？还是我只是在按程序？', why: '思考的开始——不再让程序代替判断。' },
+      { day: 3, task: '注意算法替你思考的时刻——推荐、提醒、自动决策。', why: '现代版的不思考——算法是你的"程序"。' },
+      { day: 4, task: '看一份你完全不同立场的内容——耐心、不愤怒地看完。', why: '强迫自己思考"不舒服的想法"。' },
+      { day: 5, task: '找一件"程序要求但你不赞同"的事。', why: '让分歧浮上来——这是思考的种子。' },
+      { day: 6, task: '今天拒绝一件"按程序"的事。可以小——但要真的拒绝。', why: '思考必须有时变成行动。' },
+      { day: 7, task: '你这周思考了什么"应当不思考"的事？记下来。', why: '思考的标志: 你能想"不被允许想"的东西。' },
+    ],
+  },
+  {
+    id: 'wym-week',
+    title: '知行合一 7 天',
+    philosopher: '王阳明',
+    color: 'stoic',
+    intro: '王阳明说: "知而不行，只是未知。" 一周让你检验你"知道"的真假。',
+    days: [
+      { day: 1, task: '列出你"知道但没做到"的 5 件事——早睡、运动、读书、联系朋友、戒手机。', why: '识别假知。' },
+      { day: 2, task: '第 1 件——立刻做一个 5 分钟版本。不要计划，立刻做。', why: '王阳明: 真正的知必然行。' },
+      { day: 3, task: '第 2 件——同样，5 分钟版本，立刻。', why: '不积累——每件事立刻验证。' },
+      { day: 4, task: '第 3 件。', why: '继续。' },
+      { day: 5, task: '第 4 件。', why: '继续。' },
+      { day: 6, task: '第 5 件。', why: '完成 5 件。' },
+      { day: 7, task: '问自己: 哪几件做了之后感觉很好？这些可能是真知。哪几件还是没做？那是假知——你还没真的明白。', why: '王阳明会说: 不是你意志力不行——是你还没真知道。' },
+    ],
+  },
+  {
+    id: 'han-week',
+    title: '倦怠社会检查 7 天',
+    philosopher: '韩炳哲',
+    color: 'foucault',
+    intro: '韩炳哲说成就社会把你变成自己的剥削者。一周让你看清并松开。',
+    days: [
+      { day: 1, task: '今天一天不完成任何"应该完成"的事。所有 to-do 推到明天。', why: '体验一天不被"应当"驱动。' },
+      { day: 2, task: '删掉一个打卡 App。任何一个。今天就删。', why: '减少一个剥削你的机制。' },
+      { day: 3, task: '注意每次"再做一点"的冲动——回邮件、刷消息、写计划。每次停下问"谁需要我做"。', why: '识别内化的剥削。' },
+      { day: 4, task: '主动拒绝一个"睡后收入"的诱惑——副业、课程、自媒体涨粉技巧。', why: '"24 小时为资本工作"是新的奴隶制。' },
+      { day: 5, task: '一天什么"产出"都不做。不写、不发、不学。只存在。', why: '你不是产出。' },
+      { day: 6, task: '给自己一项完全"无用"的爱好——种花、看云、撸狗。', why: '无用是对成就社会的反抗。' },
+      { day: 7, task: '问自己: 这周我休息了几次？真休息——不是"为了恢复以继续工作"。', why: '真正的休息不服务于工作——它就是它自己。' },
+    ],
+  },
+];
 
 // ═══ 当代议题透镜 ═══
 const CONTEMPORARY = [
@@ -5271,6 +5570,51 @@ function buildRadarSVG(stats, size = 200) {
   return `<svg class="mind-radar" width="${size}" height="${size + 20}" viewBox="0 -10 ${size} ${size + 20}">${bgPolys}${axes}${statPoly}${dots}${labels}</svg>`;
 }
 
+function renderPractices() {
+  const scroll = document.getElementById('practices-scroll');
+  const cards = PRACTICES.map(p => `
+    <button class="practice-card" data-pr="${p.id}" data-color="${p.color}">
+      <div class="pr-card-who">${escapeHtml(p.philosopher)}</div>
+      <div class="pr-card-title">${escapeHtml(p.title)}</div>
+      <div class="pr-card-intro">${escapeHtml(p.intro)}</div>
+    </button>
+  `).join('');
+  scroll.innerHTML = `
+    <div class="practices-title">7 天实践</div>
+    <div class="practices-subtitle">把哲学从"读"变成"做"——每天一个具体动作</div>
+    ${cards}
+  `;
+  scroll.querySelectorAll('.practice-card').forEach(card => {
+    card.addEventListener('click', () => {
+      haptic('light');
+      openPractice(card.getAttribute('data-pr'));
+    });
+  });
+}
+
+function openPractice(id) {
+  const p = PRACTICES.find(x => x.id === id);
+  if (!p) return;
+  // Apply philosopher accent for this view
+  document.documentElement.setAttribute('data-philosopher', p.color);
+  const scroll = document.getElementById('practice-detail-scroll');
+  const days = p.days.map(d => `
+    <div class="pr-day">
+      <div class="pr-day-number">DAY ${d.day}</div>
+      <div class="pr-day-task">${escapeHtml(d.task)}</div>
+      <div class="pr-day-why">${escapeHtml(d.why)}</div>
+    </div>
+  `).join('');
+  scroll.innerHTML = `
+    <div class="pr-title">${escapeHtml(p.title)}</div>
+    <div class="pr-who">${escapeHtml(p.philosopher)}</div>
+    <div class="pr-intro">${escapeHtml(p.intro)}</div>
+    ${days}
+  `;
+  showScreen('practice-detail');
+  window.scrollTo(0, 0);
+}
+
 function renderContemporary() {
   const scroll = document.getElementById('contemporary-scroll');
   const cards = CONTEMPORARY.map(c => `
@@ -6983,6 +7327,25 @@ document.getElementById('nav-global-journal').addEventListener('click', () => {
   journalGlobal = true;
   renderJournal();
   showScreen('journal');
+});
+
+document.getElementById('nav-practices').addEventListener('click', () => {
+  haptic('light');
+  document.documentElement.removeAttribute('data-philosopher');
+  renderPractices();
+  showScreen('practices');
+});
+
+document.getElementById('practices-back-btn').addEventListener('click', () => {
+  document.documentElement.removeAttribute('data-philosopher');
+  renderHome();
+  showScreen('home');
+});
+
+document.getElementById('practice-detail-back-btn').addEventListener('click', () => {
+  document.documentElement.removeAttribute('data-philosopher');
+  renderPractices();
+  showScreen('practices');
 });
 
 document.getElementById('nav-contemporary').addEventListener('click', () => {
