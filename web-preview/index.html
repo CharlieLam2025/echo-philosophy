@@ -956,6 +956,126 @@ body::after {
   letter-spacing: 0.15em;
 }
 
+/* ── Fake questions screens ── */
+.fake-qs-scroll, .fake-q-detail-scroll {
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.fake-qs-title {
+  font-size: 28px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.fake-qs-subtitle {
+  font-size: 12px;
+  opacity: 0.35;
+  font-style: italic;
+  margin-bottom: 40px;
+}
+.fake-q-card {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(245,241,232,0.05);
+  color: #f5f1e8;
+  font-family: inherit;
+  text-align: left;
+  padding: 20px 0;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.fake-q-card:active { opacity: 0.7; transform: translateX(3px); }
+.fake-q-card:focus { outline: none; }
+.fq-card-number {
+  font-size: 11px;
+  opacity: 0.3;
+  letter-spacing: 0.15em;
+  margin-bottom: 4px;
+}
+.fq-card-q {
+  font-size: 17px;
+  opacity: 0.9;
+  font-style: italic;
+  line-height: 1.6;
+}
+.fq-original-q {
+  font-size: 24px;
+  opacity: 0.9;
+  font-style: italic;
+  line-height: 1.6;
+  text-align: center;
+  padding: 16px 0 24px;
+  border-bottom: 2px solid rgba(245,241,232,0.08);
+  margin-bottom: 32px;
+}
+.fq-strikethrough {
+  position: relative;
+  display: inline-block;
+}
+.fq-strikethrough::after {
+  content: '';
+  position: absolute;
+  left: -4px; right: -4px;
+  top: 50%;
+  height: 1px;
+  background: rgba(245,241,232,0.4);
+  transform: rotate(-3deg);
+}
+.fq-section {
+  margin-bottom: 28px;
+}
+.fq-section-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  opacity: 0.45;
+  margin-bottom: 12px;
+  color: rgba(245,241,232,0.55);
+}
+.fq-body {
+  font-size: 15px;
+  line-height: 1.85;
+  opacity: 0.82;
+}
+.fq-assumption {
+  font-size: 14px;
+  line-height: 1.8;
+  opacity: 0.65;
+  padding: 14px 18px;
+  background: rgba(245,241,232,0.02);
+  border-left: 2px solid rgba(245,241,232,0.15);
+  border-radius: 0 4px 4px 0;
+  font-style: italic;
+}
+.fq-real-q {
+  font-size: 17px;
+  opacity: 0.9;
+  padding: 18px 22px;
+  border-left: 2px solid var(--accent);
+  background: rgba(245,241,232,0.025);
+  border-radius: 0 4px 4px 0;
+  font-style: italic;
+}
+.fq-who {
+  margin-top: 4px;
+}
+.fq-who-item {
+  font-size: 13px;
+  opacity: 0.7;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(245,241,232,0.04);
+}
+.fq-who-item:last-child { border-bottom: none; }
+.fq-apply {
+  font-size: 15px;
+  line-height: 1.85;
+  opacity: 0.85;
+  padding: 16px 22px;
+  background: rgba(245,241,232,0.025);
+  border-radius: 4px;
+}
+
 /* ── Scenarios list screen ── */
 .scenarios-scroll {
   padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
@@ -2228,6 +2348,7 @@ body::after {
     <button class="nav-btn" id="nav-dialogues" style="font-size:13px;">对话录 →</button>
     <button class="nav-btn" id="nav-scenarios" style="font-size:13px;">应用题 →</button>
     <button class="nav-btn" id="nav-oriental" style="font-size:13px;">东方思想 →</button>
+    <button class="nav-btn" id="nav-fake-qs" style="font-size:13px;">伪命题 →</button>
   </div>
 </div>
 
@@ -2255,6 +2376,24 @@ body::after {
   </div>
   <div class="story-scroll" id="story-scroll"></div>
 </div>
+<!-- ═══ Fake Questions List Screen ═══ -->
+<div id="fake-qs-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="fake-qs-back-btn">←</button>
+    <span class="story-concept-label">伪命题</span>
+  </div>
+  <div class="fake-qs-scroll" id="fake-qs-scroll"></div>
+</div>
+
+<!-- ═══ Fake Question Detail Screen ═══ -->
+<div id="fake-q-detail-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="fake-q-detail-back-btn">←</button>
+    <span class="story-concept-label">伪命题</span>
+  </div>
+  <div class="fake-q-detail-scroll" id="fake-q-detail-scroll"></div>
+</div>
+
 <!-- ═══ Oriental Thinkers List Screen ═══ -->
 <div id="oriental-screen" class="screen">
   <div class="journal-header">
@@ -2841,6 +2980,145 @@ const DEEP_READS = {
     apply: '识别你生活中的"异托邦"——夜晚的便利店、失眠的微信对话、深夜大排档——这些缝隙时刻是你呼吸的地方。',
   },
 };
+
+// ═══ 哲学伪命题 ═══
+const FAKE_QUESTIONS = [
+  {
+    id: 'true-self',
+    question: '我的"真正自我"是什么？',
+    whyFake: '它假设有一个不变的、被遮蔽的"真我"等你揭开。但寻找了几十年的人都发现——揭开一层还有一层，没有底。',
+    assumption: '自我是名词——是一件可以找到的东西。',
+    realQuestion: '我正在成为什么？（自我是动词。）',
+    whoSawIt: ['尼采（自我是变形的过程）', '巴特勒（表演中生产自我）', '庄子（齐物——分别本身是后加的）'],
+    apply: '下次问"我是谁"时，把它换成"我这周做了什么样的事"。前者无解，后者有答案。',
+  },
+  {
+    id: 'meaning-of-life',
+    question: '人生的意义是什么？',
+    whyFake: '它假设有"答案"等你发现。但意义不是被发现的，是被给出的——给出的人是你。',
+    assumption: '意义是宇宙的一个属性，等待被找到。',
+    realQuestion: '我愿意把意义给什么？',
+    whoSawIt: ['尼采（上帝死后，意义由人创造）', '加缪（荒诞 = 意义真空）', '萨特（存在先于本质）'],
+    apply: '不要问"什么有意义"——问"我在哪件事上愿意死"。这才是你给出意义的位置。',
+  },
+  {
+    id: 'should-i-do',
+    question: '我"应该"做什么？',
+    whyFake: '"应该"已经预设了一个外部权威——上帝、传统、父母、社会。但那个权威可能不存在，或者你不接受它。',
+    assumption: '有人/有体系知道答案，你只要找到。',
+    realQuestion: '我选择做什么？',
+    whoSawIt: ['尼采（自由精神 = 为自己立法）', '萨特（自由是诅咒）'],
+    apply: '当你问"我应该考公务员吗"，先问"是谁在问？" 99% 的概率是父母在你脑子里说话。',
+  },
+  {
+    id: 'free-will',
+    question: '我有没有自由意志？',
+    whyFake: '把"自由"当成有/无的二元。但每个具体处境里的"自由度"都不同——一个人可能在选择牛排时自由、在选择职业时不自由、在选择死亡时极度自由。',
+    assumption: '自由是个总体属性，一个人要么有要么没有。',
+    realQuestion: '在这个具体处境里，我的自由有多大？被什么限制？',
+    whoSawIt: ['福柯（主体被生产，但仍有缝隙）', '海德格尔（被抛之后仍有本真选择）'],
+    apply: '当你陷入"反正命运决定一切"或"反正我能做一切"——两种极端都是逃避。问具体处境。',
+  },
+  {
+    id: 'good-or-bad-person',
+    question: '我是好人还是坏人？',
+    whyFake: '把"我"当成一个静态实体，让道德属性附着在身份上。但人不是结晶——人是流动的行为。',
+    assumption: '道德属性附着在人身上，像颜色附着在物体上。',
+    realQuestion: '这件事我做得对吗？这件事呢？',
+    whoSawIt: ['尼采（谱系学——美德也是被发明的）', '阿伦特（艾希曼不是坏人，但做了恶事）'],
+    apply: '当你怀疑"我是不是个坏人"——这种"是不是"问错了。问"我刚才做的那件具体的事，对吗"。',
+  },
+  {
+    id: 'real-preference',
+    question: '我喜欢的真的是"我"喜欢的吗？',
+    whyFake: '假设有一个"未被污染的真喜好"——好像可以剥掉广告、家庭、社会的影响，找到"纯粹的我喜欢"。这种纯粹不存在。',
+    assumption: '欲望可以被纯化，找到"真实"的版本。',
+    realQuestion: '我现在选择继续这样喜欢吗？',
+    whoSawIt: ['福柯（自我的技术——所有"喜欢"都是被塑造的）', '鲍德里亚（消费 = 喜欢符号而非物）'],
+    apply: '"我喜欢这件衣服"不需要纯粹——只需要你愿意为它付钱。"我爱这个人"也不需要纯粹——只需要你今天选择再爱一次。',
+  },
+  {
+    id: 'what-is-love',
+    question: '什么是爱？',
+    whyFake: '假设"爱"是单一对象，有一个本质等你发现。但"爱"是一个词，被用在几十种完全不同的场景里——母爱、性爱、友爱、对家国的爱、对食物的爱。',
+    assumption: '"爱"指向一个统一的本质。',
+    realQuestion: '在这个具体关系里，"爱"该做什么？',
+    whoSawIt: ['维特根斯坦（语言游戏——词的意思在使用里）'],
+    apply: '吵架时不要争"这是不是爱"——问"我们应该用什么方式照顾对方"。前者无解，后者可议。',
+  },
+  {
+    id: 'am-i-failure',
+    question: '我是不是个失败者？',
+    whyFake: '把人和成败结果等同。但"失败"是某件事的属性，不是某个人的属性。一个人可能失败 100 件事仍然是"成功的人"——也可能反之。',
+    assumption: '人 = 他做过的所有事的总和。',
+    realQuestion: '这件事我学到了什么？下次我做什么不一样？',
+    whoSawIt: ['尼采（命运之爱——把失败变成自己的）', '斯多葛（结果不在控制内，过程才是）'],
+    apply: '"我是失败者"是结论。"我刚刚失败了"是事实。前者吞掉你，后者让你继续。',
+  },
+  {
+    id: 'why-me',
+    question: '为什么会发生在我身上？',
+    whyFake: '假设宇宙在针对你——事情发生有意图。但事情发生通常没意图——它就是发生了。',
+    assumption: '事件有目的，宇宙有意识。',
+    realQuestion: '既然发生了，我怎么回应？',
+    whoSawIt: ['加缪（世界的冷漠——它不针对你，它根本不在乎你）', '斯多葛（控制二分——发生不在控制内，回应在）'],
+    apply: '坏事发生时给自己 5 分钟问"为什么"，然后切到"那现在怎么办"。前者无答案，后者有。',
+  },
+  {
+    id: 'if-i-was-born-elsewhere',
+    question: '如果我没生在这个家庭/国家就好了',
+    whyFake: '假设"我"可以脱离被抛——好像有一个"真实的我"独立于处境。但你之所以是你，恰恰因为这些处境。',
+    assumption: '存在一个"原始的我"，独立于具体处境。',
+    realQuestion: '从这里开始，我去哪？',
+    whoSawIt: ['海德格尔（被抛——你被扔进一个未经同意的世界）', '萨特（你必须从此处选择）'],
+    apply: '想象自己生在另一处的练习有意思，但有限度。最终的问题永远是：从这里、这具体的处境，下一步。',
+  },
+  {
+    id: 'do-i-deserve',
+    question: '我配吗？',
+    whyFake: '假设有一个客观的"配得上"——好像有一份标准在外面，你只要够够看。但谁定的标准？',
+    assumption: '"配得上"是个客观属性，由某个权威评估。',
+    realQuestion: '我在做什么？我愿意继续做吗？',
+    whoSawIt: ['尼采（奴隶道德——用外部尺度衡量自己）', '萨特（自欺——假设有客观的"我"比现实低）'],
+    apply: '把"我配吗"换成"我在做这件事"——感受立刻变了。判断变成事实，焦虑变成行动。',
+  },
+  {
+    id: 'is-it-useful',
+    question: '做这件事有用吗？',
+    whyFake: '"用"预设了一个外部目的——为某物服务的工具性。但很多最重要的事就是"无用"的——爱、艺术、友谊、思考。',
+    assumption: '行动必须为某个外部目的服务。',
+    realQuestion: '做这件事让我变成什么样？',
+    whoSawIt: ['加缪（荒诞的创造——不为留下，为姿态）', '庄子（无用之用——树活得久因为没用）'],
+    apply: '当你问"读哲学有用吗"——你已经在用"用"评估一切。哲学的"用"是它让你看穿这种评估。',
+  },
+  {
+    id: 'have-i-changed',
+    question: '我变了吗？',
+    whyFake: '假设"我"是一个不变的参照——变化以"不变"为背景才能被测。但参照本身也在变。所以"我变了吗"是循环问题。',
+    assumption: '存在一个稳定的"我"作为变化的参照系。',
+    realQuestion: '我现在在如何变？变到哪个方向？',
+    whoSawIt: ['赫拉克利特（人不能两次踏进同一条河）', '龙树（空性——没有不变的核心）', '德勒兹（生成——不要问"是"，问"成为"）'],
+    apply: '同学聚会问"你变了"——这是个无意义判断。换成"现在的我在做什么"，谈话立刻有意义。',
+  },
+  {
+    id: 'ai-vs-human',
+    question: 'AI 会比人聪明吗？',
+    whyFake: '把"聪明"当成单一维度的标量。但"聪明"在不同语境里完全不同——下棋、写诗、爱人、做菜、判断、品味——它们不可比。',
+    assumption: '智能是一个可比的标量。',
+    realQuestion: 'AI 能做什么样的事，不能做什么样的事？',
+    whoSawIt: ['维特根斯坦（语言游戏——智能在使用里，不在本质里）'],
+    apply: '不要问"AI 比我聪明吗"——问"AI 能替代我什么，不能替代我什么"。前者让你焦虑，后者让你重新定位。',
+  },
+  {
+    id: 'modern-vs-ancient',
+    question: '现代社会比古代好/坏吗？',
+    whyFake: '用单一"好坏"评价整个时代。但时代不是一个均质的东西——它在某些维度上好，某些维度上坏。',
+    assumption: '时代有总体属性，可以打一个分。',
+    realQuestion: '现代获得了什么？又失去了什么？',
+    whoSawIt: ['尼采（重估一切价值——质疑评估本身）', '福柯（谱系学——每个"理所当然"都有一段历史）'],
+    apply: '当你说"以前真好"或"现在多好"——都是怀旧或胜利主义。具体问：哪一项真的好了？哪一项真的失去了？',
+  },
+];
 
 // ═══ 东方思想 ═══
 const ORIENTAL_THINKERS = [
@@ -4130,6 +4408,64 @@ function buildRadarSVG(stats, size = 200) {
   }).join('');
 
   return `<svg class="mind-radar" width="${size}" height="${size + 20}" viewBox="0 -10 ${size} ${size + 20}">${bgPolys}${axes}${statPoly}${dots}${labels}</svg>`;
+}
+
+function renderFakeQs() {
+  const scroll = document.getElementById('fake-qs-scroll');
+  const cards = FAKE_QUESTIONS.map((q, i) => `
+    <button class="fake-q-card" data-fq="${q.id}">
+      <div class="fq-card-number">伪命题 · ${String(i+1).padStart(2, '0')}</div>
+      <div class="fq-card-q">${escapeHtml(q.question)}</div>
+    </button>
+  `).join('');
+  scroll.innerHTML = `
+    <div class="fake-qs-title">伪命题</div>
+    <div class="fake-qs-subtitle">那些听起来深刻、其实问错了的问题</div>
+    ${cards}
+  `;
+  scroll.querySelectorAll('.fake-q-card').forEach(card => {
+    card.addEventListener('click', () => {
+      haptic('light');
+      openFakeQ(card.getAttribute('data-fq'));
+    });
+  });
+}
+
+function openFakeQ(id) {
+  const q = FAKE_QUESTIONS.find(x => x.id === id);
+  if (!q) return;
+  const scroll = document.getElementById('fake-q-detail-scroll');
+  const whoList = q.whoSawIt.map(w => `<div class="fq-who-item">${escapeHtml(w)}</div>`).join('');
+  scroll.innerHTML = `
+    <div class="fq-original-q"><span class="fq-strikethrough">${escapeHtml(q.question)}</span></div>
+
+    <div class="fq-section">
+      <div class="fq-section-label">为什么是伪命题</div>
+      <div class="fq-body">${escapeHtml(q.whyFake)}</div>
+    </div>
+
+    <div class="fq-section">
+      <div class="fq-section-label">它隐藏的假设</div>
+      <div class="fq-assumption">${escapeHtml(q.assumption)}</div>
+    </div>
+
+    <div class="fq-section">
+      <div class="fq-section-label">真问题</div>
+      <div class="fq-real-q">${escapeHtml(q.realQuestion)}</div>
+    </div>
+
+    <div class="fq-section">
+      <div class="fq-section-label">谁先看穿</div>
+      <div class="fq-who">${whoList}</div>
+    </div>
+
+    <div class="fq-section">
+      <div class="fq-section-label">怎么用</div>
+      <div class="fq-apply">${escapeHtml(q.apply)}</div>
+    </div>
+  `;
+  showScreen('fake-q-detail');
+  window.scrollTo(0, 0);
 }
 
 function renderOriental() {
@@ -5617,6 +5953,22 @@ document.getElementById('nav-global-journal').addEventListener('click', () => {
   journalGlobal = true;
   renderJournal();
   showScreen('journal');
+});
+
+document.getElementById('nav-fake-qs').addEventListener('click', () => {
+  haptic('light');
+  renderFakeQs();
+  showScreen('fake-qs');
+});
+
+document.getElementById('fake-qs-back-btn').addEventListener('click', () => {
+  renderHome();
+  showScreen('home');
+});
+
+document.getElementById('fake-q-detail-back-btn').addEventListener('click', () => {
+  renderFakeQs();
+  showScreen('fake-qs');
 });
 
 document.getElementById('nav-oriental').addEventListener('click', () => {
