@@ -956,6 +956,105 @@ body::after {
   letter-spacing: 0.15em;
 }
 
+/* ── Quotes screen ── */
+.quotes-scroll {
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.quotes-title {
+  font-size: 28px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.quotes-subtitle {
+  font-size: 12px;
+  opacity: 0.35;
+  font-style: italic;
+  margin-bottom: 28px;
+}
+.quote-filter-bar {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 14px 0;
+  border-top: 1px solid rgba(245,241,232,0.06);
+  border-bottom: 1px solid rgba(245,241,232,0.06);
+  margin-bottom: 32px;
+}
+.quote-filter-btn {
+  background: transparent;
+  border: 1px solid rgba(245,241,232,0.1);
+  color: #f5f1e8;
+  font-family: inherit;
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 14px;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: all 0.2s;
+}
+.quote-filter-btn.active {
+  opacity: 1;
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.quote-filter-btn:focus { outline: none; }
+.quote-card {
+  padding: 24px 0;
+  border-bottom: 1px solid rgba(245,241,232,0.04);
+  cursor: pointer;
+  transition: background 0.2s;
+  padding-left: 12px;
+  padding-right: 12px;
+  margin: 0 -12px;
+  border-radius: 4px;
+}
+.quote-card:hover { background: rgba(245,241,232,0.02); }
+.quote-text {
+  font-size: 17px;
+  line-height: 1.75;
+  opacity: 0.92;
+  margin-bottom: 12px;
+  position: relative;
+  padding-left: 18px;
+}
+.quote-text::before {
+  content: '"';
+  position: absolute;
+  left: -4px;
+  top: -10px;
+  font-size: 40px;
+  opacity: 0.18;
+  font-family: 'Cormorant Garamond', serif;
+}
+.quote-attribution {
+  font-size: 12px;
+  opacity: 0.45;
+  font-style: italic;
+  letter-spacing: 0.05em;
+}
+.quote-who { opacity: 0.7; font-style: normal; }
+.quote-copy-hint {
+  font-size: 10px;
+  opacity: 0;
+  letter-spacing: 0.2em;
+  margin-top: 6px;
+  transition: opacity 0.3s;
+  color: var(--accent-strong);
+}
+.quote-card.copied .quote-copy-hint { opacity: 1; }
+.quote-group-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  opacity: 0.4;
+  margin: 32px 0 18px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(245,241,232,0.06);
+  color: rgba(245,241,232,0.5);
+}
+.quote-group-label:first-child { margin-top: 0; }
+
 /* ── Fake questions screens ── */
 .fake-qs-scroll, .fake-q-detail-scroll {
   padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
@@ -2349,6 +2448,7 @@ body::after {
     <button class="nav-btn" id="nav-scenarios" style="font-size:13px;">应用题 →</button>
     <button class="nav-btn" id="nav-oriental" style="font-size:13px;">东方思想 →</button>
     <button class="nav-btn" id="nav-fake-qs" style="font-size:13px;">伪命题 →</button>
+    <button class="nav-btn" id="nav-quotes" style="font-size:13px;">金句 →</button>
   </div>
 </div>
 
@@ -2376,6 +2476,15 @@ body::after {
   </div>
   <div class="story-scroll" id="story-scroll"></div>
 </div>
+<!-- ═══ Quotes Screen ═══ -->
+<div id="quotes-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="quotes-back-btn">←</button>
+    <span class="story-concept-label">金句</span>
+  </div>
+  <div class="quotes-scroll" id="quotes-scroll"></div>
+</div>
+
 <!-- ═══ Fake Questions List Screen ═══ -->
 <div id="fake-qs-screen" class="screen">
   <div class="journal-header">
@@ -2980,6 +3089,128 @@ const DEEP_READS = {
     apply: '识别你生活中的"异托邦"——夜晚的便利店、失眠的微信对话、深夜大排档——这些缝隙时刻是你呼吸的地方。',
   },
 };
+
+// ═══ 金句精选 ═══
+const QUOTES = [
+  // ─── 死亡 ───
+  { theme: 'death', text: '必须想象西西弗斯是幸福的。', who: '加缪', src: '《西西弗神话》结尾' },
+  { theme: 'death', text: '你可能今晚就要离开人世——按照这个想法去说话、行动、思考。', who: '马可·奥勒留', src: '《沉思录》卷二' },
+  { theme: 'death', text: '当你长久凝视深渊时，深渊也在凝视你。', who: '尼采', src: '《善恶的彼岸》§146' },
+  { theme: 'death', text: '即使你将活三千年，乃至三万年——你失去的也不过是此刻。', who: '马可·奥勒留', src: '《沉思录》卷二' },
+  { theme: 'death', text: '一切都该被设想为已经发生——这样它真的来临时，你已经不被它伤到。', who: '塞涅卡', src: '《道德书简》§91' },
+  { theme: 'death', text: '设想一个魔鬼潜入你最孤独的孤独中说："这种生活，你必须一遍又一遍地重过。"', who: '尼采', src: '《快乐的科学》§341' },
+  { theme: 'death', text: '现代权力不杀你——它管理你的生育、健康、寿命、人口。', who: '福柯', src: '《性史》第一卷' },
+  { theme: 'death', text: '此心光明，亦复何言。', who: '王阳明', src: '临终遗言' },
+  { theme: 'death', text: '只有一个真正严肃的哲学问题：那就是自杀。', who: '加缪', src: '《西西弗神话》开篇' },
+  { theme: 'death', text: '凯撒之死和你今天的死，本质上是一样的。', who: '马可·奥勒留', src: '《沉思录》' },
+
+  // ─── 自由 ───
+  { theme: 'freedom', text: '在我们掌控之内的事，天生自由、不受阻碍；不在的，天生软弱、奴性、可被夺走。', who: '爱比克泰德', src: '《手册》§1' },
+  { theme: 'freedom', text: '自由的精神，是脱离了所有惯例的桎梏——他自己为自己立法。', who: '尼采', src: '《人性的，太人性的》' },
+  { theme: 'freedom', text: '反者道之动——你越紧握，越流失。', who: '老子', src: '《道德经》' },
+  { theme: 'freedom', text: '荒诞的人意识到自己没有自由——但荒诞本身把他从一切之中解放了出来。', who: '加缪', src: '《西西弗神话》' },
+  { theme: 'freedom', text: '你以为的自由，可能正是被规训出来的。', who: '福柯', src: '《规训与惩罚》（重述）' },
+  { theme: 'freedom', text: '直言之人冒着一切风险讲出真理——其他的只是发泄。', who: '福柯', src: '《说真话的勇气》' },
+  { theme: 'freedom', text: '人是被宣判去自由的。', who: '萨特', src: '《存在与虚无》' },
+  { theme: 'freedom', text: '知而不行，只是未知。', who: '王阳明', src: '《传习录》' },
+  { theme: 'freedom', text: '让我们想象西西弗斯是自由的——他知道，所以他自由。', who: '加缪', src: '《西西弗神话》' },
+
+  // ─── 他人 ───
+  { theme: 'others', text: '我反抗，故我们存在。', who: '加缪', src: '《反抗者》' },
+  { theme: 'others', text: '群居的本能——服从——作为一种格式化人类的力量，已经几乎根深蒂固。', who: '尼采', src: '《善恶的彼岸》§199' },
+  { theme: 'others', text: '我的城邦和我的祖国，作为人，是宇宙。', who: '马可·奥勒留', src: '《沉思录》卷六' },
+  { theme: 'others', text: '同情在伟大的爱面前是渺小的——爱是创造，不是同情。', who: '尼采', src: '《查拉图斯特拉如是说》' },
+  { theme: 'others', text: '仁者爱人——但这"爱"从具体的人际关系出发。', who: '孔子', src: '《论语》' },
+  { theme: 'others', text: '你不需要被监视——你已经在监视自己。', who: '福柯', src: '《规训与惩罚》（重述）' },
+  { theme: 'others', text: '他人即地狱。', who: '萨特', src: '《禁闭》' },
+  { theme: 'others', text: '艾希曼不是怪物——他只是没在思考。这就是平庸之恶。', who: '阿伦特', src: '《耶路撒冷的艾希曼》' },
+
+  // ─── 真理 ───
+  { theme: 'truth', text: '没有事实，只有解释。', who: '尼采', src: '《权力意志》§481' },
+  { theme: 'truth', text: '我们拥有艺术，是为了不至死于真理。', who: '尼采', src: '《权力意志》§822' },
+  { theme: 'truth', text: '权力与知识彼此包含——没有不预设权力的知识。', who: '福柯', src: '《规训与惩罚》' },
+  { theme: 'truth', text: '色即是空，空即是色。', who: '龙树/般若经', src: '《心经》' },
+  { theme: 'truth', text: '凡是不能说的，应当保持沉默。', who: '维特根斯坦', src: '《逻辑哲学论》结尾' },
+  { theme: 'truth', text: '在每个社会中，话语的生产都被一些程序所控制、筛选、组织和重新分配。', who: '福柯', src: '《话语的秩序》' },
+  { theme: 'truth', text: '清醒——它使一切都变得不可弥补。', who: '加缪', src: '《西西弗神话》' },
+  { theme: 'truth', text: '不问"这是不是真的"，问"这在什么条件下被当成真的"。', who: '福柯', src: '《知识考古学》（重述）' },
+  { theme: 'truth', text: '"上帝死了——上帝真的死了！是我们杀死了他。"', who: '尼采', src: '《快乐的科学》§125' },
+  { theme: 'truth', text: '齐物——分别本身是后加的。', who: '庄子', src: '《庄子·齐物论》' },
+
+  // ─── 行动 ───
+  { theme: 'action', text: '阻碍行动的东西推动了行动。挡在路上的成了道路本身。', who: '马可·奥勒留', src: '《沉思录》卷五' },
+  { theme: 'action', text: '哪里有生命，哪里就有意志——不是求生的意志，而是权力意志。', who: '尼采', src: '《查拉图斯特拉如是说》' },
+  { theme: 'action', text: '真正的知必然行；没有行，是因为还没真知道。', who: '王阳明', src: '《传习录》' },
+  { theme: 'action', text: '不要寻求事情按你所愿发生——而是希望它按其所是发生。', who: '爱比克泰德', src: '《手册》§8' },
+  { theme: 'action', text: '那不能杀死我的，使我更强大。', who: '尼采', src: '《偶像的黄昏》' },
+  { theme: 'action', text: '创造不是为了留下什么——是在虚无前做出一个姿态。', who: '加缪', src: '《西西弗神话》' },
+  { theme: 'action', text: '反抗本身就是答案，不需要外部目的。', who: '加缪', src: '《反抗者》' },
+  { theme: 'action', text: '不为成功而做，为不消失而做。', who: '加缪', src: '（精神继承）' },
+  { theme: 'action', text: '无为而无不为。', who: '老子', src: '《道德经》三十七章' },
+  { theme: 'action', text: '我的爱的方式只有一种：amor fati——让该如此者成为我所爱者。', who: '尼采', src: '《快乐的科学》§276' },
+
+  // ─── 自我 ───
+  { theme: 'self', text: '精神变成骆驼，骆驼变成狮子，最后狮子变成孩子。', who: '尼采', src: '《查拉图斯特拉如是说》' },
+  { theme: 'self', text: '人是一根绳索，连接在动物与超人之间——一根悬在深渊上的绳索。', who: '尼采', src: '《查拉图斯特拉如是说》前言' },
+  { theme: 'self', text: '人们寻找隐居处——但你随时可以退入自己之内。', who: '马可·奥勒留', src: '《沉思录》卷四' },
+  { theme: 'self', text: '本来无一物，何处惹尘埃。', who: '慧能', src: '《六祖坛经》' },
+  { theme: 'self', text: '自我是被技术塑造的——你的日记/健身/冥想也在塑造你。', who: '福柯', src: '《自我的技术》' },
+  { theme: 'self', text: '性别是动词——一个不停发生的"做"。', who: '巴特勒', src: '《性别麻烦》' },
+  { theme: 'self', text: '不知道是庄周梦见自己变成蝴蝶，还是蝴蝶梦见自己变成庄周。', who: '庄子', src: '《庄子·齐物论》' },
+  { theme: 'self', text: '心即理。', who: '王阳明', src: '《传习录》' },
+  { theme: 'self', text: '存在先于本质——你做什么，你就是什么。', who: '萨特', src: '《存在主义是一种人本主义》' },
+  { theme: 'self', text: '没有"成为"，只有"正在成为"。', who: '德勒兹', src: '（精神继承）' },
+
+  // ─── 苦难 ───
+  { theme: 'suffering', text: '在你过得最舒适的时候，故意吃简单的食物、穿粗糙的衣服——对自己说："这就是我害怕的吗？"', who: '塞涅卡', src: '《道德书简》§18' },
+  { theme: 'suffering', text: '我的爱的方式只有一种：amor fati——让该如此者成为我所爱者。', who: '尼采', src: '《快乐的科学》§276' },
+  { theme: 'suffering', text: '倦怠不是被外力压垮的累，是被"积极性"耗竭的累。', who: '韩炳哲', src: '《倦怠社会》' },
+  { theme: 'suffering', text: '不动心——不是没有感情，是不被感情拖着走。', who: '斯多葛', src: '（爱比克泰德/马可）' },
+  { theme: 'suffering', text: '挡在路上的成了道路本身。', who: '马可·奥勒留', src: '《沉思录》卷五' },
+  { theme: 'suffering', text: '让我们想象西西弗斯是幸福的。', who: '加缪', src: '《西西弗神话》' },
+  { theme: 'suffering', text: '失败也是命运之爱的素材。', who: '尼采', src: '（精神继承）' },
+
+  // ─── 时间 ───
+  { theme: 'time', text: '即使你将活三千年——你失去的也不过是此刻。', who: '马可·奥勒留', src: '《沉思录》卷二' },
+  { theme: 'time', text: '过去已不可改，未来尚不存在——你唯一拥有的就是现在这一刻。', who: '斯多葛', src: '（综合）' },
+  { theme: 'time', text: '这一切将无限重复——你还愿意吗？', who: '尼采', src: '《快乐的科学》§341' },
+  { theme: 'time', text: '人不能两次踏进同一条河。', who: '赫拉克利特', src: '残篇' },
+  { theme: 'time', text: '"等忙完这阵"是骗局——没有"忙完之后"。', who: '斯多葛', src: '（精神继承）' },
+  { theme: 'time', text: '在拟像时代，"未来"和"过去"也变成了符号。', who: '鲍德里亚', src: '（重述）' },
+
+  // ─── 爱 ───
+  { theme: 'love', text: '仁者爱人。', who: '孔子', src: '《论语》' },
+  { theme: 'love', text: '同情削弱受苦者——爱是创造，不是同情。', who: '尼采', src: '《查拉图斯特拉如是说》' },
+  { theme: 'love', text: '他人即地狱。', who: '萨特', src: '《禁闭》' },
+  { theme: 'love', text: '我反抗，故我们存在。', who: '加缪', src: '《反抗者》' },
+  { theme: 'love', text: 'amor fati——让该如此者成为我所爱者。', who: '尼采', src: '《快乐的科学》§276' },
+  { theme: 'love', text: '一切现实都是依其他现实而生——这就是缘起。', who: '龙树', src: '《中论》' },
+  { theme: 'love', text: '没人告诉他"男生不哭"——但他已经知道了。', who: '巴特勒', src: '（性别表演）' },
+
+  // ─── 创造 ───
+  { theme: 'create', text: '创造不是为了留下什么——是在虚无前做出一个姿态。', who: '加缪', src: '《西西弗神话》' },
+  { theme: 'create', text: '你要走进你的孤独，我的兄弟——走进你的爱与你的创造。', who: '尼采', src: '《查拉图斯特拉如是说》' },
+  { theme: 'create', text: '艺术的发展，与阿波罗精神和狄奥尼索斯精神的双重性绑定在一起。', who: '尼采', src: '《悲剧的诞生》' },
+  { theme: 'create', text: '我们拥有艺术，是为了不至死于真理。', who: '尼采', src: '《权力意志》§822' },
+  { theme: 'create', text: '块茎没有中心、没有起点——任意一点都可以长出新的。', who: '德勒兹', src: '《千高原》' },
+  { theme: 'create', text: '块茎被砍断的部分继续生长。', who: '德勒兹', src: '《千高原》' },
+  { theme: 'create', text: '荒诞的创造——在虚无前的伟大模仿。', who: '加缪', src: '《西西弗神话》' },
+  { theme: 'create', text: '创造者必须能孤独——能在没人比较、没人评价的旷野里做。', who: '尼采', src: '（精神继承）' },
+];
+
+const QUOTE_THEMES = [
+  { id: 'all',       name: '全部' },
+  { id: 'death',     name: '死亡' },
+  { id: 'freedom',   name: '自由' },
+  { id: 'others',    name: '他人' },
+  { id: 'truth',     name: '真理' },
+  { id: 'action',    name: '行动' },
+  { id: 'self',      name: '自我' },
+  { id: 'suffering', name: '苦难' },
+  { id: 'time',      name: '时间' },
+  { id: 'love',      name: '爱' },
+  { id: 'create',    name: '创造' },
+];
 
 // ═══ 哲学伪命题 ═══
 const FAKE_QUESTIONS = [
@@ -4408,6 +4639,70 @@ function buildRadarSVG(stats, size = 200) {
   }).join('');
 
   return `<svg class="mind-radar" width="${size}" height="${size + 20}" viewBox="0 -10 ${size} ${size + 20}">${bgPolys}${axes}${statPoly}${dots}${labels}</svg>`;
+}
+
+let quoteFilter = 'all';
+
+function renderQuotes() {
+  const scroll = document.getElementById('quotes-scroll');
+  const filterBar = QUOTE_THEMES.map(t => `
+    <button class="quote-filter-btn ${quoteFilter === t.id ? 'active' : ''}" data-filter="${t.id}">${escapeHtml(t.name)}</button>
+  `).join('');
+
+  // Group by theme (unless filter is 'all'; in that case show grouped; if filtered, just list)
+  let body;
+  if (quoteFilter === 'all') {
+    body = QUOTE_THEMES.filter(t => t.id !== 'all').map(t => {
+      const items = QUOTES.filter(q => q.theme === t.id);
+      const itemsHtml = items.map((q, idx) => `
+        <div class="quote-card" data-quote-idx="${QUOTES.indexOf(q)}">
+          <div class="quote-text">${escapeHtml(q.text)}</div>
+          <div class="quote-attribution">— <span class="quote-who">${escapeHtml(q.who)}</span> · ${escapeHtml(q.src)}</div>
+          <div class="quote-copy-hint">已复制</div>
+        </div>
+      `).join('');
+      return `<div class="quote-group-label">${escapeHtml(t.name)}</div>${itemsHtml}`;
+    }).join('');
+  } else {
+    const items = QUOTES.filter(q => q.theme === quoteFilter);
+    body = items.map((q, idx) => `
+      <div class="quote-card" data-quote-idx="${QUOTES.indexOf(q)}">
+        <div class="quote-text">${escapeHtml(q.text)}</div>
+        <div class="quote-attribution">— <span class="quote-who">${escapeHtml(q.who)}</span> · ${escapeHtml(q.src)}</div>
+        <div class="quote-copy-hint">已复制</div>
+      </div>
+    `).join('');
+  }
+
+  scroll.innerHTML = `
+    <div class="quotes-title">金句</div>
+    <div class="quotes-subtitle">${QUOTES.length} 句，按主题分组 · 点击复制</div>
+    <div class="quote-filter-bar">${filterBar}</div>
+    ${body}
+  `;
+
+  scroll.querySelectorAll('.quote-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      quoteFilter = btn.getAttribute('data-filter');
+      haptic('light');
+      renderQuotes();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  scroll.querySelectorAll('.quote-card').forEach(card => {
+    card.addEventListener('click', async () => {
+      const idx = parseInt(card.getAttribute('data-quote-idx'));
+      const q = QUOTES[idx];
+      const text = `"${q.text}" — ${q.who}${q.src ? '《' + q.src.replace(/^《|》$/g, '') + '》' : ''}`;
+      try {
+        await navigator.clipboard.writeText(text);
+        haptic('success');
+        card.classList.add('copied');
+        setTimeout(() => card.classList.remove('copied'), 1500);
+      } catch {}
+    });
+  });
 }
 
 function renderFakeQs() {
@@ -5953,6 +6248,18 @@ document.getElementById('nav-global-journal').addEventListener('click', () => {
   journalGlobal = true;
   renderJournal();
   showScreen('journal');
+});
+
+document.getElementById('nav-quotes').addEventListener('click', () => {
+  haptic('light');
+  quoteFilter = 'all';
+  renderQuotes();
+  showScreen('quotes');
+});
+
+document.getElementById('quotes-back-btn').addEventListener('click', () => {
+  renderHome();
+  showScreen('home');
 });
 
 document.getElementById('nav-fake-qs').addEventListener('click', () => {
