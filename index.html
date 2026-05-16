@@ -956,6 +956,170 @@ body::after {
   letter-spacing: 0.15em;
 }
 
+/* ── Home grouped navigation ── */
+.home-nav-groups {
+  padding: 24px 28px 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+.nav-group {
+  display: flex;
+  flex-direction: column;
+}
+.nav-group-label {
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  opacity: 0.4;
+  margin-bottom: 4px;
+  color: rgba(245,241,232,0.55);
+}
+.nav-group-sub {
+  font-size: 12px;
+  opacity: 0.2;
+  font-style: italic;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(245,241,232,0.05);
+}
+.nav-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(245,241,232,0.04);
+  border: 1px solid rgba(245,241,232,0.04);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.nav-entry {
+  background: #000;
+  border: none;
+  color: #f5f1e8;
+  font-family: inherit;
+  text-align: left;
+  padding: 16px 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+  min-height: 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.nav-entry:hover { background: rgba(245,241,232,0.025); }
+.nav-entry:active { background: rgba(245,241,232,0.05); }
+.nav-entry:focus { outline: none; }
+.ne-title {
+  font-size: 15px;
+  opacity: 0.92;
+  margin-bottom: 4px;
+}
+.ne-meta {
+  font-size: 11px;
+  opacity: 0.4;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+}
+
+/* ── Letters screens ── */
+.letters-scroll, .letter-detail-scroll {
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.letters-title {
+  font-size: 28px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.letters-subtitle {
+  font-size: 12px;
+  opacity: 0.35;
+  font-style: italic;
+  margin-bottom: 40px;
+}
+.letter-card {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(245,241,232,0.05);
+  color: #f5f1e8;
+  font-family: inherit;
+  text-align: left;
+  padding: 22px 0;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.letter-card:active { opacity: 0.7; transform: translateX(3px); }
+.letter-card:focus { outline: none; }
+.lc-pair {
+  font-size: 16px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.lc-arrow { opacity: 0.4; margin: 0 8px; }
+.lc-date {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  opacity: 0.4;
+  margin-bottom: 8px;
+}
+.lc-summary {
+  font-size: 13px;
+  opacity: 0.55;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+/* Detail — typed-letter feel */
+.letter-paper {
+  margin: 20px 0 0;
+  padding: 36px 36px 32px;
+  background: rgba(245,241,232,0.02);
+  border: 1px solid rgba(245,241,232,0.06);
+  border-radius: 2px;
+  position: relative;
+}
+.letter-meta-top {
+  font-size: 12px;
+  opacity: 0.45;
+  margin-bottom: 24px;
+  line-height: 1.7;
+  font-style: italic;
+}
+.letter-salute {
+  font-size: 17px;
+  opacity: 0.92;
+  margin-bottom: 24px;
+  font-style: italic;
+}
+.letter-body {
+  font-size: 16px;
+  line-height: 2.0;
+  opacity: 0.88;
+  white-space: pre-wrap;
+  font-family: 'Cormorant Garamond', 'Songti SC', 'STSong', Georgia, serif;
+}
+.letter-signature {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px dashed rgba(245,241,232,0.08);
+  font-size: 15px;
+  opacity: 0.85;
+  font-style: italic;
+  white-space: pre-wrap;
+  text-align: right;
+}
+.letter-summary {
+  font-size: 13px;
+  opacity: 0.55;
+  font-style: italic;
+  text-align: center;
+  padding: 14px 0;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(245,241,232,0.05);
+}
+
 /* ── Practices screens ── */
 .practices-scroll, .practice-detail-scroll {
   padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
@@ -2812,20 +2976,92 @@ body::after {
   <div class="philosopher-list stagger" id="philosopher-list"></div>
   <div id="themes-section" class="themes-section"></div>
   <div id="daily-wisdom" class="daily-wisdom" style="display:none;"></div>
-  <div style="padding:0 28px 80px; display:flex; gap:24px; flex-wrap:wrap;">
-    <button class="nav-btn" id="nav-global-journal" style="font-size:13px;">全部思考记录 →</button>
-    <button class="nav-btn" id="nav-lexicon" style="font-size:13px;">辞海 →</button>
-    <button class="nav-btn" id="nav-thinkers" style="font-size:13px;">现代思想 →</button>
-    <button class="nav-btn" id="nav-events" style="font-size:13px;">哲学史事件 →</button>
-    <button class="nav-btn" id="nav-dialogues" style="font-size:13px;">对话录 →</button>
-    <button class="nav-btn" id="nav-scenarios" style="font-size:13px;">应用题 →</button>
-    <button class="nav-btn" id="nav-oriental" style="font-size:13px;">东方思想 →</button>
-    <button class="nav-btn" id="nav-fake-qs" style="font-size:13px;">伪命题 →</button>
-    <button class="nav-btn" id="nav-quotes" style="font-size:13px;">金句 →</button>
-    <button class="nav-btn" id="nav-arguments" style="font-size:13px;">核心论证 →</button>
-    <button class="nav-btn" id="nav-contemporary" style="font-size:13px;">当代议题 →</button>
-    <button class="nav-btn" id="nav-practices" style="font-size:13px;">7 天实践 →</button>
-    <button class="nav-btn" id="nav-forgotten" style="font-size:13px;">被忽视的视角 →</button>
+  <div class="home-nav-groups">
+
+    <div class="nav-group">
+      <div class="nav-group-label">思 想 家</div>
+      <div class="nav-group-sub">主线之外的关键空白</div>
+      <div class="nav-grid">
+        <button class="nav-entry" id="nav-thinkers">
+          <div class="ne-title">现代思想</div>
+          <div class="ne-meta">10 位 · 阿伦特 → 韩炳哲</div>
+        </button>
+        <button class="nav-entry" id="nav-oriental">
+          <div class="ne-title">东方思想</div>
+          <div class="ne-meta">6 位 · 庄子 → 王阳明</div>
+        </button>
+        <button class="nav-entry" id="nav-forgotten">
+          <div class="ne-title">被忽视的视角</div>
+          <div class="ne-meta">10 位 · 帕斯卡 → 詹姆逊</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">话 题 与 诊 断</div>
+      <div class="nav-group-sub">用哲学切入具体的现实</div>
+      <div class="nav-grid">
+        <button class="nav-entry" id="nav-contemporary">
+          <div class="ne-title">当代议题</div>
+          <div class="ne-meta">12 个 · 内卷 / 躺平 / AI</div>
+        </button>
+        <button class="nav-entry" id="nav-scenarios">
+          <div class="ne-title">应用题</div>
+          <div class="ne-meta">15 道 · 现实场景的哲学分析</div>
+        </button>
+        <button class="nav-entry" id="nav-fake-qs">
+          <div class="ne-title">伪命题</div>
+          <div class="ne-meta">15 条 · 问错了的问题</div>
+        </button>
+        <button class="nav-entry" id="nav-events">
+          <div class="ne-title">哲学史事件</div>
+          <div class="ne-meta">8 件 · 关键的历史时刻</div>
+        </button>
+        <button class="nav-entry" id="nav-dialogues">
+          <div class="ne-title">对话录</div>
+          <div class="ne-meta">6 段 · 跨学派的对面争论</div>
+        </button>
+        <button class="nav-entry" id="nav-letters">
+          <div class="ne-title">私信</div>
+          <div class="ne-meta">6 封 · 哲学家的亲密书写</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">资 源</div>
+      <div class="nav-group-sub">工具与素材库</div>
+      <div class="nav-grid">
+        <button class="nav-entry" id="nav-quotes">
+          <div class="ne-title">金句</div>
+          <div class="ne-meta">85 句 · 按主题分组 · 点击复制</div>
+        </button>
+        <button class="nav-entry" id="nav-arguments">
+          <div class="ne-title">核心论证</div>
+          <div class="ne-meta">10 个 · 推理步骤的拆解</div>
+        </button>
+        <button class="nav-entry" id="nav-lexicon">
+          <div class="ne-title">辞海</div>
+          <div class="ne-meta">38 条 · 关键术语的字源与释义</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">实 践 与 记 录</div>
+      <div class="nav-group-sub">把哲学变成日常</div>
+      <div class="nav-grid">
+        <button class="nav-entry" id="nav-practices">
+          <div class="ne-title">7 天实践</div>
+          <div class="ne-meta">10 个 · 哲学训练营</div>
+        </button>
+        <button class="nav-entry" id="nav-global-journal">
+          <div class="ne-title">思考记录</div>
+          <div class="ne-meta">你的所有反思</div>
+        </button>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -2853,6 +3089,24 @@ body::after {
   </div>
   <div class="story-scroll" id="story-scroll"></div>
 </div>
+<!-- ═══ Letters List Screen ═══ -->
+<div id="letters-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="letters-back-btn">←</button>
+    <span class="story-concept-label">私信</span>
+  </div>
+  <div class="letters-scroll" id="letters-scroll"></div>
+</div>
+
+<!-- ═══ Letter Detail Screen ═══ -->
+<div id="letter-detail-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="letter-detail-back-btn">←</button>
+    <span class="story-concept-label">信</span>
+  </div>
+  <div class="letter-detail-scroll" id="letter-detail-scroll"></div>
+</div>
+
 <!-- ═══ Forgotten Thinkers List Screen ═══ -->
 <div id="forgotten-screen" class="screen">
   <div class="journal-header">
@@ -3538,6 +3792,70 @@ const DEEP_READS = {
     apply: '识别你生活中的"异托邦"——夜晚的便利店、失眠的微信对话、深夜大排档——这些缝隙时刻是你呼吸的地方。',
   },
 };
+
+// ═══ 哲学家私信 (想象的) ═══
+const LETTERS = [
+  {
+    id: 'camus-sartre',
+    from: '加缪',
+    to: '萨特',
+    date: '1953 年 1 月',
+    place: '巴黎',
+    summary: '决裂之后，那封他没寄出的信。',
+    body: '让-保罗，\n\n我已经决定不回应你最后那封信了。但今晚下了一整夜的雨，我又拿起来读了一遍。\n\n你说我"灵魂干干净净，但也变得多么愚蠢"——这句话我会在心里反复想很多年。我知道你是认真的。这不是论战，这是你看清的事。\n\n但我也看清了一件事。你赌的是: 在我们这个时代，要么和我们一起，要么是敌人。中间不存在。\n\n我赌的是: 中间必须存在。否则我们就都成了我们反对的那种人。\n\n这不是哲学分歧——这是性格分歧。你需要一个能立刻燃烧的火。我需要一种能持续不熄灭的温度。\n\n我知道你会赢。你的火更亮，更有力。但 30 年后，看看哪种温度还在。\n\n我不再写了。',
+    signature: '阿尔贝',
+  },
+  {
+    id: 'seneca-lucilius',
+    from: '塞涅卡',
+    to: '卢西利乌斯',
+    date: '公元 65 年春',
+    place: '罗马近郊',
+    summary: '尼禄的人就要到了。这是最后一封信。',
+    body: '卢西利乌斯，我的兄弟，\n\n当你读到这封信时，我可能已经不在了。皇帝的人快到了——昨晚我妻子告诉我她在花园里听到马蹄声。这没什么——我有 12 年时间准备这一刻。\n\n我想跟你说三件事。\n\n第一: 不要为我哭。我教过你"每天向死亡更近一步"——今天只是这条路的尽头。我把它走完了。\n\n第二: 不要相信你听到的关于我的故事。我做了一些妥协——做尼禄的导师是其中最大的一个。我会被指责"为暴君服务"。也许是对的。我想我会用我的死偿还这一切。\n\n第三: 写信给你的人比写《道德书简》给世界的人更接近真实的塞涅卡。继续写下去。不要等到有空——空永远不会来。\n\n我要去洗澡了。希望今天的水是温的。',
+    signature: '你的，塞涅卡',
+  },
+  {
+    id: 'nietzsche-wagner',
+    from: '尼采',
+    to: '瓦格纳',
+    date: '1878 年 8 月',
+    place: '巴塞尔',
+    summary: '"你是我必须杀死的父亲。"',
+    body: '理查德，\n\n我等了一年再写这封信。我害怕我会用错词，让我自己看起来像个忘恩负义的小人。\n\n你是我的父亲——不是生物学上的，是精神上的。我 25 岁时见到你，那一刻我整个人改变了。后来 10 年里，我所有的写作都是为你写的。\n\n但你也是我必须杀死的父亲。\n\n拜罗伊特那一年，我看清了。你不再是那个燃烧着、反对一切的人——你成了被国王包养、被基督教感动、被德意志民族主义包围的"大师"。你赢了——但赢的是错的东西。\n\n我寄给你《人性的，太人性的》——你立刻就明白这不再是给你的礼物，是给你的告别。你会恨这本书。\n\n这没关系。我也不再爱那个让我能恨这本书的你。',
+    signature: '你的曾经的儿子，\n弗里德里希',
+  },
+  {
+    id: 'heidegger-arendt',
+    from: '海德格尔',
+    to: '阿伦特',
+    date: '1950 年',
+    place: '弗莱堡',
+    summary: '17 年后，最复杂的重逢。',
+    body: '汉娜，\n\n17 年了。你回来了——我以为我永远不会再见到你。\n\n1933 年——我做了那个选择。我没法解释。我可以告诉你那时候我以为我在做什么，但那也只是事后给自己的话。\n\n你的家人在大屠杀中遇害。我当过纳粹党员。这两件事不能被任何"哲学解释"消化掉。\n\n你昨晚说: "我原谅你。" 但我没法接受这种原谅。它太轻了。我做的事配得上的是: 永远没人再原谅。\n\n但你来了。你来这里——你为我重建职业生涯——你给我寄书——你让我看清: 我们之间还有什么我不明白的东西。\n\n我不会问你为什么。我也不会假装我配。我只想说: 谢谢。',
+    signature: '你的，\n马丁',
+  },
+  {
+    id: 'marcus-self',
+    from: '马可·奥勒留',
+    to: '自己',
+    date: '公元 175 年冬',
+    place: '多瑙河前线',
+    summary: '一个皇帝在帐篷里写给自己的话。',
+    body: '马可，\n\n你今天又想自杀了。\n\n不是因为战场——战场你已经习惯了。是因为又一个夜里你看见瘟疫带走了一个朋友的孩子。是因为信使带来消息说阿维狄乌斯在埃及反叛。是因为你已经 54 岁，回不去罗马了。\n\n但你不能死。不是因为责任——你已经看清"责任"是个空洞的词。是因为你死了，你管的事情会变得更糟。\n\n这就是斯多葛的真正功夫: 不是因为你愿意活，是因为活着是更好的事。\n\n明天早晨你还是要起床。穿盔甲。听简报。审阅文件。给孩子写信。给军队讲话。\n\n这一天你不会被记住。你写的这些笔记你也不会发表。它们只是为了让你今晚能睡。\n\n关上灯。',
+    signature: '马可',
+  },
+  {
+    id: 'foucault-deleuze',
+    from: '福柯',
+    to: '德勒兹',
+    date: '1972 年春',
+    place: '巴黎',
+    summary: '关于权力和欲望的彼此承认。',
+    body: '吉尔，\n\n我刚读完你和加塔利的稿子。我承认我一开始抵触——"反俄狄浦斯"听起来太响亮，太挑衅。但读到第三章我懂了。\n\n你做了我一直想做但做不到的事: 你给"权力"一个身体。我一直在描述"权力如何运作"——但你描述了"欲望如何流动"。这是同一个现象的两面。\n\n我也想跟你说: 我后悔我们前几年争吵的某些时刻。"知识考古学" vs "千高原"——这是个假对立。我们在描述同一个世界，只是用不同的工具。\n\n这个夏天我要写一本关于监狱的书。我会把你的"线"概念偷过来用——希望你不介意。如果你介意，告诉我，我会换个词。但我不会换概念。\n\n见面再聊。',
+    signature: '米歇尔',
+  },
+];
 
 // ═══ 被忽视的视角 (10 位) ═══
 const FORGOTTEN = [
@@ -5723,6 +6041,44 @@ function buildRadarSVG(stats, size = 200) {
   return `<svg class="mind-radar" width="${size}" height="${size + 20}" viewBox="0 -10 ${size} ${size + 20}">${bgPolys}${axes}${statPoly}${dots}${labels}</svg>`;
 }
 
+function renderLetters() {
+  const scroll = document.getElementById('letters-scroll');
+  const cards = LETTERS.map(l => `
+    <button class="letter-card" data-letter="${l.id}">
+      <div class="lc-pair">${escapeHtml(l.from)}<span class="lc-arrow">→</span>${escapeHtml(l.to)}</div>
+      <div class="lc-date">${escapeHtml(l.date)} · ${escapeHtml(l.place)}</div>
+      <div class="lc-summary">${escapeHtml(l.summary)}</div>
+    </button>
+  `).join('');
+  scroll.innerHTML = `
+    <div class="letters-title">私信</div>
+    <div class="letters-subtitle">从公开论争走到亲密书写</div>
+    ${cards}
+  `;
+  scroll.querySelectorAll('.letter-card').forEach(card => {
+    card.addEventListener('click', () => {
+      haptic('light');
+      openLetter(card.getAttribute('data-letter'));
+    });
+  });
+}
+
+function openLetter(id) {
+  const l = LETTERS.find(x => x.id === id);
+  if (!l) return;
+  const scroll = document.getElementById('letter-detail-scroll');
+  scroll.innerHTML = `
+    <div class="letter-summary">${escapeHtml(l.from)} → ${escapeHtml(l.to)} · ${escapeHtml(l.summary)}</div>
+    <div class="letter-paper">
+      <div class="letter-meta-top">${escapeHtml(l.place)}，${escapeHtml(l.date)}</div>
+      <div class="letter-body">${escapeHtml(l.body)}</div>
+      <div class="letter-signature">${escapeHtml(l.signature)}</div>
+    </div>
+  `;
+  showScreen('letter-detail');
+  window.scrollTo(0, 0);
+}
+
 function renderForgotten() {
   const scroll = document.getElementById('forgotten-scroll');
   const cards = FORGOTTEN.map(t => `
@@ -7542,6 +7898,22 @@ document.getElementById('nav-global-journal').addEventListener('click', () => {
   journalGlobal = true;
   renderJournal();
   showScreen('journal');
+});
+
+document.getElementById('nav-letters').addEventListener('click', () => {
+  haptic('light');
+  renderLetters();
+  showScreen('letters');
+});
+
+document.getElementById('letters-back-btn').addEventListener('click', () => {
+  renderHome();
+  showScreen('home');
+});
+
+document.getElementById('letter-detail-back-btn').addEventListener('click', () => {
+  renderLetters();
+  showScreen('letters');
 });
 
 document.getElementById('nav-forgotten').addEventListener('click', () => {
