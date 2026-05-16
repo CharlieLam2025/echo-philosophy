@@ -956,6 +956,144 @@ body::after {
   letter-spacing: 0.15em;
 }
 
+/* ── Arguments screens ── */
+.arguments-scroll, .argument-detail-scroll {
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
+  max-width: 680px;
+  margin: 0 auto;
+}
+.arguments-title {
+  font-size: 28px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.arguments-subtitle {
+  font-size: 12px;
+  opacity: 0.35;
+  font-style: italic;
+  margin-bottom: 40px;
+}
+.argument-card {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(245,241,232,0.05);
+  color: #f5f1e8;
+  font-family: inherit;
+  text-align: left;
+  padding: 22px 0;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.argument-card:active { opacity: 0.7; transform: translateX(3px); }
+.argument-card:focus { outline: none; }
+.ag-card-who {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  opacity: 0.4;
+  margin-bottom: 4px;
+}
+.ag-card-title {
+  font-size: 18px;
+  opacity: 0.9;
+  margin-bottom: 8px;
+}
+.ag-card-target {
+  font-size: 13px;
+  opacity: 0.55;
+  font-style: italic;
+}
+.ag-card-target::before { content: '对应迷思: '; opacity: 0.6; }
+
+/* Detail */
+.ag-target {
+  font-size: 14px;
+  opacity: 0.55;
+  font-style: italic;
+  margin-bottom: 8px;
+  padding: 8px 14px;
+  background: rgba(245,241,232,0.025);
+  border-radius: 4px;
+  display: inline-block;
+}
+.ag-detail-who {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  opacity: 0.4;
+  margin-bottom: 6px;
+}
+.ag-title {
+  font-size: 30px;
+  opacity: 0.9;
+  line-height: 1.3;
+  margin-bottom: 24px;
+}
+.ag-section {
+  margin-bottom: 36px;
+}
+.ag-section-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  opacity: 0.45;
+  margin-bottom: 16px;
+  color: rgba(245,241,232,0.55);
+}
+.ag-premise {
+  font-size: 17px;
+  line-height: 1.85;
+  opacity: 0.88;
+  padding: 18px 22px;
+  border-left: 2px solid var(--accent);
+  background: rgba(245,241,232,0.025);
+  border-radius: 0 4px 4px 0;
+}
+.ag-steps {
+  counter-reset: ag-step;
+}
+.ag-step {
+  position: relative;
+  padding: 14px 0 14px 48px;
+  border-bottom: 1px solid rgba(245,241,232,0.04);
+  counter-increment: ag-step;
+  font-size: 15px;
+  line-height: 1.85;
+  opacity: 0.85;
+}
+.ag-step:last-child { border-bottom: none; }
+.ag-step::before {
+  content: counter(ag-step);
+  position: absolute;
+  left: 0; top: 14px;
+  width: 28px; height: 28px;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  opacity: 0.7;
+  font-feature-settings: 'tnum';
+}
+.ag-conclusion {
+  font-size: 17px;
+  line-height: 1.8;
+  opacity: 0.95;
+  padding: 22px 24px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  background: var(--accent-soft);
+  font-style: italic;
+}
+.ag-power {
+  font-size: 14px;
+  line-height: 1.85;
+  opacity: 0.7;
+  padding: 18px 0;
+  border-top: 1px solid rgba(245,241,232,0.06);
+  font-style: italic;
+}
+
 /* ── Quotes screen ── */
 .quotes-scroll {
   padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
@@ -2449,6 +2587,7 @@ body::after {
     <button class="nav-btn" id="nav-oriental" style="font-size:13px;">东方思想 →</button>
     <button class="nav-btn" id="nav-fake-qs" style="font-size:13px;">伪命题 →</button>
     <button class="nav-btn" id="nav-quotes" style="font-size:13px;">金句 →</button>
+    <button class="nav-btn" id="nav-arguments" style="font-size:13px;">核心论证 →</button>
   </div>
 </div>
 
@@ -2476,6 +2615,24 @@ body::after {
   </div>
   <div class="story-scroll" id="story-scroll"></div>
 </div>
+<!-- ═══ Arguments List Screen ═══ -->
+<div id="arguments-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="arguments-back-btn">←</button>
+    <span class="story-concept-label">核心论证</span>
+  </div>
+  <div class="arguments-scroll" id="arguments-scroll"></div>
+</div>
+
+<!-- ═══ Argument Detail Screen ═══ -->
+<div id="argument-detail-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="argument-detail-back-btn">←</button>
+    <span class="story-concept-label">论证</span>
+  </div>
+  <div class="argument-detail-scroll" id="argument-detail-scroll"></div>
+</div>
+
 <!-- ═══ Quotes Screen ═══ -->
 <div id="quotes-screen" class="screen">
   <div class="journal-header">
@@ -3089,6 +3246,169 @@ const DEEP_READS = {
     apply: '识别你生活中的"异托邦"——夜晚的便利店、失眠的微信对话、深夜大排档——这些缝隙时刻是你呼吸的地方。',
   },
 };
+
+// ═══ 核心论证 ═══
+const ARGUMENTS = [
+  {
+    id: 'genealogy-of-morality',
+    philosopher: '尼采',
+    title: '道德的谱系',
+    target: '"善"是从天上掉下来的',
+    premise: '我们以为"善"是客观的、永恒的、从天上掉下来的价值。',
+    steps: [
+      '看古代社会——"善"指贵族特质：强壮、勇敢、慷慨、有力。"坏"指平民特质：弱小、卑微、贫穷。',
+      '看中世纪基督教——"善"反转为弱者特质：温顺、谦卑、克制、贫穷。"恶"成了原本被赞美的：骄傲、强壮、世俗成功。',
+      '这种反转是怎么发生的？尼采说：弱者无力反抗强者，于是用"道德"重新定义——把强者的特质命名为"恶"，把自己的特质命名为"善"。',
+      '这种发明需要时间。它通过宗教、教育、社会规范——慢慢渗透——直到所有人（包括强者自己）都接受了。',
+    ],
+    conclusion: '"善"不是天上掉下来的——它是斗争的产物。每一套道德背后都有"谁需要这种善"的问题。',
+    power: '这个论证把"道德"从天上拉下来。从此你可以问任何"应该"——这个"应该"谁需要？为谁服务？这种质疑构成了现代批判理论的基础。',
+  },
+  {
+    id: 'eternal-return-test',
+    philosopher: '尼采',
+    title: '永恒轮回的测试',
+    target: '宇宙真的会循环吗？',
+    premise: '想象一个魔鬼对你说："这一切将无限重复——同样的快乐、同样的痛苦、每一个细节，永无止境。"',
+    steps: [
+      '这不是宇宙学假设——尼采不是在说"时间真的循环"。',
+      '这是一个伦理测试——你听到这话时的第一反应，就是诊断。',
+      '如果你颤抖、抗拒、感到沉重——你的人生不是你愿意要的。',
+      '如果你听到这话能平静甚至欣喜——你正在过自己想过的人生。',
+      '关键: 不是"这个魔鬼说的对吗"——而是"我现在的反应是什么"。',
+    ],
+    conclusion: '永恒轮回不是关于宇宙的——是关于你。它问的是: 这一切，你愿意重过吗？',
+    power: '一个简单的问题，让你立刻看见自己的人生质量。没有比这更锋利的诊断工具了。',
+  },
+  {
+    id: 'dichotomy-argument',
+    philosopher: '爱比克泰德',
+    title: '控制的二分论证',
+    target: '为什么我这么痛苦？',
+    premise: '痛苦从哪里来？',
+    steps: [
+      '痛苦不是事件本身——是你对事件的"判断"。两个人遇到同一件事，反应可以完全不同。',
+      '你能控制判断吗？能——这是你内在的东西。',
+      '你能控制事件吗？不能——事件已经发生了，或者还没发生。',
+      '所以痛苦的真正来源是错配——你把不能控制的事情当成了你的事。',
+      '解决方法不是"消灭痛苦"——是"重新分配注意力"。把精力收回到你能控制的部分。',
+    ],
+    conclusion: '不要寻求事情按你所愿发生——希望它按其所是发生。你立刻得到自由。',
+    power: '给焦虑一个外科手术式的解剖。它不是把痛苦消失了——是让你看清痛苦的真正源头，从而有了行动的位置。',
+  },
+  {
+    id: 'suicide-as-core',
+    philosopher: '加缪',
+    title: '为什么自杀是哲学核心',
+    target: '哲学到底应该回答什么？',
+    premise: '哲学应该回答什么是"基本"问题？',
+    steps: [
+      '"三维度还是九范畴" "精神和物质哪个在先" 这些都不是基本问题——是次要的细节。',
+      '真正的基本问题是: 这场生命值得继续吗？',
+      '为什么？因为只有这个问题有完全的紧迫性——它直接关系到一个具体的人现在的存在。',
+      '在这个问题面前，所有其他问题都是次要的。如果答案是"不值得"，所有思考都失去了意义。',
+      '回答这个问题，需要先承认它的位置——多数哲学家拒绝承认。',
+    ],
+    conclusion: '只有一个真正严肃的哲学问题：自杀。这就是判断生命是否值得活——这是哲学的真正起点。',
+    power: '加缪重新定义了哲学的核心。从此哲学不再是学院游戏——它是关于"如何不死"的具体工作。',
+  },
+  {
+    id: 'revolt-logic',
+    philosopher: '加缪',
+    title: '反抗的逻辑',
+    target: '没意义还为什么动？',
+    premise: '世界无意义——没有上帝、没有目的、没有补偿。然后呢？',
+    steps: [
+      '选项 A: 自杀。这是字面的——拒绝荒诞。但它"赢"了荒诞吗？没有——它只是停止参与。',
+      '选项 B: 哲学自杀。用宗教、政治、任何体系给荒诞一个假答案——"一切自有安排"。看起来活着，其实闭眼了。',
+      '选项 C: 反抗。看清荒诞，但还行动。这是唯一不逃避也不假装的选项。',
+      '反抗不需要外部目的——如果你为某个目的反抗，那个目的的失败会让你停止。',
+      '反抗本身就是答案——做就是答案。"我反抗，故我们存在。"',
+    ],
+    conclusion: '反抗本身就是答案——不需要意义，不需要补偿，不需要终点。',
+    power: '给"没有意义还要做事"的人一个理论依据。这不是鸡汤"反正人生要积极"，是严密的逻辑推演。',
+  },
+  {
+    id: 'panopticon-argument',
+    philosopher: '福柯',
+    title: '全景监狱的关键',
+    target: '为什么"自由"社会的人活得更紧？',
+    premise: '边沁的全景监狱设计——中心塔可以看到所有牢房，但囚徒看不到塔里有没有人。',
+    steps: [
+      '关键不在监视——监视者甚至可以不在塔里。',
+      '关键在"不确定"——囚徒必须假设可能被看。',
+      '于是他自己看自己——把外部监视内化。',
+      '这种自我监控比外在监控更彻底——你 24 小时都在执行它。',
+      '现代社会的所有"自由"机制（履历、点赞、KPI、社交媒体）——都是同一种结构。',
+    ],
+    conclusion: '现代权力的本质不是压迫——是让你监管你自己。可见性是一个陷阱。',
+    power: '解释了一个困惑: 为什么"自由"社会的人反而活得更紧。因为规训已经在你内部，不需要外人执行。',
+  },
+  {
+    id: 'power-knowledge-argument',
+    philosopher: '福柯',
+    title: '知识-权力的不可分性',
+    target: '"科学是客观的"',
+    premise: '我们以为"知识"是中立的——它只是描述事实。"权力"是另一回事——它压迫、强制、奖惩。',
+    steps: [
+      '知识需要"主体"（认知者）和"对象"（被认知的）——这就是一种权力关系。',
+      '谁能成为知识的主体？被某些制度允许的人——拥有学位、机构资格、研究经费。',
+      '谁能成为知识的对象？被某些制度选中的现象——某些病、某些人群、某些行为。',
+      '这些"允许"和"选中"——就是权力。',
+      '所以"知识"内部已经包含权力——它们彼此构成，无法分离。',
+    ],
+    conclusion: '没有不预设权力关系的知识，也没有不需要知识的权力。',
+    power: '让你看清"科学共识"也是一种权力运作。当某个"专家"告诉你什么——先问"他从哪个位置说"。',
+  },
+  {
+    id: 'bad-faith-structure',
+    philosopher: '萨特',
+    title: '自欺的结构',
+    target: '"我必须" 真的是必须吗？',
+    premise: '人是绝对自由的——每一刻你都在选择。',
+    steps: [
+      '自由意味着每个时刻你都在选择——包括"不选择"也是一种选择。',
+      '这是沉重的——所有选择都是你的责任。',
+      '人逃避这种重，把自己变成"角色"——咖啡馆服务员"是"服务员，不是"正在做服务员工作的人"。',
+      '"我必须" "我应该" "因为我是 X 所以..." 都是自欺的标志——假装自己没在选择。',
+      '识破自欺需要承认: 没有"我必须"——只有"我选择这样而不承认我选择了"。',
+    ],
+    conclusion: '大多数"我必须"都是"我选择不承认我选择了"——这就是自欺。',
+    power: '让你识破自己每天用"应该"逃避自由的方式。这是萨特式诚实的核心。',
+  },
+  {
+    id: 'being-toward-death',
+    philosopher: '海德格尔',
+    title: '向死而在',
+    target: '为什么思考死亡让人更清醒？',
+    premise: '死亡是什么样的"可能性"？',
+    steps: [
+      '所有别的可能性是"可以做的事"——我可以去散步、可以读书、可以骂人。',
+      '死亡不是"可以做的事"——它是所有可能性的终结。',
+      '它是"最本己的可能性"——无人能替你死。你的死亡是绝对属于你的。',
+      '日常生活中我们逃避这一点——把死亡变成"医院里的事" "总有一天的事" "别人的事"。',
+      '真正面对死亡（"向死而在"），会让其他可能性变得清晰——重要的事浮上来，琐碎的事退下去。',
+    ],
+    conclusion: '向死而在不是病态——是清醒。逃避死亡的代价是不本真。',
+    power: '解释了为什么思考死亡反而让人活得更真实。死亡不是终点的恐惧，是清晰度的源泉。',
+  },
+  {
+    id: 'banality-of-evil',
+    philosopher: '阿伦特',
+    title: '平庸之恶',
+    target: '大屠杀这种恶是怎么发生的？',
+    premise: '我们以为执行大屠杀的人是怪物——施虐狂、意识形态狂热分子、变态。',
+    steps: [
+      '看艾希曼: 他不是怪物。他是一个普通文员。彬彬有礼，话语平庸。',
+      '他不恨犹太人——他甚至说过对屠杀感到遗憾。',
+      '但他每天都在签字——把数百万人送向死亡。"我只是在做我的工作。"',
+      '他的罪不是"邪恶意图"——是"不思考"。他从来没有"停下来想想我在做什么"。',
+      '官僚化的现代恶不需要恶意——它需要"不思考"。每个齿轮做好自己的部分。',
+    ],
+    conclusion: '现代恶的核心不是恶意——是缺席。不是"想得太坏"，是"根本没在想"。',
+    power: '解释了为什么官僚体制下的恶可能。同时给个体一个责任: 你不思考——也是参与恶的一种方式。',
+  },
+];
 
 // ═══ 金句精选 ═══
 const QUOTES = [
@@ -4639,6 +4959,62 @@ function buildRadarSVG(stats, size = 200) {
   }).join('');
 
   return `<svg class="mind-radar" width="${size}" height="${size + 20}" viewBox="0 -10 ${size} ${size + 20}">${bgPolys}${axes}${statPoly}${dots}${labels}</svg>`;
+}
+
+function renderArguments() {
+  const scroll = document.getElementById('arguments-scroll');
+  const cards = ARGUMENTS.map(a => `
+    <button class="argument-card" data-arg="${a.id}">
+      <div class="ag-card-who">${escapeHtml(a.philosopher)}</div>
+      <div class="ag-card-title">${escapeHtml(a.title)}</div>
+      <div class="ag-card-target">${escapeHtml(a.target)}</div>
+    </button>
+  `).join('');
+  scroll.innerHTML = `
+    <div class="arguments-title">核心论证</div>
+    <div class="arguments-subtitle">不只是结论——结论是怎么推出来的</div>
+    ${cards}
+  `;
+  scroll.querySelectorAll('.argument-card').forEach(card => {
+    card.addEventListener('click', () => {
+      haptic('light');
+      openArgument(card.getAttribute('data-arg'));
+    });
+  });
+}
+
+function openArgument(id) {
+  const a = ARGUMENTS.find(x => x.id === id);
+  if (!a) return;
+  const scroll = document.getElementById('argument-detail-scroll');
+  const steps = a.steps.map(s => `<div class="ag-step">${escapeHtml(s)}</div>`).join('');
+  scroll.innerHTML = `
+    <div class="ag-detail-who">${escapeHtml(a.philosopher)}</div>
+    <div class="ag-title">${escapeHtml(a.title)}</div>
+    <div class="ag-target">对应迷思: ${escapeHtml(a.target)}</div>
+
+    <div class="ag-section">
+      <div class="ag-section-label">起点</div>
+      <div class="ag-premise">${escapeHtml(a.premise)}</div>
+    </div>
+
+    <div class="ag-section">
+      <div class="ag-section-label">推理</div>
+      <div class="ag-steps">${steps}</div>
+    </div>
+
+    <div class="ag-section">
+      <div class="ag-section-label">结论</div>
+      <div class="ag-conclusion">${escapeHtml(a.conclusion)}</div>
+    </div>
+
+    <div class="ag-section">
+      <div class="ag-section-label">这个论证的力量</div>
+      <div class="ag-power">${escapeHtml(a.power)}</div>
+    </div>
+  `;
+  showScreen('argument-detail');
+  window.scrollTo(0, 0);
 }
 
 let quoteFilter = 'all';
@@ -6248,6 +6624,22 @@ document.getElementById('nav-global-journal').addEventListener('click', () => {
   journalGlobal = true;
   renderJournal();
   showScreen('journal');
+});
+
+document.getElementById('nav-arguments').addEventListener('click', () => {
+  haptic('light');
+  renderArguments();
+  showScreen('arguments');
+});
+
+document.getElementById('arguments-back-btn').addEventListener('click', () => {
+  renderHome();
+  showScreen('home');
+});
+
+document.getElementById('argument-detail-back-btn').addEventListener('click', () => {
+  renderArguments();
+  showScreen('arguments');
 });
 
 document.getElementById('nav-quotes').addEventListener('click', () => {
