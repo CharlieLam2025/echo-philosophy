@@ -2436,6 +2436,96 @@ html[data-theme="paper"] .achievement-popup {
   font-style: italic;
 }
 
+/* ── Socratic dialogue ── */
+.socratic-prompt {
+  margin: 32px 0;
+  padding: 28px 24px;
+  text-align: center;
+  background: var(--accent-soft);
+  border: 1px solid var(--gold);
+  border-radius: 2px;
+  position: relative;
+}
+.socratic-prompt::before,
+.socratic-prompt::after {
+  content: '';
+  position: absolute;
+  width: 10px; height: 10px;
+  border: 1px solid var(--gold);
+}
+.socratic-prompt::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+.socratic-prompt::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+.sp-label {
+  font-size: 11px;
+  letter-spacing: 0.45em;
+  color: var(--gold);
+  margin-bottom: 14px;
+  font-weight: 400;
+}
+.sp-hint {
+  font-size: 13px;
+  opacity: 0.75;
+  font-style: italic;
+  line-height: 1.7;
+  margin-bottom: 22px;
+}
+.socratic-question-hint {
+  font-size: 13px;
+  opacity: 0.6;
+  font-style: italic;
+  margin-bottom: 18px;
+}
+.socratic-option {
+  display: block;
+  width: 100%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-soft);
+  color: var(--text-primary);
+  font-family: inherit;
+  text-align: left;
+  padding: 16px 20px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.25s;
+}
+.socratic-option:hover { border-color: var(--gold); }
+.socratic-option:focus { outline: none; }
+.socratic-option.correct {
+  background: var(--accent-soft);
+  border-color: var(--gold-bright);
+  animation: socCorrect 0.5s ease;
+}
+.socratic-option.wrong {
+  border-color: rgba(220,90,80,0.5);
+  background: rgba(220,90,80,0.05);
+  cursor: default;
+  pointer-events: none;
+}
+@keyframes socCorrect {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); box-shadow: 0 0 20px var(--accent); }
+  100% { transform: scale(1); }
+}
+.so-text {
+  font-size: 14px;
+  line-height: 1.75;
+}
+.so-hint {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(220,90,80,0.3);
+  font-size: 12px;
+  opacity: 0.85;
+  font-style: italic;
+  color: rgba(220,120,100,0.95);
+}
+
+.argument-card.completed {
+  border-color: var(--gold) !important;
+  background: var(--bg-card);
+}
+
 /* ── Arguments screens ── */
 .arguments-scroll, .argument-detail-scroll {
   padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
@@ -4930,6 +5020,11 @@ const ACHIEVEMENTS = [
   { id: 'challenge-1', name: '初识陷阱', desc: '满分通过第一关', icon: '✦', check: (s) => s.passedChallenges?.includes('fc-1') },
   { id: 'challenge-3', name: '半数识破', desc: '满分通过 3 关', icon: '✧', check: (s) => s.passedChallenges?.length >= 3 },
   { id: 'challenge-all', name: '问题诊断师', desc: '满分通过全部 5 关', icon: '⚜', check: (s) => s.passedChallenges?.length >= 5 },
+
+  // 苏格拉底产婆术
+  { id: 'socratic-1',   name: '初次推导',     desc: '推出一个论证的结论',       icon: '✦', check: (s) => s.completedArguments?.length >= 1 },
+  { id: 'socratic-5',   name: '半数推出',     desc: '推出 5 个论证',           icon: '✧', check: (s) => s.completedArguments?.length >= 5 },
+  { id: 'socratic-all', name: '产婆术大师',   desc: '推出全部 10 个论证',      icon: '⚜', check: (s) => s.completedArguments?.length >= 10 },
 ];
 
 // ═══ 心智等级 (overall level) ═══
@@ -5015,7 +5110,8 @@ function getInProgressPractices() {
 function calculateOverallStats() {
   const completedP = getCompletedPractices();
   const passedC = getCompletedChallenges();
-  const stats = { readCount: 0, reflectionCount: 0, streak: 0, dims: { awareness:0, criticality:0, composure:0, autonomy:0, action:0 }, nietzsche:0, stoic:0, camus:0, foucault:0, practiceCompleted: completedP.length, completedPractices: completedP, completedPracticesCount: completedP.length, passedChallenges: passedC };
+  const completedA = getCompletedArguments();
+  const stats = { readCount: 0, reflectionCount: 0, streak: 0, dims: { awareness:0, criticality:0, composure:0, autonomy:0, action:0 }, nietzsche:0, stoic:0, camus:0, foucault:0, practiceCompleted: completedP.length, completedPractices: completedP, completedPracticesCount: completedP.length, passedChallenges: passedC, completedArguments: completedA };
   PHILOSOPHERS.forEach(p => {
     try {
       const prog = JSON.parse(localStorage.getItem(storageKey(p.id, 'progress'))) || {};
@@ -5536,6 +5632,76 @@ const FORGOTTEN = [
     connection: '鲍德里亚的"拟像"、本雅明的"灵晕消失"、阿多诺的"文化工业"——都汇聚到詹姆逊这里。他给出了系统化的诊断: 所有这些都是"晚期资本主义"的症状。',
   },
 ];
+
+// ═══ 核心论证 — 苏格拉底产婆术选项 ═══
+const SOCRATIC_OPTIONS = {
+  'genealogy-of-morality': [
+    { text: '"善"不是天上掉下来的——它是斗争的产物。每一套道德背后都有"谁需要这种善"的问题。', correct: true },
+    { text: '弱者是错的——他们用怨恨发明了虚假的道德。我们应该回到强者的"高贵"。', correct: false, hint: '这是对尼采常见的曲解。尼采不是要"回到"任何东西——他要重估价值。' },
+    { text: '善是相对的——每个时代都有自己的道德，没有对错之分。', correct: false, hint: '这是相对主义的滑坡——尼采不否认价值评估，他追问评估本身的来源。' },
+  ],
+  'eternal-return-test': [
+    { text: '永恒轮回不是关于宇宙的——是关于你。它问的是：这一切，你愿意重过吗？', correct: true },
+    { text: '时间真的会循环，所以一切努力都没意义。', correct: false, hint: '这是把伦理实验误读成宇宙学假设——尼采不是在做物理论证。' },
+    { text: '永恒轮回证明了上帝存在——只有上帝能保证这种循环。', correct: false, hint: '完全相反——永恒轮回是上帝死后的思想实验，用来取代上帝判决的功能。' },
+  ],
+  'dichotomy-argument': [
+    { text: '不要寻求事情按你所愿发生——希望它按其所是发生。你立刻得到自由。', correct: true },
+    { text: '所以应该消灭所有痛苦——通过冷漠或情感隔离。', correct: false, hint: '这是把"不动心" (apatheia) 误读成"冷漠"——斯多葛不是消灭情感，是不被情感劫持。' },
+    { text: '所以应该尽量去控制更多的事，包括别人的反应。', correct: false, hint: '完全相反——斯多葛的关键正是放弃对不能控制的事物的执着。' },
+  ],
+  'suicide-as-core': [
+    { text: '只有一个真正严肃的哲学问题——自杀。判断生命是否值得活，这是哲学的真正起点。', correct: true },
+    { text: '应该考虑自杀——这是对荒诞最诚实的回应。', correct: false, hint: '加缪明确反对——他认为自杀是逃避而不是面对荒诞。' },
+    { text: '哲学的核心是逻辑推理，自杀这种情绪问题不属于哲学。', correct: false, hint: '这恰恰是加缪要批判的"学院哲学"——把根本问题排除在外。' },
+  ],
+  'revolt-logic': [
+    { text: '反抗本身就是答案——不需要意义，不需要补偿，不需要终点。', correct: true },
+    { text: '应该寻找意义来对抗虚无——只有目的能让行动有效。', correct: false, hint: '这是哲学自杀的一种——用"意义"消灭荒诞。加缪要的是看清荒诞之后依然行动。' },
+    { text: '反抗应该指向具体的政治目标，否则就是空话。', correct: false, hint: '加缪与萨特决裂的核心正是这一点——他拒绝把反抗简化为政治。' },
+  ],
+  'panopticon-argument': [
+    { text: '现代权力的本质不是压迫——是让你监管你自己。可见性是一个陷阱。', correct: true },
+    { text: '所以应该建造更多监控系统，让社会更安全。', correct: false, hint: '完全反向——福柯不是建议建造，是揭示已有机制。读这个论证应该让你警惕监控，不是欢迎。' },
+    { text: '所以应该完全消灭监控，回到没有规训的社会。', correct: false, hint: '福柯不是浪漫派——他不相信"自然状态"。他要的是看清运作机制，而不是回到从前。' },
+  ],
+  'power-knowledge-argument': [
+    { text: '没有不预设权力关系的知识，也没有不需要知识的权力——它们彼此构成。', correct: true },
+    { text: '所以应该不相信任何科学——它们都是权力工具。', correct: false, hint: '这是滑向阴谋论。福柯不是说"科学都是骗局"，是说科学不能假装"中立"。' },
+    { text: '所以应该用更多知识来对抗权力——知识就是反抗。', correct: false, hint: '这正是福柯要拆解的"启蒙"假设——知识本身就是权力关系的产物。' },
+  ],
+  'bad-faith-structure': [
+    { text: '大多数"我必须"都是"我选择不承认我选择了"——这就是自欺。', correct: true },
+    { text: '人没有真正的自由——"我必须"才是诚实的描述。', correct: false, hint: '这正是萨特要拆解的——把"被动"当成事实，是逃避自由的标准方式。' },
+    { text: '所以应该追求"必须"——给生活一个稳固的结构，避免无尽选择。', correct: false, hint: '这是反向的自欺——主动把自己关进角色。萨特要的是承认你一直在选择。' },
+  ],
+  'being-toward-death': [
+    { text: '向死而在不是病态——是清醒。逃避死亡的代价是不本真。', correct: true },
+    { text: '应该尽量不想死亡——保持积极心态对健康有利。', correct: false, hint: '这是海德格尔说的"日常陷溺"——回避死亡的代价是从来没真正活过。' },
+    { text: '死亡证明生命没有意义——所以应该及时行乐。', correct: false, hint: '海德格尔不导向享乐主义——向死而在让你认真，不是放纵。' },
+  ],
+  'banality-of-evil': [
+    { text: '现代恶的核心不是恶意——是缺席。不是"想得太坏"，是"根本没在想"。', correct: true },
+    { text: '艾希曼是个隐藏的怪物——他装作平庸来逃避审判。', correct: false, hint: '阿伦特坚持艾希曼真的平庸——这正是她报道的核心争议点。' },
+    { text: '所以应该有更严格的法律——避免普通人犯下恶行。', correct: false, hint: '阿伦特的诊断恰恰相反——法律和程序是"不思考"的载体，而不是解药。' },
+  ],
+};
+
+function getArgumentResult(id) {
+  try {
+    return JSON.parse(localStorage.getItem('echo/argument/' + id + '/result'));
+  } catch { return null; }
+}
+function saveArgumentResult(id, correct) {
+  localStorage.setItem('echo/argument/' + id + '/result', JSON.stringify({ correct, at: new Date().toISOString() }));
+}
+function isArgumentCompleted(id) {
+  const r = getArgumentResult(id);
+  return r && r.correct;
+}
+function getCompletedArguments() {
+  return ARGUMENTS.filter(a => isArgumentCompleted(a.id)).map(a => a.id);
+}
 
 // ═══ 伪命题识破挑战 ═══
 const FAKE_CHALLENGES = [
@@ -8180,16 +8346,19 @@ function openContemporary(id) {
 
 function renderArguments() {
   const scroll = document.getElementById('arguments-scroll');
-  const cards = ARGUMENTS.map(a => `
-    <button class="argument-card" data-arg="${a.id}">
-      <div class="ag-card-who">${escapeHtml(a.philosopher)}</div>
-      <div class="ag-card-title">${escapeHtml(a.title)}</div>
-      <div class="ag-card-target">${escapeHtml(a.target)}</div>
-    </button>
-  `).join('');
+  const cards = ARGUMENTS.map(a => {
+    const completed = isArgumentCompleted(a.id);
+    return `
+      <button class="argument-card${completed ? ' completed' : ''}" data-arg="${a.id}">
+        <div class="ag-card-who">${escapeHtml(a.philosopher)}${completed ? ' <span style="color:var(--gold-bright); margin-left:8px;">✦</span>' : ''}</div>
+        <div class="ag-card-title">${escapeHtml(a.title)}</div>
+        <div class="ag-card-target">${escapeHtml(a.target)}</div>
+      </button>
+    `;
+  }).join('');
   scroll.innerHTML = `
     <div class="arguments-title">核心论证</div>
-    <div class="arguments-subtitle">不只是结论——结论是怎么推出来的</div>
+    <div class="arguments-subtitle">10 个产婆术 · 一步步推出结论，而不是直接读</div>
     ${cards}
   `;
   scroll.querySelectorAll('.argument-card').forEach(card => {
@@ -8200,13 +8369,30 @@ function renderArguments() {
   });
 }
 
+// Socratic interactive state
+let socraticArgument = null;
+let socraticStepIndex = 0;
+let socraticMode = 'premise'; // premise → stepping → choose → done
+
 function openArgument(id) {
   const a = ARGUMENTS.find(x => x.id === id);
   if (!a) return;
+  socraticArgument = a;
+  socraticStepIndex = 0;
+  socraticMode = 'premise';
+  renderSocratic();
+  showScreen('argument-detail');
+  window.scrollTo(0, 0);
+}
+
+function renderSocratic() {
+  const a = socraticArgument;
   const scroll = document.getElementById('argument-detail-scroll');
-  const steps = a.steps.map(s => `<div class="ag-step">${escapeHtml(s)}</div>`).join('');
-  scroll.innerHTML = `
-    <div class="ag-detail-who">${escapeHtml(a.philosopher)}</div>
+  const completed = isArgumentCompleted(a.id);
+
+  // Always show header + premise
+  let html = `
+    <div class="ag-detail-who">${escapeHtml(a.philosopher)}${completed ? ' · <span style="color:var(--gold);">✦ 已推出</span>' : ''}</div>
     <div class="ag-title">${escapeHtml(a.title)}</div>
     <div class="ag-target">对应迷思: ${escapeHtml(a.target)}</div>
 
@@ -8214,24 +8400,165 @@ function openArgument(id) {
       <div class="ag-section-label">起点</div>
       <div class="ag-premise">${escapeHtml(a.premise)}</div>
     </div>
+  `;
 
-    <div class="ag-section">
-      <div class="ag-section-label">推理</div>
-      <div class="ag-steps">${steps}</div>
-    </div>
+  if (socraticMode === 'premise') {
+    html += `
+      <div class="socratic-prompt">
+        <div class="sp-label">现 在 开 始 推 导</div>
+        <div class="sp-hint">不要急着读结论——让自己先想想接下来会怎么发展。</div>
+        <button class="cp-submit-btn" id="socratic-start">开 始</button>
+      </div>
+    `;
+  }
 
-    <div class="ag-section">
-      <div class="ag-section-label">结论</div>
-      <div class="ag-conclusion">${escapeHtml(a.conclusion)}</div>
-    </div>
+  // Show revealed steps
+  if (socraticStepIndex > 0 || socraticMode === 'stepping' || socraticMode === 'choose' || socraticMode === 'done') {
+    const shownSteps = a.steps.slice(0, socraticStepIndex);
+    if (shownSteps.length > 0) {
+      const steps = shownSteps.map(s => `<div class="ag-step">${escapeHtml(s)}</div>`).join('');
+      html += `
+        <div class="ag-section">
+          <div class="ag-section-label">推 理</div>
+          <div class="ag-steps">${steps}</div>
+        </div>
+      `;
+    }
+  }
 
-    <div class="ag-section">
-      <div class="ag-section-label">这个论证的力量</div>
-      <div class="ag-power">${escapeHtml(a.power)}</div>
+  // Show next-step button or stepping prompt
+  if (socraticMode === 'stepping') {
+    if (socraticStepIndex < a.steps.length) {
+      html += `
+        <div class="socratic-prompt">
+          <div class="sp-label">下 一 步 会 怎 么 发 展？</div>
+          <div class="sp-hint">先在心里想一下——然后看你的猜测对不对。</div>
+          <button class="cp-submit-btn" id="socratic-next">揭 晓 下 一 步</button>
+        </div>
+      `;
+    } else {
+      // All steps shown, now ask for conclusion
+      socraticMode = 'choose';
+    }
+  }
+
+  if (socraticMode === 'choose') {
+    const opts = SOCRATIC_OPTIONS[a.id] || [];
+    // Shuffle (stable by argument id)
+    const shuffled = [...opts].map((o, i) => ({...o, _idx: i})).sort((a, b) => (a.text.length % 7) - (b.text.length % 7));
+    const optionsHtml = shuffled.map((o) => `
+      <button class="socratic-option" data-correct="${o.correct ? '1' : '0'}" data-hint="${escapeHtml(o.hint || '')}">
+        <div class="so-text">${escapeHtml(o.text)}</div>
+      </button>
+    `).join('');
+    html += `
+      <div class="ag-section">
+        <div class="ag-section-label">结 论 是 什 么？</div>
+        <div class="socratic-question-hint">从下面三个中选——只有一个是这个论证真正得出的结论。</div>
+        ${optionsHtml}
+      </div>
+    `;
+  }
+
+  if (socraticMode === 'done') {
+    html += `
+      <div class="ag-section">
+        <div class="ag-section-label">结 论</div>
+        <div class="ag-conclusion">${escapeHtml(a.conclusion)}</div>
+      </div>
+
+      <div class="ag-section">
+        <div class="ag-section-label">这 个 论 证 的 力 量</div>
+        <div class="ag-power">${escapeHtml(a.power)}</div>
+      </div>
+
+      <div style="text-align:center; padding:24px 0;">
+        <button class="cp-submit-btn" id="socratic-back-list">回 到 论 证 列 表</button>
+      </div>
+    `;
+  }
+
+  scroll.innerHTML = html;
+
+  // Wire buttons
+  const startBtn = document.getElementById('socratic-start');
+  if (startBtn) startBtn.addEventListener('click', () => {
+    haptic('light');
+    socraticMode = 'stepping';
+    socraticStepIndex = 1;
+    renderSocratic();
+  });
+
+  const nextBtn = document.getElementById('socratic-next');
+  if (nextBtn) nextBtn.addEventListener('click', () => {
+    haptic('light');
+    socraticStepIndex++;
+    if (socraticStepIndex >= a.steps.length + 1) {
+      socraticStepIndex = a.steps.length;
+      socraticMode = 'choose';
+    }
+    renderSocratic();
+  });
+
+  scroll.querySelectorAll('.socratic-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      const correct = opt.getAttribute('data-correct') === '1';
+      const hint = opt.getAttribute('data-hint');
+      if (correct) {
+        haptic('success');
+        saveArgumentResult(a.id, true);
+        // Show success — gold the option
+        opt.classList.add('correct');
+        setTimeout(() => {
+          showSocraticVictory(a);
+        }, 600);
+      } else {
+        haptic('medium');
+        opt.classList.add('wrong');
+        // Show hint in-place
+        const hintEl = document.createElement('div');
+        hintEl.className = 'so-hint';
+        hintEl.textContent = hint;
+        opt.appendChild(hintEl);
+      }
+    });
+  });
+
+  const backBtn = document.getElementById('socratic-back-list');
+  if (backBtn) backBtn.addEventListener('click', () => {
+    renderArguments();
+    showScreen('arguments');
+  });
+}
+
+function showSocraticVictory(a) {
+  const overlay = document.createElement('div');
+  overlay.className = 'boss-victory';
+  overlay.innerHTML = `
+    <div class="bv-bg"></div>
+    <div class="bv-mandala"></div>
+    <div class="bv-content">
+      <div class="bv-label">推 导 通 过</div>
+      <div class="bv-title">${escapeHtml(a.title)}</div>
+      <div class="bv-who">${escapeHtml(a.philosopher)}</div>
+      <div class="bv-divider">✦</div>
+      <div class="bv-message">"你不只是读到这个结论——<br>你推出来了。<br>它现在是你的。"</div>
+      <button class="bv-dismiss" id="bv-dismiss-btn">看看这个论证的力量</button>
     </div>
   `;
-  showScreen('argument-detail');
-  window.scrollTo(0, 0);
+  document.body.appendChild(overlay);
+  haptic('success');
+  document.getElementById('bv-dismiss-btn').addEventListener('click', () => {
+    overlay.style.transition = 'opacity 0.5s';
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+      overlay.remove();
+      socraticMode = 'done';
+      renderSocratic();
+      window.scrollTo(0, 0);
+      checkAndShowAchievements();
+    }, 500);
+  });
 }
 
 let quoteFilter = 'all';
