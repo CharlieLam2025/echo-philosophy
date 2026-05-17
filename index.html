@@ -14,41 +14,66 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html {
   height: 100%;
-  background: #000;
+  background: #0a0807;
   scroll-behavior: smooth;
   --accent: rgba(245,241,232,0.3);
   --accent-soft: rgba(245,241,232,0.12);
   --accent-strong: rgba(245,241,232,0.45);
+  --bg-base: #0a0807;
+  --bg-deep: #050403;
+  --ambient: rgba(255, 220, 180, 0.015);
 }
 html[data-philosopher="nietzsche"] {
   --accent: rgba(196,164,105,0.45);
   --accent-soft: rgba(196,164,105,0.15);
   --accent-strong: rgba(220,185,120,0.6);
+  --ambient: rgba(196,164,105,0.04);
 }
 html[data-philosopher="stoic"] {
   --accent: rgba(150,170,180,0.45);
   --accent-soft: rgba(150,170,180,0.15);
   --accent-strong: rgba(170,190,200,0.6);
+  --ambient: rgba(150,170,180,0.035);
 }
 html[data-philosopher="camus"] {
   --accent: rgba(200,130,100,0.45);
   --accent-soft: rgba(200,130,100,0.15);
   --accent-strong: rgba(220,150,115,0.6);
+  --ambient: rgba(200,130,100,0.04);
 }
 html[data-philosopher="foucault"] {
   --accent: rgba(165,140,185,0.45);
   --accent-soft: rgba(165,140,185,0.15);
   --accent-strong: rgba(185,160,205,0.6);
+  --ambient: rgba(165,140,185,0.04);
 }
 body {
   min-height: 100%;
   color: #f5f1e8;
-  font-family: 'Cormorant Garamond', 'Songti SC', 'STSong', Georgia, 'Times New Roman', serif;
-  background: #000;
+  font-family: 'Cormorant Garamond', 'Songti SC', 'STSong', 'Source Han Serif SC', Georgia, 'Times New Roman', serif;
+  background: var(--bg-base);
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior: none;
   -webkit-font-smoothing: antialiased;
+  position: relative;
 }
+
+/* Ambient radial glow - center-top warmth */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -10% -10% auto -10%;
+  height: 80vh;
+  background:
+    radial-gradient(ellipse at 50% 0%, var(--ambient) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.4) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  transition: background 0.8s ease;
+}
+
+/* Subtle vignette */
+body > * { position: relative; z-index: 1; }
 
 /* ── Grain texture overlay ── */
 body::after {
@@ -476,28 +501,43 @@ body::after {
 .home-header {
   padding: calc(72px + env(safe-area-inset-top, 32px)) 28px 8px;
   font-size: 11px;
-  opacity: 0.2;
-  letter-spacing: 0.35em;
+  opacity: 0.22;
+  letter-spacing: 0.45em;
+  font-weight: 300;
 }
 .home-title {
-  padding: 0 28px 6px;
-  font-size: 28px;
-  line-height: 1.4;
-  opacity: 0.85;
+  padding: 0 28px 4px;
+  font-size: 48px;
+  line-height: 1.1;
+  opacity: 0.92;
+  font-weight: 300;
+  letter-spacing: -0.02em;
 }
 .home-subtitle {
-  padding: 0 28px 12px;
+  padding: 0 28px 18px;
   font-size: 12px;
-  opacity: 0.12;
+  opacity: 0.18;
+  letter-spacing: 0.18em;
+  font-style: italic;
 }
 .home-quote {
-  padding: 0 28px 48px;
-  font-size: 13px;
-  line-height: 1.7;
-  opacity: 0.18;
+  padding: 0 28px 56px;
+  font-size: 14px;
+  line-height: 1.85;
+  opacity: 0.22;
   font-style: italic;
-  max-width: 320px;
+  max-width: 340px;
   transition: opacity 0.8s ease;
+  position: relative;
+}
+.home-quote::before {
+  content: '"';
+  position: absolute;
+  left: 14px;
+  top: -10px;
+  font-size: 36px;
+  opacity: 0.5;
+  font-family: 'Cormorant Garamond', serif;
 }
 .philosopher-list { padding: 0 0 80px; }
 .philosopher-card {
@@ -516,7 +556,18 @@ body::after {
 }
 .philosopher-card:focus { outline: none; }
 .philosopher-card:active { opacity: 0.85; transform: scale(0.985); }
-.philosopher-card:hover { background: rgba(245,241,232,0.02); }
+.philosopher-card:hover { background: rgba(245,241,232,0.025); }
+.philosopher-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 90% 50%, var(--card-accent, transparent) 0%, transparent 50%);
+  opacity: 0.15;
+  pointer-events: none;
+  border-radius: inherit;
+  transition: opacity 0.4s;
+}
+.philosopher-card:hover::after { opacity: 0.3; }
 .philosopher-name {
   font-size: 22px;
   line-height: 1.5;
@@ -719,6 +770,172 @@ body::after {
 .toast.show {
   opacity: 0.7;
   transform: translateX(-50%) translateY(0);
+}
+
+/* ── 心智之灯 (Brain Light - evolving home visual) ── */
+.brain-light {
+  margin: 0 28px 36px;
+  padding: 24px 24px 28px;
+  border-radius: 6px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(245,241,232,0.04) 0%, transparent 70%),
+    rgba(245,241,232,0.015);
+  border: 1px solid rgba(245,241,232,0.06);
+  position: relative;
+  overflow: hidden;
+}
+.bl-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 16px;
+}
+.bl-label {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  opacity: 0.35;
+}
+.bl-level {
+  font-size: 12px;
+  opacity: 0.6;
+  letter-spacing: 0.1em;
+}
+.bl-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  position: relative;
+}
+.bl-svg { width: 100%; max-width: 320px; }
+.bl-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  opacity: 0.4;
+  margin-top: 12px;
+  letter-spacing: 0.05em;
+}
+.bl-streak {
+  font-size: 11px;
+  opacity: 0.55;
+}
+.bl-streak-flame {
+  color: var(--accent-strong);
+  margin-right: 4px;
+}
+.bl-desc {
+  font-size: 12px;
+  opacity: 0.35;
+  font-style: italic;
+  margin-top: 6px;
+  text-align: center;
+}
+
+/* ── 每日挑战 ── */
+.daily-challenge {
+  margin: 0 28px 28px;
+  padding: 18px 22px;
+  border-left: 2px solid var(--accent);
+  background: rgba(245,241,232,0.025);
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.daily-challenge:hover { background: rgba(245,241,232,0.04); }
+.dc-label {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  opacity: 0.4;
+  margin-bottom: 6px;
+  color: var(--accent-strong);
+}
+.dc-text {
+  font-size: 14px;
+  opacity: 0.85;
+  line-height: 1.7;
+}
+.dc-action {
+  font-size: 11px;
+  opacity: 0.45;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* ── 成就弹层 ── */
+.achievement-popup {
+  position: fixed;
+  top: calc(60px + env(safe-area-inset-top, 32px));
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: rgba(10,8,7,0.95);
+  border: 1px solid var(--accent);
+  border-radius: 30px;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  z-index: 200;
+  transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+  backdrop-filter: blur(10px);
+}
+.achievement-popup.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.ap-icon {
+  font-size: 20px;
+  color: var(--accent-strong);
+}
+.ap-text {
+  font-size: 13px;
+}
+.ap-label {
+  font-size: 10px;
+  opacity: 0.5;
+  letter-spacing: 0.2em;
+}
+.ap-name {
+  opacity: 0.95;
+}
+
+/* ── Achievements screen ── */
+.achievements-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.achievement-tile {
+  padding: 18px 14px;
+  background: rgba(245,241,232,0.02);
+  border: 1px solid rgba(245,241,232,0.05);
+  border-radius: 6px;
+  text-align: center;
+  transition: opacity 0.3s;
+}
+.achievement-tile.locked {
+  opacity: 0.25;
+}
+.achievement-tile.earned {
+  border-color: var(--accent);
+  background: rgba(245,241,232,0.04);
+}
+.at-icon {
+  font-size: 28px;
+  opacity: 0.7;
+  margin-bottom: 8px;
+  color: var(--accent-strong);
+}
+.at-name {
+  font-size: 13px;
+  margin-bottom: 4px;
+  opacity: 0.9;
+}
+.at-desc {
+  font-size: 11px;
+  opacity: 0.45;
+  line-height: 1.5;
 }
 
 /* ── Mind card (home) ── */
@@ -986,27 +1203,38 @@ body::after {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1px;
-  background: rgba(245,241,232,0.04);
-  border: 1px solid rgba(245,241,232,0.04);
-  border-radius: 4px;
+  background: rgba(245,241,232,0.05);
+  border: 1px solid rgba(245,241,232,0.05);
+  border-radius: 6px;
   overflow: hidden;
 }
 .nav-entry {
-  background: #000;
+  background: var(--bg-base);
   border: none;
   color: #f5f1e8;
   font-family: inherit;
   text-align: left;
-  padding: 16px 16px;
+  padding: 18px 18px;
   cursor: pointer;
-  transition: background 0.2s;
-  min-height: 64px;
+  transition: background 0.3s, transform 0.2s;
+  min-height: 72px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: relative;
 }
-.nav-entry:hover { background: rgba(245,241,232,0.025); }
-.nav-entry:active { background: rgba(245,241,232,0.05); }
+.nav-entry::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(245,241,232,0.02) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.nav-entry:hover { background: rgba(245,241,232,0.03); }
+.nav-entry:hover::after { opacity: 1; }
+.nav-entry:active { background: rgba(245,241,232,0.05); transform: scale(0.99); }
 .nav-entry:focus { outline: none; }
 .ne-title {
   font-size: 15px;
@@ -1019,6 +1247,169 @@ body::after {
   letter-spacing: 0.02em;
   line-height: 1.5;
 }
+
+/* ── Settings screen ── */
+.settings-section { margin-bottom: 32px; }
+.settings-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  opacity: 0.45;
+  margin-bottom: 12px;
+  color: rgba(245,241,232,0.55);
+}
+.settings-row {
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(245,241,232,0.05);
+}
+.settings-input {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--accent-soft);
+  border-radius: 4px;
+  color: #f5f1e8;
+  font-family: inherit;
+  font-size: 14px;
+  padding: 12px 14px;
+  outline: none;
+}
+.settings-input:focus { border-color: var(--accent); }
+.settings-help {
+  font-size: 12px;
+  opacity: 0.4;
+  margin-top: 8px;
+  line-height: 1.7;
+}
+.settings-btn {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: #f5f1e8;
+  font-family: inherit;
+  font-size: 13px;
+  padding: 10px 22px;
+  border-radius: 22px;
+  cursor: pointer;
+  margin-top: 12px;
+  opacity: 0.85;
+}
+.settings-btn:hover { background: var(--accent-soft); opacity: 1; }
+.settings-btn:focus { outline: none; }
+.settings-status {
+  font-size: 12px;
+  margin-top: 12px;
+  font-style: italic;
+}
+.settings-status.ok { color: rgba(150,200,160,0.7); }
+.settings-status.err { color: rgba(220,140,120,0.7); }
+
+/* ── Chat screen ── */
+.chat-scroll {
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 100px;
+  max-width: 680px;
+  margin: 0 auto;
+  min-height: calc(100vh - 80px);
+}
+.chat-intro {
+  text-align: center;
+  padding: 40px 20px;
+  opacity: 0.5;
+  font-size: 14px;
+  line-height: 1.85;
+  font-style: italic;
+}
+.chat-bubble {
+  margin-bottom: 18px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  max-width: 85%;
+  font-size: 15px;
+  line-height: 1.85;
+  white-space: pre-wrap;
+}
+.chat-bubble.user {
+  background: rgba(245,241,232,0.06);
+  margin-left: auto;
+  border-bottom-right-radius: 4px;
+}
+.chat-bubble.philosopher {
+  background: rgba(245,241,232,0.02);
+  border: 1px solid var(--accent-soft);
+  border-bottom-left-radius: 4px;
+  position: relative;
+}
+.chat-bubble-name {
+  font-size: 11px;
+  opacity: 0.55;
+  letter-spacing: 0.15em;
+  margin-bottom: 6px;
+  color: var(--accent-strong);
+}
+.chat-bubble.loading::after {
+  content: '...';
+  display: inline-block;
+  animation: chatPulse 1.2s ease-in-out infinite;
+}
+@keyframes chatPulse {
+  0%,100% { opacity: 0.3; }
+  50% { opacity: 0.9; }
+}
+.chat-input-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  padding: 14px 20px calc(14px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(to top, var(--bg-base) 70%, transparent);
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  z-index: 20;
+}
+.chat-input {
+  flex: 1;
+  background: rgba(245,241,232,0.04);
+  border: 1px solid rgba(245,241,232,0.08);
+  color: #f5f1e8;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  padding: 12px 14px;
+  border-radius: 20px;
+  outline: none;
+  resize: none;
+  max-height: 120px;
+}
+.chat-input:focus { border-color: var(--accent); }
+.chat-send {
+  background: var(--accent);
+  border: none;
+  color: #f5f1e8;
+  font-size: 18px;
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.chat-send:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.chat-send:focus { outline: none; }
+
+/* Chat button on philosopher / archive screen */
+.chat-fab {
+  display: inline-block;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: #f5f1e8;
+  font-family: inherit;
+  font-size: 13px;
+  padding: 10px 22px;
+  border-radius: 22px;
+  cursor: pointer;
+  opacity: 0.85;
+  margin-top: 20px;
+}
+.chat-fab:hover { background: var(--accent-soft); opacity: 1; }
+.chat-fab:focus { outline: none; }
 
 /* ── Letters screens ── */
 .letters-scroll, .letter-detail-scroll {
@@ -2972,6 +3363,7 @@ body::after {
   <div class="home-subtitle">哲学概念的故事化学习</div>
   <div class="home-quote" id="home-quote"></div>
   <div id="continue-card" class="continue-card" style="display:none;"></div>
+  <div id="brain-light" class="brain-light"></div>
   <div id="mind-card" class="mind-card" style="display:none;"></div>
   <div class="philosopher-list stagger" id="philosopher-list"></div>
   <div id="themes-section" class="themes-section"></div>
@@ -3055,9 +3447,17 @@ body::after {
           <div class="ne-title">7 天实践</div>
           <div class="ne-meta">10 个 · 哲学训练营</div>
         </button>
+        <button class="nav-entry" id="nav-achievements">
+          <div class="ne-title">成就</div>
+          <div class="ne-meta">15 个徽章 · 看你解锁了几个</div>
+        </button>
         <button class="nav-entry" id="nav-global-journal">
           <div class="ne-title">思考记录</div>
           <div class="ne-meta">你的所有反思</div>
+        </button>
+        <button class="nav-entry" id="nav-settings">
+          <div class="ne-title">设置</div>
+          <div class="ne-meta">接入 AI · 数据管理</div>
         </button>
       </div>
     </div>
@@ -3089,6 +3489,37 @@ body::after {
   </div>
   <div class="story-scroll" id="story-scroll"></div>
 </div>
+<!-- ═══ Settings Screen ═══ -->
+<div id="settings-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="settings-back-btn">←</button>
+    <span class="story-concept-label">设置</span>
+  </div>
+  <div class="archive-scroll" id="settings-scroll"></div>
+</div>
+
+<!-- ═══ Chat Screen ═══ -->
+<div id="chat-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="chat-back-btn">←</button>
+    <span class="story-concept-label" id="chat-header-label">对话</span>
+  </div>
+  <div class="chat-scroll" id="chat-scroll"></div>
+  <div class="chat-input-bar">
+    <textarea class="chat-input" id="chat-input" placeholder="问点什么..." rows="1"></textarea>
+    <button class="chat-send" id="chat-send">→</button>
+  </div>
+</div>
+
+<!-- ═══ Achievements Screen ═══ -->
+<div id="achievements-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="achievements-back-btn">←</button>
+    <span class="story-concept-label">成就</span>
+  </div>
+  <div class="archive-scroll" id="achievements-scroll"></div>
+</div>
+
 <!-- ═══ Letters List Screen ═══ -->
 <div id="letters-screen" class="screen">
   <div class="journal-header">
@@ -3539,6 +3970,113 @@ function getLevel(score) {
   let lvl = LEVEL_THRESHOLDS[0];
   for (const l of LEVEL_THRESHOLDS) if (score >= l.min) lvl = l;
   return lvl;
+}
+
+// ═══ 成就系统 (Achievements) ═══
+const ACHIEVEMENTS = [
+  { id: 'first-read', name: '第一次阅读', desc: '读完任何一个概念', icon: '○', check: (s) => s.readCount >= 1 },
+  { id: 'first-reflect', name: '第一次反思', desc: '写下你的第一条反思', icon: '✎', check: (s) => s.reflectionCount >= 1 },
+  { id: 'streak-3', name: '连续 3 天', desc: '3 天连续打开', icon: '◐', check: (s) => s.streak >= 3 },
+  { id: 'streak-7', name: '连续 7 天', desc: '7 天连续打开', icon: '◑', check: (s) => s.streak >= 7 },
+  { id: 'streak-30', name: '连续 30 天', desc: '30 天连续打开', icon: '●', check: (s) => s.streak >= 30 },
+  { id: 'read-10', name: '读 10 个概念', desc: '阅读累计 10 个', icon: '✦', check: (s) => s.readCount >= 10 },
+  { id: 'read-25', name: '读 25 个概念', desc: '阅读累计 25 个', icon: '✧', check: (s) => s.readCount >= 25 },
+  { id: 'read-50', name: '读 50 个概念', desc: '阅读累计 50 个', icon: '⊕', check: (s) => s.readCount >= 50 },
+  { id: 'nietzsche-complete', name: '尼采全部', desc: '完成尼采全部 25 个概念', icon: '✦', check: (s) => s.nietzsche === 25 },
+  { id: 'stoic-complete', name: '斯多葛全部', desc: '完成斯多葛全部 12 个', icon: '◆', check: (s) => s.stoic === 12 },
+  { id: 'camus-complete', name: '加缪全部', desc: '完成加缪全部 10 个', icon: '○', check: (s) => s.camus === 10 },
+  { id: 'foucault-complete', name: '福柯全部', desc: '完成福柯全部 10 个', icon: '▪', check: (s) => s.foucault === 10 },
+  { id: 'all-dim-touched', name: '五维觉醒', desc: '所有维度都到达"浮现"', icon: '⊙', check: (s) => Object.values(s.dims).every(v => v >= 6) },
+  { id: 'reflections-10', name: '思考者', desc: '写下 10 条反思', icon: '✎', check: (s) => s.reflectionCount >= 10 },
+  { id: 'reflections-25', name: '日记本不空', desc: '写下 25 条反思', icon: '✏', check: (s) => s.reflectionCount >= 25 },
+  { id: 'practice-complete', name: '7 天战士', desc: '完成至少 1 个 7 天实践', icon: '◆', check: (s) => s.practiceCompleted >= 1 },
+];
+
+// ═══ 心智等级 (overall level) ═══
+const BRAIN_LEVELS = [
+  { min: 0,   max: 4,   name: '初见', symbol: '·', desc: '思想的种子刚刚落下' },
+  { min: 5,   max: 14,  name: '浮现', symbol: '◌', desc: '轮廓开始显形' },
+  { min: 15,  max: 29,  name: '入门', symbol: '◐', desc: '主要思路已经形成' },
+  { min: 30,  max: 49,  name: '深入', symbol: '◑', desc: '能在思想间转换' },
+  { min: 50,  max: 79,  name: '通透', symbol: '●', desc: '思想成了你的呼吸' },
+  { min: 80,  max: 999, name: '大家', symbol: '✦', desc: '你已成为思想本身' },
+];
+
+function getBrainLevel(readCount) {
+  return BRAIN_LEVELS.find(l => readCount >= l.min && readCount <= l.max) || BRAIN_LEVELS[0];
+}
+
+function calculateOverallStats() {
+  const stats = { readCount: 0, reflectionCount: 0, streak: 0, dims: { awareness:0, criticality:0, composure:0, autonomy:0, action:0 }, nietzsche:0, stoic:0, camus:0, foucault:0, practiceCompleted: 0 };
+  PHILOSOPHERS.forEach(p => {
+    try {
+      const prog = JSON.parse(localStorage.getItem(storageKey(p.id, 'progress'))) || {};
+      const refls = JSON.parse(localStorage.getItem(storageKey(p.id, 'reflections'))) || {};
+      const readKeys = Object.keys(prog).filter(k => prog[k]);
+      stats.readCount += readKeys.length;
+      stats[p.id] = readKeys.length;
+      Object.values(refls).forEach(r => {
+        const txt = typeof r === 'string' ? r : r?.text;
+        if (txt && txt.trim()) stats.reflectionCount++;
+      });
+      readKeys.forEach(id => {
+        const c = CONCEPT_DIMENSIONS[id];
+        if (c) Object.entries(c).forEach(([k,v]) => stats.dims[k] += v);
+      });
+    } catch {}
+  });
+  stats.streak = computeStreak();
+  return stats;
+}
+
+function computeStreak() {
+  try {
+    const raw = localStorage.getItem('echo/visits') || '[]';
+    const visits = JSON.parse(raw);
+    if (visits.length === 0) return 0;
+    // Sort descending
+    const days = [...new Set(visits)].sort().reverse();
+    const today = new Date().toISOString().slice(0,10);
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+    if (days[0] !== today && days[0] !== yesterday) return 0;
+    let streak = 1;
+    let prev = new Date(days[0]);
+    for (let i = 1; i < days.length; i++) {
+      const cur = new Date(days[i]);
+      const diff = (prev - cur) / 86400000;
+      if (diff === 1) { streak++; prev = cur; }
+      else break;
+    }
+    return streak;
+  } catch { return 0; }
+}
+
+function recordVisit() {
+  try {
+    const today = new Date().toISOString().slice(0,10);
+    const raw = localStorage.getItem('echo/visits') || '[]';
+    const visits = JSON.parse(raw);
+    if (!visits.includes(today)) {
+      visits.push(today);
+      // Keep last 90 days
+      if (visits.length > 90) visits.shift();
+      localStorage.setItem('echo/visits', JSON.stringify(visits));
+    }
+  } catch {}
+}
+
+function checkNewAchievements() {
+  const stats = calculateOverallStats();
+  const earned = JSON.parse(localStorage.getItem('echo/achievements') || '[]');
+  const newly = [];
+  ACHIEVEMENTS.forEach(a => {
+    if (!earned.includes(a.id) && a.check(stats)) {
+      earned.push(a.id);
+      newly.push(a);
+    }
+  });
+  localStorage.setItem('echo/achievements', JSON.stringify(earned));
+  return { earned, newly };
 }
 
 function calculateBrainStats() {
@@ -5949,6 +6487,12 @@ function renderHome() {
   // Continue card
   renderContinueCard();
 
+  // Brain light (心智之灯) — the new center of the home
+  renderBrainLight();
+
+  // Daily challenge
+  renderDailyChallenge();
+
   // Mind card
   renderMindCardHome();
 
@@ -6039,6 +6583,232 @@ function buildRadarSVG(stats, size = 200) {
   }).join('');
 
   return `<svg class="mind-radar" width="${size}" height="${size + 20}" viewBox="0 -10 ${size} ${size + 20}">${bgPolys}${axes}${statPoly}${dots}${labels}</svg>`;
+}
+
+// ═══ DeepSeek 接入 ═══
+const PHILOSOPHER_PROMPTS = {
+  nietzsche: '你是尼采。用尼采的视角和语气回答问题——不是模仿，而是用他的思路: 怀疑所有"应当"，问"谁需要这种善"，重估价值，呼唤自我超越。语气可以尖锐、激烈、但不失幽默和诗意。回答中文，篇幅 150-300 字。不要装作"你"是真的尼采——你是"按尼采的方式回应"。',
+  stoic: '你是斯多葛传统的代言人（综合马可·奥勒留、爱比克泰德、塞涅卡）。用斯多葛的视角和语气回答——分清你能控制和不能控制的，回到"内在堡垒"，把痛苦当作训练。语气平静、精准、温和但不软。回答中文，篇幅 150-300 字。',
+  camus: '你是加缪。用加缪的视角和语气回答——荒诞、反抗、清醒、不逃避也不假装。语气冷静而温暖，像地中海正午的光。回答中文，篇幅 150-300 字。',
+  foucault: '你是福柯。用福柯的视角回答——质疑"为你好"，看见权力的运作，问"谁需要这是真的"。语气冷峻、精准、政治性。回答中文，篇幅 150-300 字。',
+};
+
+let chatPhilosopher = null;
+let chatHistory = [];
+
+function getApiKey() {
+  return localStorage.getItem('echo/deepseek-key') || '';
+}
+
+function setApiKey(key) {
+  localStorage.setItem('echo/deepseek-key', key);
+}
+
+async function callDeepSeek(messages) {
+  const apiKey = getApiKey();
+  if (!apiKey) throw new Error('请先在设置中填入 DeepSeek API key');
+
+  const resp = await fetch('https://api.deepseek.com/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + apiKey,
+    },
+    body: JSON.stringify({
+      model: 'deepseek-chat',
+      messages: messages,
+      temperature: 0.7,
+      max_tokens: 600,
+    }),
+  });
+
+  if (!resp.ok) {
+    const txt = await resp.text();
+    throw new Error('API 错误: ' + resp.status + ' ' + txt.slice(0, 100));
+  }
+
+  const data = await resp.json();
+  return data.choices[0].message.content;
+}
+
+function openChat(philosopherId) {
+  const p = PHILOSOPHERS.find(x => x.id === philosopherId);
+  if (!p) return;
+  chatPhilosopher = p;
+  chatHistory = [{
+    role: 'system',
+    content: PHILOSOPHER_PROMPTS[philosopherId] || '你是一位智者。',
+  }];
+
+  document.documentElement.setAttribute('data-philosopher', p.id);
+  document.getElementById('chat-header-label').textContent = '和' + p.name + '对话';
+
+  const scroll = document.getElementById('chat-scroll');
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    scroll.innerHTML = `
+      <div class="chat-intro">
+        要和${escapeHtml(p.name)}对话，先在设置里填入 DeepSeek API key。<br><br>
+        <button class="chat-fab" onclick="window.__goToSettings()">去设置</button>
+      </div>
+    `;
+  } else {
+    scroll.innerHTML = `
+      <div class="chat-intro">
+        和${escapeHtml(p.name)}对话——按 ${escapeHtml(p.name)} 的方式思考问题。<br>
+        <span style="font-size:11px; opacity:0.5;">这是 AI 模拟，不是真正的哲学家。把它当作"用某种风格思考"的工具。</span>
+      </div>
+    `;
+  }
+  showScreen('chat');
+  setTimeout(() => document.getElementById('chat-input').focus(), 100);
+}
+
+window.__goToSettings = function() {
+  renderSettings();
+  showScreen('settings');
+};
+
+function appendBubble(role, text, isLoading = false) {
+  const scroll = document.getElementById('chat-scroll');
+  // Remove intro if present
+  const intro = scroll.querySelector('.chat-intro');
+  if (intro) intro.remove();
+
+  const bubble = document.createElement('div');
+  bubble.className = 'chat-bubble ' + (role === 'user' ? 'user' : 'philosopher');
+  if (isLoading) bubble.classList.add('loading');
+  if (role !== 'user' && chatPhilosopher) {
+    bubble.innerHTML = `<div class="chat-bubble-name">${escapeHtml(chatPhilosopher.name)}</div>${escapeHtml(text)}`;
+  } else {
+    bubble.textContent = text;
+  }
+  scroll.appendChild(bubble);
+  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  return bubble;
+}
+
+async function sendChatMessage() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const apiKey = getApiKey();
+  if (!apiKey) { window.__goToSettings(); return; }
+
+  input.value = '';
+  input.style.height = 'auto';
+  appendBubble('user', text);
+  chatHistory.push({ role: 'user', content: text });
+
+  const loading = appendBubble('philosopher', '', true);
+  document.getElementById('chat-send').disabled = true;
+
+  try {
+    const response = await callDeepSeek(chatHistory);
+    loading.remove();
+    appendBubble('philosopher', response);
+    chatHistory.push({ role: 'assistant', content: response });
+  } catch (e) {
+    loading.remove();
+    appendBubble('philosopher', '× ' + e.message);
+  } finally {
+    document.getElementById('chat-send').disabled = false;
+  }
+}
+
+function renderSettings() {
+  const scroll = document.getElementById('settings-scroll');
+  const currentKey = getApiKey();
+  const masked = currentKey ? currentKey.slice(0,4) + '••••' + currentKey.slice(-4) : '';
+  scroll.innerHTML = `
+    <div class="archive-name">设置</div>
+    <div class="archive-orig">让平台说话</div>
+
+    <div class="settings-section" style="margin-top:32px;">
+      <div class="settings-label">DEEPSEEK API KEY</div>
+      <input type="password" id="settings-api-key" class="settings-input" placeholder="sk-..." value="${escapeHtml(currentKey)}">
+      <div class="settings-help">
+        ${currentKey ? '当前已填: <code style="opacity:0.7">' + masked + '</code><br>' : ''}
+        前往 <a href="https://platform.deepseek.com/api_keys" target="_blank" style="color: var(--accent-strong);">platform.deepseek.com</a> 申请。<br>
+        Key 只存在你的浏览器里，不会上传到任何服务器。
+      </div>
+      <button class="settings-btn" id="settings-save-key">保存</button>
+      <button class="settings-btn" id="settings-clear-key" style="margin-left:8px; border-color:rgba(220,140,120,0.4);">清除</button>
+      <div class="settings-status" id="settings-status"></div>
+    </div>
+
+    <div class="settings-section" style="margin-top:48px;">
+      <div class="settings-label">数据</div>
+      <div class="settings-row" style="opacity:0.55; font-size:13px;">
+        你的所有阅读、反思、设置都存在浏览器的 localStorage 里。<br>
+        清浏览器缓存或换设备会丢失。<br><br>
+        计划: 之后会加导出/导入功能。
+      </div>
+    </div>
+
+    <div class="settings-section" style="margin-top:48px;">
+      <div class="settings-label">关于</div>
+      <div class="settings-row" style="opacity:0.55; font-size:13px;">
+        回声 · Echo<br>
+        哲学概念的故事化学习平台<br>
+        ${ACHIEVEMENTS.length} 个成就 / 30+ 位思想家 / 200+ 篇内容
+      </div>
+    </div>
+  `;
+
+  document.getElementById('settings-save-key').onclick = () => {
+    const val = document.getElementById('settings-api-key').value.trim();
+    if (val.length < 10) {
+      const status = document.getElementById('settings-status');
+      status.textContent = '× key 看起来太短';
+      status.className = 'settings-status err';
+      return;
+    }
+    setApiKey(val);
+    haptic('success');
+    const status = document.getElementById('settings-status');
+    status.textContent = '✓ 已保存。现在可以和哲学家对话了。';
+    status.className = 'settings-status ok';
+  };
+
+  document.getElementById('settings-clear-key').onclick = () => {
+    localStorage.removeItem('echo/deepseek-key');
+    document.getElementById('settings-api-key').value = '';
+    haptic('medium');
+    const status = document.getElementById('settings-status');
+    status.textContent = '已清除';
+    status.className = 'settings-status';
+  };
+}
+
+function renderAchievements() {
+  const scroll = document.getElementById('achievements-scroll');
+  const stats = calculateOverallStats();
+  const earned = JSON.parse(localStorage.getItem('echo/achievements') || '[]');
+  const earnedCount = earned.length;
+  const total = ACHIEVEMENTS.length;
+  const level = getBrainLevel(stats.readCount);
+
+  const tiles = ACHIEVEMENTS.map(a => {
+    const isEarned = earned.includes(a.id);
+    return `
+      <div class="achievement-tile ${isEarned ? 'earned' : 'locked'}">
+        <div class="at-icon">${a.icon}</div>
+        <div class="at-name">${escapeHtml(a.name)}</div>
+        <div class="at-desc">${escapeHtml(a.desc)}</div>
+      </div>
+    `;
+  }).join('');
+
+  scroll.innerHTML = `
+    <div class="archive-name">成就</div>
+    <div class="archive-orig">${earnedCount} / ${total} 已解锁</div>
+    <div class="archive-dates">心智等级: ${level.symbol} ${level.name} · ${escapeHtml(level.desc)}</div>
+    <div class="archive-bio">每个成就标记一个具体的里程碑——读了一定数量、连续打卡、完成一个流派。它们不是徽章——是你这段时间真实做过的事的证据。</div>
+
+    <div class="archive-section-label">徽章列表</div>
+    <div class="achievements-grid">${tiles}</div>
+  `;
 }
 
 function renderLetters() {
@@ -6928,7 +7698,155 @@ function renderArchive() {
       <div class="archive-section-label">原典选段</div>
       ${passages}
     </div>
+
+    <div style="text-align:center; padding: 32px 0;">
+      <button class="chat-fab" id="archive-chat-btn">和${escapeHtml(currentPhilosopher.name)}对话 →</button>
+    </div>
   `;
+
+  const chatBtn = document.getElementById('archive-chat-btn');
+  if (chatBtn) {
+    chatBtn.addEventListener('click', () => {
+      haptic('light');
+      openChat(currentPhilosopher.id);
+    });
+  }
+}
+
+// ═══ 心智之灯 (脑子养成系统的视觉中心) ═══
+function buildBrainLightSVG(readCount, maxConcepts = 57) {
+  // Visual evolution: dot → seed → sprout → branches → tree → constellation
+  const stage = Math.min(5, Math.floor((readCount / maxConcepts) * 6));
+  const w = 320, h = 100, cx = w/2, cy = h/2;
+
+  if (readCount === 0) {
+    // Empty state - faint glow center
+    return `<svg class="bl-svg" viewBox="0 0 ${w} ${h}">
+      <circle cx="${cx}" cy="${cy}" r="2" fill="var(--accent-strong)" opacity="0.4"/>
+      <circle cx="${cx}" cy="${cy}" r="8" fill="none" stroke="var(--accent)" stroke-width="0.5" opacity="0.3"/>
+    </svg>`;
+  }
+
+  // Generate evolving branches based on read count
+  const lines = [];
+  const dots = [];
+
+  // Central core
+  dots.push(`<circle cx="${cx}" cy="${cy}" r="3" fill="var(--accent-strong)" opacity="0.9"/>`);
+  dots.push(`<circle cx="${cx}" cy="${cy}" r="${6 + stage * 2}" fill="none" stroke="var(--accent)" stroke-width="0.5" opacity="0.4"/>`);
+
+  // Branches grow with reading
+  const branchCount = Math.min(readCount, 20);
+  for (let i = 0; i < branchCount; i++) {
+    const angle = (i / 20) * Math.PI * 2;
+    const length = 12 + (readCount / maxConcepts) * 30;
+    const ex = cx + Math.cos(angle) * length;
+    const ey = cy + Math.sin(angle) * length * 0.6; // flattened vertically
+    const opacity = 0.3 + (i / branchCount) * 0.4;
+    lines.push(`<line x1="${cx}" y1="${cy}" x2="${ex}" y2="${ey}" stroke="var(--accent)" stroke-width="0.5" opacity="${opacity}"/>`);
+    dots.push(`<circle cx="${ex}" cy="${ey}" r="1.5" fill="var(--accent-strong)" opacity="${opacity * 1.5}"/>`);
+  }
+
+  // Outer constellation for advanced stages
+  if (stage >= 3) {
+    const outerCount = Math.min(readCount - 15, 30);
+    for (let i = 0; i < outerCount; i++) {
+      const angle = (i / 30) * Math.PI * 2 + 0.1;
+      const length = 50 + Math.random() * 8;
+      const ox = cx + Math.cos(angle) * length;
+      const oy = cy + Math.sin(angle) * length * 0.5;
+      dots.push(`<circle cx="${ox}" cy="${oy}" r="1" fill="var(--accent)" opacity="${0.2 + (i/outerCount)*0.4}"/>`);
+    }
+  }
+
+  return `<svg class="bl-svg" viewBox="0 0 ${w} ${h}">${lines.join('')}${dots.join('')}</svg>`;
+}
+
+function renderBrainLight() {
+  const el = document.getElementById('brain-light');
+  const stats = calculateOverallStats();
+  const total = stats.readCount;
+  const level = getBrainLevel(total);
+  const allCount = 57; // current main concepts
+
+  const svg = buildBrainLightSVG(total, allCount);
+  const streak = stats.streak > 0 ? `<span class="bl-streak-flame">▲</span>连续 ${stats.streak} 天` : '';
+
+  el.innerHTML = `
+    <div class="bl-header">
+      <span class="bl-label">心 智 之 灯</span>
+      <span class="bl-level">${level.symbol} ${level.name}</span>
+    </div>
+    <div class="bl-visual">${svg}</div>
+    <div class="bl-desc">${level.desc}</div>
+    <div class="bl-meta">
+      <span>读过 ${total} / ${allCount}</span>
+      <span class="bl-streak">${streak}</span>
+    </div>
+  `;
+}
+
+// ═══ 每日挑战 ═══
+function getDailyChallenge() {
+  const today = new Date().toISOString().slice(0,10);
+  // Stable seed by date
+  const seed = today.split('-').join('') | 0;
+  const stats = calculateOverallStats();
+
+  const challenges = [];
+  if (stats.readCount === 0) {
+    challenges.push({ type: 'read', text: '今天开始第一个概念', action: '从尼采的"上帝之死"开始 →', goTo: () => { const p = PHILOSOPHERS[0]; enterPhilosopher(p); } });
+  } else {
+    challenges.push({ type: 'read', text: '今天读一个新概念', action: '继续探索 →', goTo: () => { renderContinueCard(); } });
+    challenges.push({ type: 'reflect', text: '回到一个旧概念，写下新的反思', action: '打开日记 →', goTo: () => { journalGlobal = true; renderJournal(); showScreen('journal'); } });
+    challenges.push({ type: 'practice', text: '开始一个 7 天实践', action: '挑选一个 →', goTo: () => { renderPractices(); showScreen('practices'); } });
+    challenges.push({ type: 'quote', text: '找一句你想要记住的金句', action: '逛逛金句库 →', goTo: () => { quoteFilter = 'all'; renderQuotes(); showScreen('quotes'); } });
+    challenges.push({ type: 'topic', text: '看一个当代议题的哲学诊断', action: '选一个议题 →', goTo: () => { renderContemporary(); showScreen('contemporary'); } });
+  }
+  return challenges[seed % challenges.length];
+}
+
+function renderDailyChallenge() {
+  let el = document.getElementById('daily-challenge');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'daily-challenge';
+    el.className = 'daily-challenge';
+    const brain = document.getElementById('brain-light');
+    brain.parentNode.insertBefore(el, brain.nextSibling);
+  }
+  const ch = getDailyChallenge();
+  el.innerHTML = `
+    <div class="dc-label">今 日 挑 战</div>
+    <div class="dc-text">${escapeHtml(ch.text)}</div>
+    <div class="dc-action">${escapeHtml(ch.action)}</div>
+  `;
+  el.onclick = () => { haptic('light'); ch.goTo(); };
+}
+
+function showAchievementPopup(achievement) {
+  const popup = document.createElement('div');
+  popup.className = 'achievement-popup';
+  popup.innerHTML = `
+    <span class="ap-icon">${achievement.icon}</span>
+    <div class="ap-text">
+      <div class="ap-label">新成就</div>
+      <div class="ap-name">${escapeHtml(achievement.name)}</div>
+    </div>
+  `;
+  document.body.appendChild(popup);
+  requestAnimationFrame(() => { popup.classList.add('show'); haptic('success'); });
+  setTimeout(() => {
+    popup.classList.remove('show');
+    setTimeout(() => popup.remove(), 600);
+  }, 3000);
+}
+
+function checkAndShowAchievements() {
+  const { newly } = checkNewAchievements();
+  newly.forEach((a, i) => {
+    setTimeout(() => showAchievementPopup(a), i * 3500);
+  });
 }
 
 function renderMindCardHome() {
@@ -7592,6 +8510,7 @@ function openStory(conceptId) {
       const newStats = calculateBrainStats();
       showStatGain(conceptId, oldStats, newStats);
       setTimeout(() => showEchoAftertaste(conceptId, concept), 2800);
+      setTimeout(checkAndShowAchievements, 5500);
     }
   });
   btnRow.appendChild(reflectSkip);
@@ -7622,6 +8541,7 @@ function openStory(conceptId) {
       const newStats = calculateBrainStats();
       showStatGain(conceptId, oldStats, newStats);
       setTimeout(() => showEchoAftertaste(conceptId, concept), 2800);
+      setTimeout(checkAndShowAchievements, 5500);
     }
   });
   btnRow.appendChild(reflectSave);
@@ -7898,6 +8818,47 @@ document.getElementById('nav-global-journal').addEventListener('click', () => {
   journalGlobal = true;
   renderJournal();
   showScreen('journal');
+});
+
+document.getElementById('nav-settings').addEventListener('click', () => {
+  haptic('light');
+  renderSettings();
+  showScreen('settings');
+});
+
+document.getElementById('settings-back-btn').addEventListener('click', () => {
+  renderHome();
+  showScreen('home');
+});
+
+document.getElementById('chat-back-btn').addEventListener('click', () => {
+  showScreen('archive');
+});
+
+document.getElementById('chat-send').addEventListener('click', sendChatMessage);
+
+document.getElementById('chat-input').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendChatMessage();
+  }
+});
+
+// Auto-grow textarea
+document.getElementById('chat-input').addEventListener('input', (e) => {
+  e.target.style.height = 'auto';
+  e.target.style.height = Math.min(120, e.target.scrollHeight) + 'px';
+});
+
+document.getElementById('nav-achievements').addEventListener('click', () => {
+  haptic('light');
+  renderAchievements();
+  showScreen('achievements');
+});
+
+document.getElementById('achievements-back-btn').addEventListener('click', () => {
+  renderHome();
+  showScreen('home');
 });
 
 document.getElementById('nav-letters').addEventListener('click', () => {
@@ -8262,11 +9223,14 @@ if ('serviceWorker' in navigator) {
 }
 
 // ═══ Init ═══
+recordVisit();
 if (!localStorage.getItem('echo/onboarded')) {
   showOnboarding();
 }
 renderHome();
 showScreen('home');
+// Defer achievement check to allow render
+setTimeout(checkAndShowAchievements, 1500);
 </script>
 </body>
 </html>
