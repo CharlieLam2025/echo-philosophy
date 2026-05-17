@@ -991,6 +991,52 @@ html[data-theme="paper"] .achievement-popup {
   transform: translateX(-50%) translateY(0);
 }
 
+/* ── 正在进行的实践 ── */
+.in-progress-practice {
+  margin: 0 28px 24px;
+  padding: 18px 20px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-soft);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+}
+.in-progress-practice:hover {
+  background: var(--bg-card);
+  border-color: var(--gold);
+}
+.ipp-label {
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.ipp-title {
+  font-size: 16px;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+.ipp-status {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-bottom: 8px;
+  color: var(--gold-bright);
+  letter-spacing: 0.05em;
+}
+.ipp-bar {
+  height: 2px;
+  background: var(--border-faint);
+  border-radius: 1px;
+  overflow: hidden;
+}
+.ipp-bar-fill {
+  height: 100%;
+  background: var(--gold);
+  transition: width 0.6s ease;
+}
+
 /* ── 心智之灯 — 炼金术风的圆盘 ── */
 .brain-light {
   margin: 0 28px 36px;
@@ -1851,6 +1897,309 @@ html[data-theme="paper"] .achievement-popup {
   margin-bottom: 8px;
   border-bottom: 1px solid rgba(237,229,211,0.05);
 }
+
+/* ── Practice card progress states ── */
+.pr-card-status {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  opacity: 0.6;
+  margin-bottom: 6px;
+  padding-left: 14px;
+  color: var(--text-secondary);
+}
+.practice-card.in-progress .pr-card-status { color: var(--gold-bright); opacity: 0.9; }
+.practice-card.completed .pr-card-status { color: var(--gold); opacity: 1; }
+.practice-card.completed { border-left: 3px solid var(--gold); padding-left: 12px; }
+.practice-card.completed::before { background: var(--gold); width: 3px; }
+.practice-card.in-progress::before { width: 2px; }
+.pr-card-bar {
+  margin: 12px 0 0 14px;
+  height: 2px;
+  background: var(--border-faint);
+  border-radius: 1px;
+  overflow: hidden;
+  max-width: 200px;
+}
+.pr-card-bar-fill {
+  height: 100%;
+  background: var(--gold);
+  transition: width 0.6s ease;
+}
+
+/* ── Practice detail: locked-step UI ── */
+.pr-progress-bar {
+  margin: 24px 0 12px;
+  height: 3px;
+  background: var(--border-soft);
+  border-radius: 1.5px;
+  overflow: hidden;
+}
+.pr-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+  transition: width 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.pr-progress-text {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-bottom: 32px;
+  letter-spacing: 0.05em;
+  color: var(--gold);
+}
+.pr-completed-badge {
+  margin: 24px 0 32px;
+  padding: 16px;
+  text-align: center;
+  font-size: 14px;
+  letter-spacing: 0.3em;
+  color: var(--gold-bright);
+  background: var(--accent-soft);
+  border: 1px solid var(--gold);
+  border-radius: 2px;
+  position: relative;
+}
+.pr-completed-badge::before,
+.pr-completed-badge::after {
+  content: '✦';
+  margin: 0 14px;
+  opacity: 0.6;
+}
+
+.pr-day {
+  position: relative;
+  padding: 22px 0 22px 80px;
+  border-bottom: 1px solid var(--border-faint);
+  transition: opacity 0.4s, background 0.3s;
+}
+.pr-day:last-child { border-bottom: none; }
+.pr-day-header {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  margin-bottom: 12px;
+  position: relative;
+}
+.pr-day-number {
+  position: absolute;
+  left: -80px;
+  top: 2px;
+  width: 60px;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  opacity: 0.7;
+  text-align: right;
+  color: var(--gold);
+  font-feature-settings: 'tnum';
+}
+.pr-day-state {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  opacity: 0.5;
+  text-transform: uppercase;
+}
+.pr-day-state.done { color: var(--gold); opacity: 0.85; }
+.pr-day-state.current-label {
+  color: var(--gold-bright);
+  opacity: 1;
+  padding: 3px 10px;
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+}
+.pr-day-state.boss-label {
+  color: var(--gold-bright);
+  opacity: 1;
+  padding: 3px 10px;
+  border: 1px solid var(--gold-bright);
+  border-radius: 12px;
+  background: var(--accent-soft);
+}
+
+.pr-day.done { opacity: 0.55; }
+.pr-day.done .pr-day-task { text-decoration: line-through; text-decoration-color: var(--text-faint); }
+.pr-day.locked {
+  opacity: 0.3;
+}
+.pr-day.locked .pr-day-number {
+  opacity: 0.3;
+}
+
+.pr-day.current {
+  background: linear-gradient(90deg, var(--accent-soft) 0%, transparent 80%);
+  border-radius: 0 4px 4px 0;
+}
+.pr-day.current .pr-day-number {
+  color: var(--gold-bright);
+  font-weight: 500;
+}
+
+.pr-day.boss {
+  position: relative;
+}
+.pr-day.boss::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-top: 1px solid var(--border-soft);
+  border-bottom: 1px solid var(--border-soft);
+  pointer-events: none;
+}
+.pr-day.boss.current {
+  background: linear-gradient(90deg, var(--accent-soft) 0%, transparent 100%);
+  padding-top: 28px;
+  padding-bottom: 28px;
+}
+.pr-day.boss.current .pr-day-number {
+  color: var(--gold-bright);
+  font-size: 13px;
+}
+
+.pr-day-task {
+  font-size: 16px;
+  line-height: 1.75;
+  opacity: 0.95;
+  margin-bottom: 10px;
+}
+.pr-day-why {
+  font-size: 12px;
+  opacity: 0.6;
+  font-style: italic;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+.pr-day-complete-btn {
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold-bright);
+  font-family: inherit;
+  font-size: 13px;
+  padding: 9px 22px;
+  border-radius: 18px;
+  cursor: pointer;
+  opacity: 0.95;
+  transition: all 0.2s;
+  letter-spacing: 0.08em;
+}
+.pr-day-complete-btn:hover {
+  background: var(--accent-soft);
+  border-color: var(--gold-bright);
+}
+.pr-day-complete-btn:active { transform: scale(0.97); }
+.pr-day-complete-btn:focus { outline: none; }
+.pr-day.boss .pr-day-complete-btn {
+  font-size: 14px;
+  padding: 12px 32px;
+  background: var(--accent-soft);
+}
+
+/* ── Boss Victory Overlay ── */
+.boss-victory {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(10,7,4,0.96);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  animation: bvFadeIn 0.8s ease-out forwards;
+}
+@keyframes bvFadeIn { to { opacity: 1; } }
+.bv-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 50%, var(--accent-soft) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 50%, rgba(201,164,92,0.06) 0%, transparent 80%);
+  animation: bvPulse 4s ease-in-out infinite;
+}
+@keyframes bvPulse { 0%,100% { opacity: 0.7; } 50% { opacity: 1; } }
+.bv-mandala {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 320px; height: 320px;
+  margin: -160px 0 0 -160px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  opacity: 0.25;
+  animation: bvSpin 30s linear infinite;
+}
+.bv-mandala::before,
+.bv-mandala::after {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  border: 1px dashed var(--gold);
+  border-radius: 50%;
+  opacity: 0.5;
+}
+.bv-mandala::after {
+  inset: -50px;
+  border-style: solid;
+  opacity: 0.2;
+}
+@keyframes bvSpin { to { transform: rotate(360deg); } }
+.bv-content {
+  position: relative;
+  text-align: center;
+  padding: 40px;
+  z-index: 1;
+  max-width: 420px;
+}
+.bv-label {
+  font-size: 12px;
+  letter-spacing: 0.55em;
+  color: var(--gold);
+  opacity: 0.85;
+  margin-bottom: 24px;
+}
+.bv-title {
+  font-size: 36px;
+  line-height: 1.2;
+  color: var(--gold-bright);
+  margin-bottom: 8px;
+  background: linear-gradient(180deg, #f5e6c2 0%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.bv-who {
+  font-size: 14px;
+  opacity: 0.6;
+  font-style: italic;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  margin-bottom: 36px;
+}
+.bv-divider {
+  font-size: 18px;
+  color: var(--gold);
+  margin-bottom: 28px;
+  opacity: 0.8;
+}
+.bv-message {
+  font-size: 15px;
+  line-height: 1.9;
+  opacity: 0.85;
+  font-style: italic;
+  margin-bottom: 40px;
+  color: var(--text-primary);
+}
+.bv-dismiss {
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold-bright);
+  font-family: inherit;
+  font-size: 14px;
+  padding: 12px 32px;
+  border-radius: 24px;
+  cursor: pointer;
+  letter-spacing: 0.15em;
+  transition: all 0.3s;
+}
+.bv-dismiss:hover {
+  background: var(--accent-soft);
+}
+.bv-dismiss:focus { outline: none; }
 
 /* ── Practices screens ── */
 .practices-scroll, .practice-detail-scroll {
@@ -3707,6 +4056,7 @@ html[data-theme="paper"] .achievement-popup {
   <div class="home-subtitle">哲学概念的故事化学习</div>
   <div class="home-quote" id="home-quote"></div>
   <div id="continue-card" class="continue-card" style="display:none;"></div>
+  <div id="in-progress-practice" class="in-progress-practice" style="display:none;"></div>
   <div id="brain-light" class="brain-light"></div>
   <div id="mind-card" class="mind-card" style="display:none;"></div>
   <div class="philosopher-list stagger" id="philosopher-list"></div>
@@ -4334,6 +4684,22 @@ const ACHIEVEMENTS = [
   { id: 'reflections-10', name: '思考者', desc: '写下 10 条反思', icon: '✒', check: (s) => s.reflectionCount >= 10 },
   { id: 'reflections-25', name: '日记本不空', desc: '写下 25 条反思', icon: '☙', check: (s) => s.reflectionCount >= 25 },
   { id: 'practice-complete', name: '7 天战士', desc: '完成至少 1 个 7 天实践', icon: '⚔', check: (s) => s.practiceCompleted >= 1 },
+
+  // 通关勋章 — 每个实践一个
+  { id: 'practice-stoic-week',          name: '斯多葛之徒', desc: '完成斯多葛 7 天',         icon: '⚔', check: (s) => s.completedPractices?.includes('stoic-week') },
+  { id: 'practice-absurd-week',         name: '反抗者',     desc: '完成荒诞 7 天',           icon: '☥', check: (s) => s.completedPractices?.includes('absurd-week') },
+  { id: 'practice-eternal-return-week', name: '永恒之约',   desc: '完成永恒轮回 7 天',       icon: '☉', check: (s) => s.completedPractices?.includes('eternal-return-week') },
+  { id: 'practice-foucault-week',       name: '看穿者',     desc: '完成看穿权力 7 天',       icon: '☩', check: (s) => s.completedPractices?.includes('foucault-week') },
+  { id: 'practice-wuwei-week',          name: '上善若水',   desc: '完成无为 7 天',           icon: '☯', check: (s) => s.completedPractices?.includes('wuwei-week') },
+  { id: 'practice-qiwu-week',           name: '齐物之心',   desc: '完成齐物 7 天',           icon: '◯', check: (s) => s.completedPractices?.includes('qiwu-week') },
+  { id: 'practice-bad-faith-week',      name: '不再自欺',   desc: '完成看见自欺 7 天',       icon: '✦', check: (s) => s.completedPractices?.includes('bad-faith-week') },
+  { id: 'practice-arendt-week',         name: '思考者',     desc: '完成平庸之恶检查 7 天',   icon: '⚜', check: (s) => s.completedPractices?.includes('arendt-week') },
+  { id: 'practice-wym-week',            name: '知行合一',   desc: '完成知行合一 7 天',       icon: '✧', check: (s) => s.completedPractices?.includes('wym-week') },
+  { id: 'practice-han-week',            name: '不被耗尽',   desc: '完成倦怠社会检查 7 天',   icon: '☽', check: (s) => s.completedPractices?.includes('han-week') },
+
+  // Meta 成就
+  { id: 'practice-3',     name: '修行三关',   desc: '完成 3 个 7 天实践',       icon: '✯', check: (s) => s.practiceCompleted >= 3 },
+  { id: 'practice-master',name: '修行大成',   desc: '完成全部 10 个 7 天实践', icon: '✯', check: (s) => s.practiceCompleted >= 10 },
 ];
 
 // ═══ 心智等级 (overall level) ═══
@@ -4350,8 +4716,56 @@ function getBrainLevel(readCount) {
   return BRAIN_LEVELS.find(l => readCount >= l.min && readCount <= l.max) || BRAIN_LEVELS[0];
 }
 
+// ═══ 7 天实践 — 闯关进度跟踪 ═══
+function getPracticeProgress(practiceId) {
+  try {
+    return JSON.parse(localStorage.getItem('echo/practice/' + practiceId + '/progress')) || [];
+  } catch { return []; }
+}
+
+function completeDay(practiceId, day) {
+  const done = getPracticeProgress(practiceId);
+  if (done.includes(day)) return 'ALREADY';
+  done.push(day);
+  done.sort((a,b) => a-b);
+  localStorage.setItem('echo/practice/' + practiceId + '/progress', JSON.stringify(done));
+  if (done.length === 7) {
+    localStorage.setItem('echo/practice/' + practiceId + '/completed-at', new Date().toISOString());
+    return 'COMPLETED';
+  }
+  return 'PROGRESS';
+}
+
+function getCurrentDay(practiceId) {
+  const done = getPracticeProgress(practiceId);
+  if (done.length === 0) return 1;
+  if (done.length >= 7) return 7;
+  // Find lowest day not yet done
+  for (let i = 1; i <= 7; i++) {
+    if (!done.includes(i)) return i;
+  }
+  return 7;
+}
+
+function isPracticeStarted(practiceId) {
+  return getPracticeProgress(practiceId).length > 0;
+}
+
+function isPracticeCompleted(practiceId) {
+  return getPracticeProgress(practiceId).length >= 7;
+}
+
+function getCompletedPractices() {
+  return PRACTICES.filter(p => isPracticeCompleted(p.id)).map(p => p.id);
+}
+
+function getInProgressPractices() {
+  return PRACTICES.filter(p => isPracticeStarted(p.id) && !isPracticeCompleted(p.id));
+}
+
 function calculateOverallStats() {
-  const stats = { readCount: 0, reflectionCount: 0, streak: 0, dims: { awareness:0, criticality:0, composure:0, autonomy:0, action:0 }, nietzsche:0, stoic:0, camus:0, foucault:0, practiceCompleted: 0 };
+  const completedP = getCompletedPractices();
+  const stats = { readCount: 0, reflectionCount: 0, streak: 0, dims: { awareness:0, criticality:0, composure:0, autonomy:0, action:0 }, nietzsche:0, stoic:0, camus:0, foucault:0, practiceCompleted: completedP.length, completedPractices: completedP, completedPracticesCount: completedP.length };
   PHILOSOPHERS.forEach(p => {
     try {
       const prog = JSON.parse(localStorage.getItem(storageKey(p.id, 'progress'))) || {};
@@ -6831,6 +7245,9 @@ function renderHome() {
   // Continue card
   renderContinueCard();
 
+  // In-progress practice card
+  renderInProgressPractice();
+
   // Brain light (心智之灯) — the new center of the home
   renderBrainLight();
 
@@ -7257,16 +7674,26 @@ function openForgotten(id) {
 
 function renderPractices() {
   const scroll = document.getElementById('practices-scroll');
-  const cards = PRACTICES.map(p => `
-    <button class="practice-card" data-pr="${p.id}" data-color="${p.color}">
-      <div class="pr-card-who">${escapeHtml(p.philosopher)}</div>
-      <div class="pr-card-title">${escapeHtml(p.title)}</div>
-      <div class="pr-card-intro">${escapeHtml(p.intro)}</div>
-    </button>
-  `).join('');
+  const cards = PRACTICES.map(p => {
+    const progress = getPracticeProgress(p.id);
+    const done = progress.length;
+    const status = done === 0 ? '未开始'
+                 : done >= 7 ? '✓ 已完成'
+                 : 'Day ' + done + ' / 7';
+    const statusClass = done === 0 ? '' : done >= 7 ? ' completed' : ' in-progress';
+    return `
+      <button class="practice-card${statusClass}" data-pr="${p.id}" data-color="${p.color}">
+        <div class="pr-card-status">${status}</div>
+        <div class="pr-card-who">${escapeHtml(p.philosopher)}</div>
+        <div class="pr-card-title">${escapeHtml(p.title)}</div>
+        <div class="pr-card-intro">${escapeHtml(p.intro)}</div>
+        ${done > 0 && done < 7 ? `<div class="pr-card-bar"><div class="pr-card-bar-fill" style="width:${(done/7)*100}%"></div></div>` : ''}
+      </button>
+    `;
+  }).join('');
   scroll.innerHTML = `
     <div class="practices-title">7 天实践</div>
-    <div class="practices-subtitle">把哲学从"读"变成"做"——每天一个具体动作</div>
+    <div class="practices-subtitle">10 关 × 7 天 · 把哲学从"读"变成"做"</div>
     ${cards}
   `;
   scroll.querySelectorAll('.practice-card').forEach(card => {
@@ -7280,24 +7707,109 @@ function renderPractices() {
 function openPractice(id) {
   const p = PRACTICES.find(x => x.id === id);
   if (!p) return;
-  // Apply philosopher accent for this view
   document.documentElement.setAttribute('data-philosopher', p.color);
+  renderPracticeDetail(p);
+  showScreen('practice-detail');
+  window.scrollTo(0, 0);
+}
+
+function renderPracticeDetail(p) {
   const scroll = document.getElementById('practice-detail-scroll');
-  const days = p.days.map(d => `
-    <div class="pr-day">
-      <div class="pr-day-number">DAY ${d.day}</div>
-      <div class="pr-day-task">${escapeHtml(d.task)}</div>
-      <div class="pr-day-why">${escapeHtml(d.why)}</div>
-    </div>
-  `).join('');
+  const done = getPracticeProgress(p.id);
+  const completed = done.length >= 7;
+  const currentDay = getCurrentDay(p.id);
+
+  const days = p.days.map(d => {
+    const isDone = done.includes(d.day);
+    const isCurrent = !completed && d.day === currentDay;
+    const isLocked = !isDone && !isCurrent;
+    const isBoss = d.day === 7;
+
+    let cls = 'pr-day';
+    if (isDone) cls += ' done';
+    if (isCurrent) cls += ' current';
+    if (isLocked) cls += ' locked';
+    if (isBoss) cls += ' boss';
+
+    const button = isCurrent
+      ? `<button class="pr-day-complete-btn" data-day="${d.day}">${isBoss ? '完成最终一日 ⚜' : '完成今天'}</button>`
+      : '';
+
+    const stateLabel = isDone ? '<span class="pr-day-state done">✓ 已完成</span>'
+                     : isCurrent ? (isBoss ? '<span class="pr-day-state boss-label">最 终 关</span>' : '<span class="pr-day-state current-label">今 日</span>')
+                     : '<span class="pr-day-state">未解锁</span>';
+
+    return `
+      <div class="${cls}" data-day="${d.day}">
+        <div class="pr-day-header">
+          <span class="pr-day-number">${isBoss ? '⚜ DAY 7' : 'DAY ' + d.day}</span>
+          ${stateLabel}
+        </div>
+        ${isLocked ? '' : `
+          <div class="pr-day-task">${escapeHtml(d.task)}</div>
+          <div class="pr-day-why">${escapeHtml(d.why)}</div>
+          ${button}
+        `}
+      </div>
+    `;
+  }).join('');
+
+  const headerStatus = completed
+    ? `<div class="pr-completed-badge">✓ 已完成 · 通关</div>`
+    : `<div class="pr-progress-bar"><div class="pr-progress-fill" style="width:${(done.length/7)*100}%"></div></div>
+       <div class="pr-progress-text">${done.length} / 7 已完成 · 当前 Day ${currentDay}</div>`;
+
   scroll.innerHTML = `
     <div class="pr-title">${escapeHtml(p.title)}</div>
     <div class="pr-who">${escapeHtml(p.philosopher)}</div>
     <div class="pr-intro">${escapeHtml(p.intro)}</div>
+    ${headerStatus}
     ${days}
   `;
-  showScreen('practice-detail');
-  window.scrollTo(0, 0);
+
+  scroll.querySelectorAll('.pr-day-complete-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const day = parseInt(btn.getAttribute('data-day'));
+      const result = completeDay(p.id, day);
+      haptic('success');
+      if (result === 'COMPLETED') {
+        showPracticeBossCompletion(p);
+      } else {
+        showToast('Day ' + day + ' 已完成 ✓');
+        renderPracticeDetail(p);
+        setTimeout(checkAndShowAchievements, 800);
+      }
+    });
+  });
+}
+
+function showPracticeBossCompletion(p) {
+  const overlay = document.createElement('div');
+  overlay.className = 'boss-victory';
+  overlay.innerHTML = `
+    <div class="bv-bg"></div>
+    <div class="bv-mandala"></div>
+    <div class="bv-content">
+      <div class="bv-label">通 关</div>
+      <div class="bv-title">${escapeHtml(p.title)}</div>
+      <div class="bv-who">${escapeHtml(p.philosopher)}</div>
+      <div class="bv-divider">✦</div>
+      <div class="bv-message">"7 天，每一天都是一次小决定。<br>现在你身上多了一种姿势。"</div>
+      <button class="bv-dismiss" id="bv-dismiss-btn">合上书页</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  haptic('success');
+  document.getElementById('bv-dismiss-btn').addEventListener('click', () => {
+    overlay.style.transition = 'opacity 0.6s';
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+      overlay.remove();
+      renderPracticeDetail(p);
+      checkAndShowAchievements();
+    }, 600);
+  });
 }
 
 function renderContemporary() {
@@ -8127,6 +8639,28 @@ function buildBrainLightSVG(readCount, maxConcepts = 57) {
   }
 
   return `<svg class="bl-svg" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">${elements.join('')}</svg>`;
+}
+
+function renderInProgressPractice() {
+  const el = document.getElementById('in-progress-practice');
+  const inProgress = getInProgressPractices();
+  if (inProgress.length === 0) { el.style.display = 'none'; return; }
+  // Show the most recent one
+  const p = inProgress[0];
+  const done = getPracticeProgress(p.id);
+  const current = getCurrentDay(p.id);
+  el.innerHTML = `
+    <div class="ipp-label">正 在 进 行</div>
+    <div class="ipp-title">${escapeHtml(p.title)} · Day ${current}</div>
+    <div class="ipp-status">${done.length} / 7 已完成 — 继续 →</div>
+    <div class="ipp-bar"><div class="ipp-bar-fill" style="width:${(done.length/7)*100}%"></div></div>
+  `;
+  el.style.display = 'block';
+  el.onclick = () => {
+    haptic('light');
+    openPractice(p.id);
+    showScreen('practice-detail');
+  };
 }
 
 function renderBrainLight() {
