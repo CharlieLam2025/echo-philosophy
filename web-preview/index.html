@@ -16,81 +16,113 @@ html {
   height: 100%;
   scroll-behavior: smooth;
 
-  /* ── 学者夜阅 (default) — 深木 + 烫金 + 抄本 ── */
-  --bg-base: #1a130c;
-  --bg-elevated: #251c12;
-  --bg-card: #2c2218;
-  --bg-deep: #100a05;
-  --text-primary: #ebdcb8;
-  --text-secondary: rgba(235, 220, 184, 0.7);
-  --text-tertiary: rgba(235, 220, 184, 0.42);
-  --text-faint: rgba(235, 220, 184, 0.22);
-  --border-faint: rgba(201, 164, 92, 0.12);
-  --border-soft: rgba(201, 164, 92, 0.22);
-  --ambient: rgba(220, 165, 80, 0.06);
+  /* ── 默认: 明 (clean modern light, 得到-inspired) ── */
+  --bg-base: #fafaf7;
+  --bg-elevated: #ffffff;
+  --bg-card: #ffffff;
+  --bg-deep: #f0eeea;
+  --text-primary: #1a1a1a;
+  --text-secondary: rgba(26, 26, 26, 0.7);
+  --text-tertiary: rgba(26, 26, 26, 0.5);
+  --text-faint: rgba(26, 26, 26, 0.32);
+  --border-faint: rgba(0, 0, 0, 0.06);
+  --border-soft: rgba(0, 0, 0, 0.1);
+  --ambient: rgba(180, 50, 30, 0.025);
 
-  /* Gold leaf accents */
-  --gold: #c9a45c;
-  --gold-bright: #e6c47a;
-  --gold-deep: #8b6914;
-  --copper: #b8743b;
-  --crimson: #8b3a3a;
+  /* Single deliberate accent — warm red (得到-like) */
+  --gold: #b34428;
+  --gold-bright: #c24a2e;
+  --gold-deep: #8b3520;
+  --copper: #b34428;
+  --crimson: #8b3520;
 
-  --accent: rgba(201,164,92,0.55);
-  --accent-soft: rgba(201,164,92,0.15);
-  --accent-strong: rgba(230,196,122,0.85);
+  --accent: rgba(179,68,40,0.7);
+  --accent-soft: rgba(179,68,40,0.08);
+  --accent-strong: rgba(140,53,32,1);
+
+  /* Shadows for elevation */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04), 0 1px 1px rgba(0,0,0,0.06);
+  --shadow-md: 0 2px 4px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.05);
+  --shadow-lg: 0 4px 8px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.08);
 
   background: var(--bg-base);
   color: var(--text-primary);
 }
 
-/* ── 古卷模式 (paper) — 老羊皮 + 棕墨 + 烫金 ── */
+/* ── 夜读 (dark elegant) ── */
 html[data-theme="paper"] {
-  --bg-base: #ebddbb;
-  --bg-elevated: #ddc99e;
-  --bg-card: #d4bc8a;
-  --bg-deep: #c4ad7a;
-  --text-primary: #2a1f12;
-  --text-secondary: rgba(42, 31, 18, 0.78);
-  --text-tertiary: rgba(42, 31, 18, 0.5);
-  --text-faint: rgba(42, 31, 18, 0.28);
-  --border-faint: rgba(120, 80, 30, 0.18);
-  --border-soft: rgba(120, 80, 30, 0.28);
-  --ambient: rgba(120, 60, 20, 0.05);
+  --bg-base: #0f0f10;
+  --bg-elevated: #18181a;
+  --bg-card: #1e1e21;
+  --bg-deep: #060606;
+  --text-primary: #f3f3f1;
+  --text-secondary: rgba(243, 243, 241, 0.7);
+  --text-tertiary: rgba(243, 243, 241, 0.5);
+  --text-faint: rgba(243, 243, 241, 0.3);
+  --border-faint: rgba(255, 255, 255, 0.06);
+  --border-soft: rgba(255, 255, 255, 0.1);
+  --ambient: rgba(220, 120, 80, 0.04);
 
-  --gold: #8b6914;
-  --gold-bright: #b8901f;
-  --gold-deep: #5c4408;
-  --copper: #8a4e1a;
-  --crimson: #6b2828;
+  --gold: #e08b6c;
+  --gold-bright: #f0a085;
+  --gold-deep: #b86a4a;
+  --copper: #e08b6c;
+  --crimson: #b86a4a;
 
-  --accent: rgba(139,105,20,0.6);
-  --accent-soft: rgba(139,105,20,0.15);
-  --accent-strong: rgba(92,68,8,0.95);
+  --accent: rgba(224,139,108,0.7);
+  --accent-soft: rgba(224,139,108,0.1);
+  --accent-strong: rgba(240,160,133,1);
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.4);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
 }
+/* Philosopher accents — light mode (default) */
 html[data-philosopher="nietzsche"] {
-  --accent: rgba(210,170,100,0.55);
-  --accent-soft: rgba(210,170,100,0.18);
-  --accent-strong: rgba(230,190,120,0.85);
-  --ambient: rgba(210,170,100,0.06);
+  --accent: rgba(140,90,30,0.85);
+  --accent-soft: rgba(140,90,30,0.08);
+  --accent-strong: #6b4515;
+  --ambient: rgba(140,90,30,0.03);
 }
 html[data-philosopher="stoic"] {
-  --accent: rgba(150,180,190,0.55);
-  --accent-soft: rgba(150,180,190,0.18);
-  --accent-strong: rgba(180,200,210,0.85);
-  --ambient: rgba(150,180,190,0.055);
+  --accent: rgba(40,80,110,0.85);
+  --accent-soft: rgba(40,80,110,0.08);
+  --accent-strong: #1e4566;
+  --ambient: rgba(40,80,110,0.03);
 }
 html[data-philosopher="camus"] {
-  --accent: rgba(210,135,100,0.55);
-  --accent-soft: rgba(210,135,100,0.18);
-  --accent-strong: rgba(230,155,115,0.85);
-  --ambient: rgba(210,135,100,0.06);
+  --accent: rgba(170,60,40,0.85);
+  --accent-soft: rgba(170,60,40,0.08);
+  --accent-strong: #8b3320;
+  --ambient: rgba(170,60,40,0.03);
 }
 html[data-philosopher="foucault"] {
-  --accent: rgba(180,145,200,0.55);
-  --accent-soft: rgba(180,145,200,0.18);
-  --accent-strong: rgba(200,165,220,0.85);
-  --ambient: rgba(180,145,200,0.06);
+  --accent: rgba(95,60,130,0.85);
+  --accent-soft: rgba(95,60,130,0.08);
+  --accent-strong: #4a2f70;
+  --ambient: rgba(95,60,130,0.03);
+}
+
+/* Philosopher accents — dark mode */
+html[data-theme="paper"][data-philosopher="nietzsche"] {
+  --accent: rgba(220,170,90,0.85);
+  --accent-soft: rgba(220,170,90,0.12);
+  --accent-strong: #f0c685;
+}
+html[data-theme="paper"][data-philosopher="stoic"] {
+  --accent: rgba(140,180,210,0.85);
+  --accent-soft: rgba(140,180,210,0.12);
+  --accent-strong: #b0d0e8;
+}
+html[data-theme="paper"][data-philosopher="camus"] {
+  --accent: rgba(230,140,100,0.85);
+  --accent-soft: rgba(230,140,100,0.12);
+  --accent-strong: #f5b39a;
+}
+html[data-theme="paper"][data-philosopher="foucault"] {
+  --accent: rgba(180,140,210,0.85);
+  --accent-soft: rgba(180,140,210,0.12);
+  --accent-strong: #d4b8e8;
 }
 
 /* Paper theme — keep philosopher accents but darker for legibility on cream */
@@ -133,15 +165,13 @@ body {
   font-family: 'Cormorant Garamond', 'Songti SC', 'STSong', Georgia, serif;
 }
 
-/* Ambient radial glow - center-top warmth */
+/* Ambient radial glow - very subtle warmth (dark mode only) */
 body::before {
   content: '';
   position: fixed;
   inset: -10% -10% auto -10%;
   height: 80vh;
-  background:
-    radial-gradient(ellipse at 50% 0%, var(--ambient) 0%, transparent 60%),
-    radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.4) 0%, transparent 70%);
+  background: radial-gradient(ellipse at 50% 0%, var(--ambient) 0%, transparent 60%);
   pointer-events: none;
   z-index: 0;
   transition: background 0.8s ease;
@@ -150,17 +180,18 @@ body::before {
 /* Subtle vignette */
 body > * { position: relative; z-index: 1; }
 
-/* ── Grain texture overlay ── */
+/* ── Grain texture (only in dark mode for warmth) ── */
 body::after {
   content: '';
   position: fixed;
   inset: 0;
-  opacity: 0.025;
+  opacity: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 256px 256px;
   pointer-events: none;
   z-index: 9999;
 }
+html[data-theme="paper"] body::after { opacity: 0.03; }
 
 /* ── Screens with transitions ── */
 .screen { display: none; min-height: 100vh; opacity: 0; }
@@ -731,17 +762,17 @@ html[data-theme="paper"] .achievement-popup {
 .home-quote {
   margin: 0 28px 44px;
   padding: 18px 22px;
-  font-size: 14px;
-  line-height: 1.8;
-  opacity: 0.65;
+  font-size: 15px;
+  line-height: 1.75;
   font-style: italic;
   max-width: none;
   text-align: left;
   transition: opacity 0.8s ease;
   color: var(--text-secondary);
   background: var(--bg-elevated);
-  border-left: 3px solid var(--gold);
-  border-radius: 0 6px 6px 0;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 12px 12px 0;
+  box-shadow: var(--shadow-sm);
 }
 .philosopher-list {
   padding: 0 28px 32px;
@@ -755,15 +786,15 @@ html[data-theme="paper"] .achievement-popup {
   padding: 24px 22px;
   background: var(--bg-elevated);
   border: 1px solid var(--border-faint);
-  border-radius: 12px;
+  border-radius: 16px;
   color: var(--text-primary);
   font-family: inherit;
   text-align: left;
   cursor: pointer;
-  transition: all 0.25s;
+  transition: all 0.2s;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 1px 0 rgba(0,0,0,0.15), 0 2px 6px rgba(0,0,0,0.2);
+  box-shadow: var(--shadow-sm);
 }
 .philosopher-card::before {
   display: none;
@@ -779,9 +810,9 @@ html[data-theme="paper"] .achievement-popup {
   transition: opacity 0.3s;
 }
 .philosopher-card:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   border-color: var(--border-soft);
-  box-shadow: 0 2px 0 rgba(0,0,0,0.15), 0 6px 14px rgba(0,0,0,0.3);
+  box-shadow: var(--shadow-md);
 }
 .philosopher-card:hover::after { opacity: 0.85; }
 .philosopher-card:active { transform: translateY(0); }
@@ -1048,12 +1079,12 @@ html[data-theme="paper"] .achievement-popup {
 .brain-light {
   margin: 0 28px 32px;
   padding: 24px 22px 22px;
-  border-radius: 12px;
+  border-radius: 16px;
   background: var(--bg-elevated);
   border: 1px solid var(--border-faint);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 1px 0 rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.2);
+  box-shadow: var(--shadow-md);
 }
 .bl-header {
   display: flex;
@@ -1123,17 +1154,16 @@ html[data-theme="paper"] .achievement-popup {
   padding: 20px 22px;
   background: var(--bg-elevated);
   border: 1px solid var(--border-faint);
-  border-radius: 12px;
+  border-radius: 14px;
   cursor: pointer;
-  transition: all 0.25s;
+  transition: all 0.2s;
   position: relative;
-  box-shadow: 0 1px 0 rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.2);
+  box-shadow: var(--shadow-sm);
 }
 .daily-challenge:hover {
-  background: var(--bg-card);
   border-color: var(--border-soft);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 0 rgba(0,0,0,0.15), 0 6px 14px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 .daily-challenge:active { transform: translateY(0); }
 .dc-label {
@@ -1541,26 +1571,25 @@ html[data-theme="paper"] .achievement-popup {
   color: var(--text-primary);
   font-family: inherit;
   text-align: left;
-  padding: 18px 18px;
+  padding: 20px 20px;
   cursor: pointer;
-  transition: all 0.25s;
-  min-height: 82px;
+  transition: all 0.2s;
+  min-height: 86px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: relative;
-  border-radius: 10px;
-  box-shadow: 0 1px 0 rgba(0,0,0,0.15), 0 2px 6px rgba(0,0,0,0.2);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
 }
 .nav-entry:hover {
-  background: var(--bg-card);
   border-color: var(--border-soft);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 0 rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 .nav-entry:active {
   transform: translateY(0);
-  box-shadow: 0 1px 0 rgba(0,0,0,0.15), 0 1px 4px rgba(0,0,0,0.25);
+  box-shadow: var(--shadow-sm);
 }
 .nav-entry:focus { outline: none; }
 .ne-title {
@@ -10915,21 +10944,22 @@ if ('serviceWorker' in navigator) {
 
 // ═══ Theme toggle (夜读 / 纸本) ═══
 function applyTheme() {
-  const theme = localStorage.getItem('echo/theme') || 'night';
+  // Default is light. data-theme="paper" is dark mode (legacy name kept).
+  const theme = localStorage.getItem('echo/theme') || 'light';
   if (theme === 'paper') {
     document.documentElement.setAttribute('data-theme', 'paper');
     const icon = document.getElementById('theme-toggle-icon');
-    if (icon) icon.textContent = '☾';
+    if (icon) icon.textContent = '☀';
   } else {
     document.documentElement.removeAttribute('data-theme');
     const icon = document.getElementById('theme-toggle-icon');
-    if (icon) icon.textContent = '☀';
+    if (icon) icon.textContent = '☾';
   }
 }
 
 function toggleTheme() {
-  const current = localStorage.getItem('echo/theme') || 'night';
-  const next = current === 'night' ? 'paper' : 'night';
+  const current = localStorage.getItem('echo/theme') || 'light';
+  const next = current === 'light' ? 'paper' : 'light';
   localStorage.setItem('echo/theme', next);
   applyTheme();
   haptic('light');
