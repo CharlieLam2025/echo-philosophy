@@ -2673,6 +2673,209 @@ html[data-theme="paper"] .achievement-popup {
 }
 .quote-group-label:first-child { margin-top: 0; }
 
+/* ── Challenges list + play screens ── */
+.challenges-scroll, .challenge-play-scroll {
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 100px;
+  max-width: 680px;
+  margin: 0 auto;
+}
+.challenges-title {
+  font-size: 28px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.challenges-subtitle {
+  font-size: 12px;
+  opacity: 0.45;
+  font-style: italic;
+  margin-bottom: 40px;
+}
+.challenge-card {
+  display: block;
+  width: 100%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-soft);
+  color: var(--text-primary);
+  font-family: inherit;
+  text-align: left;
+  padding: 22px 24px;
+  margin-bottom: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  border-radius: 2px;
+}
+.challenge-card:hover { background: var(--bg-card); border-color: var(--gold); }
+.challenge-card:active { transform: scale(0.99); }
+.challenge-card:focus { outline: none; }
+.challenge-card.boss { border-left: 3px solid var(--gold); }
+.challenge-card.perfect { border-color: var(--gold); background: var(--bg-card); }
+.challenge-card.perfect::after {
+  content: '✦';
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  color: var(--gold-bright);
+  font-size: 16px;
+  opacity: 0.9;
+}
+.cc-title {
+  font-size: 17px;
+  opacity: 0.95;
+  margin-bottom: 6px;
+}
+.challenge-card.boss .cc-title { color: var(--gold-bright); }
+.cc-subtitle {
+  font-size: 13px;
+  opacity: 0.55;
+  font-style: italic;
+  margin-bottom: 10px;
+}
+.cc-status {
+  font-size: 11px;
+  opacity: 0.55;
+  letter-spacing: 0.1em;
+}
+.cc-status.passed { color: var(--gold); opacity: 0.9; }
+
+/* ── Challenge play ── */
+.cp-title {
+  font-size: 26px;
+  opacity: 0.95;
+  margin-bottom: 6px;
+}
+.cp-subtitle {
+  font-size: 13px;
+  opacity: 0.55;
+  font-style: italic;
+  margin-bottom: 32px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border-faint);
+}
+.cp-question {
+  display: block;
+  width: 100%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-soft);
+  color: var(--text-primary);
+  font-family: inherit;
+  text-align: left;
+  padding: 18px 22px;
+  margin-bottom: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 2px;
+  position: relative;
+}
+.cp-question:hover { border-color: var(--gold); }
+.cp-question:focus { outline: none; }
+.cp-question.selected {
+  background: var(--accent-soft);
+  border-color: var(--gold);
+}
+.cp-question.selected::after {
+  content: '× 伪';
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  color: var(--gold-bright);
+  letter-spacing: 0.15em;
+}
+.cp-q-text {
+  font-size: 16px;
+  line-height: 1.7;
+  font-style: italic;
+}
+.cp-submit-bar {
+  margin-top: 32px;
+  display: flex;
+  justify-content: center;
+}
+.cp-submit-btn {
+  background: var(--accent-soft);
+  border: 1px solid var(--gold);
+  color: var(--gold-bright);
+  font-family: inherit;
+  font-size: 14px;
+  padding: 12px 36px;
+  border-radius: 22px;
+  cursor: pointer;
+  letter-spacing: 0.15em;
+  transition: all 0.2s;
+}
+.cp-submit-btn:hover { background: var(--accent); }
+.cp-submit-btn:active { transform: scale(0.97); }
+.cp-submit-btn:focus { outline: none; }
+.cp-submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Challenge result */
+.cp-result-header {
+  text-align: center;
+  padding: 32px 20px 28px;
+  margin-bottom: 32px;
+  border: 1px solid var(--gold);
+  background: radial-gradient(ellipse at 50% 50%, var(--accent-soft) 0%, transparent 70%);
+  border-radius: 2px;
+  position: relative;
+}
+.cp-result-header.perfect {
+  border-color: var(--gold-bright);
+  background:
+    radial-gradient(ellipse at 50% 50%, var(--accent-soft) 0%, transparent 70%),
+    var(--bg-card);
+}
+.cp-result-label {
+  font-size: 11px;
+  letter-spacing: 0.5em;
+  color: var(--gold);
+  margin-bottom: 12px;
+  opacity: 0.85;
+}
+.cp-result-score {
+  font-size: 48px;
+  line-height: 1;
+  color: var(--gold-bright);
+  margin-bottom: 12px;
+  background: linear-gradient(180deg, var(--text-primary) 0%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.cp-result-text {
+  font-size: 14px;
+  opacity: 0.75;
+  font-style: italic;
+}
+.cp-review-item {
+  padding: 18px 22px;
+  margin-bottom: 12px;
+  background: var(--bg-elevated);
+  border-left: 3px solid;
+  border-radius: 0 4px 4px 0;
+}
+.cp-review-item.correct { border-left-color: rgba(150,180,100,0.6); }
+.cp-review-item.wrong { border-left-color: rgba(200,90,80,0.6); }
+.cp-review-q {
+  font-size: 14px;
+  opacity: 0.9;
+  margin-bottom: 8px;
+  font-style: italic;
+}
+.cp-review-verdict {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  margin-bottom: 8px;
+}
+.cp-review-verdict.correct { color: rgba(150,180,100,0.95); }
+.cp-review-verdict.wrong { color: rgba(220,120,100,0.95); }
+.cp-review-explanation {
+  font-size: 13px;
+  opacity: 0.75;
+  line-height: 1.7;
+}
+
 /* ── Fake questions screens ── */
 .fake-qs-scroll, .fake-q-detail-scroll {
   padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
@@ -4099,6 +4302,10 @@ html[data-theme="paper"] .achievement-popup {
           <div class="ne-title">伪命题</div>
           <div class="ne-meta">15 条 · 问错了的问题</div>
         </button>
+        <button class="nav-entry" id="nav-challenges">
+          <div class="ne-title">识破挑战</div>
+          <div class="ne-meta">5 关 · 挑出问错的问题</div>
+        </button>
         <button class="nav-entry" id="nav-events">
           <div class="ne-title">哲学史事件</div>
           <div class="ne-meta">8 件 · 关键的历史时刻</div>
@@ -4311,6 +4518,24 @@ html[data-theme="paper"] .achievement-popup {
     <span class="story-concept-label">金句</span>
   </div>
   <div class="quotes-scroll" id="quotes-scroll"></div>
+</div>
+
+<!-- ═══ Challenges List Screen ═══ -->
+<div id="challenges-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="challenges-back-btn">←</button>
+    <span class="story-concept-label">识破挑战</span>
+  </div>
+  <div class="challenges-scroll" id="challenges-scroll"></div>
+</div>
+
+<!-- ═══ Challenge Play Screen ═══ -->
+<div id="challenge-play-screen" class="screen">
+  <div class="journal-header">
+    <button class="back-btn" id="challenge-play-back-btn">←</button>
+    <span class="story-concept-label" id="challenge-play-label">挑战</span>
+  </div>
+  <div class="challenge-play-scroll" id="challenge-play-scroll"></div>
 </div>
 
 <!-- ═══ Fake Questions List Screen ═══ -->
@@ -4700,6 +4925,11 @@ const ACHIEVEMENTS = [
   // Meta 成就
   { id: 'practice-3',     name: '修行三关',   desc: '完成 3 个 7 天实践',       icon: '✯', check: (s) => s.practiceCompleted >= 3 },
   { id: 'practice-master',name: '修行大成',   desc: '完成全部 10 个 7 天实践', icon: '✯', check: (s) => s.practiceCompleted >= 10 },
+
+  // 识破挑战勋章
+  { id: 'challenge-1', name: '初识陷阱', desc: '满分通过第一关', icon: '✦', check: (s) => s.passedChallenges?.includes('fc-1') },
+  { id: 'challenge-3', name: '半数识破', desc: '满分通过 3 关', icon: '✧', check: (s) => s.passedChallenges?.length >= 3 },
+  { id: 'challenge-all', name: '问题诊断师', desc: '满分通过全部 5 关', icon: '⚜', check: (s) => s.passedChallenges?.length >= 5 },
 ];
 
 // ═══ 心智等级 (overall level) ═══
@@ -4714,6 +4944,25 @@ const BRAIN_LEVELS = [
 
 function getBrainLevel(readCount) {
   return BRAIN_LEVELS.find(l => readCount >= l.min && readCount <= l.max) || BRAIN_LEVELS[0];
+}
+
+// ═══ 伪命题挑战进度 ═══
+function getChallengeResult(id) {
+  try {
+    return JSON.parse(localStorage.getItem('echo/challenge/' + id + '/result'));
+  } catch { return null; }
+}
+function saveChallengeResult(id, score, total) {
+  const result = { score, total, at: new Date().toISOString(), perfect: score === total };
+  localStorage.setItem('echo/challenge/' + id + '/result', JSON.stringify(result));
+  return result;
+}
+function isChallengePerfect(id) {
+  const r = getChallengeResult(id);
+  return r && r.perfect;
+}
+function getCompletedChallenges() {
+  return FAKE_CHALLENGES.filter(c => isChallengePerfect(c.id)).map(c => c.id);
 }
 
 // ═══ 7 天实践 — 闯关进度跟踪 ═══
@@ -4765,7 +5014,8 @@ function getInProgressPractices() {
 
 function calculateOverallStats() {
   const completedP = getCompletedPractices();
-  const stats = { readCount: 0, reflectionCount: 0, streak: 0, dims: { awareness:0, criticality:0, composure:0, autonomy:0, action:0 }, nietzsche:0, stoic:0, camus:0, foucault:0, practiceCompleted: completedP.length, completedPractices: completedP, completedPracticesCount: completedP.length };
+  const passedC = getCompletedChallenges();
+  const stats = { readCount: 0, reflectionCount: 0, streak: 0, dims: { awareness:0, criticality:0, composure:0, autonomy:0, action:0 }, nietzsche:0, stoic:0, camus:0, foucault:0, practiceCompleted: completedP.length, completedPractices: completedP, completedPracticesCount: completedP.length, passedChallenges: passedC };
   PHILOSOPHERS.forEach(p => {
     try {
       const prog = JSON.parse(localStorage.getItem(storageKey(p.id, 'progress'))) || {};
@@ -5284,6 +5534,73 @@ const FORGOTTEN = [
     essence: '詹姆逊说: 后现代不是某种"风格"——是资本主义某个阶段的文化形态。\n\n现代主义还相信"深度"——表面之下有真实。后现代放弃了深度——只剩表面、引用、拼贴、反讽。\n\n为什么？因为晚期资本主义把所有东西都商品化了——包括"反抗"、"批判"、"另类"。所有"深度"都立刻被回收为商品。剩下的，是无限的表面循环。',
     scene: '你买了一件"反消费主义"的 T 恤。它在淘宝上 79 元。\n\n詹姆逊会说: 欢迎来到后现代——连"反"也是商品。',
     connection: '鲍德里亚的"拟像"、本雅明的"灵晕消失"、阿多诺的"文化工业"——都汇聚到詹姆逊这里。他给出了系统化的诊断: 所有这些都是"晚期资本主义"的症状。',
+  },
+];
+
+// ═══ 伪命题识破挑战 ═══
+const FAKE_CHALLENGES = [
+  {
+    id: 'fc-1',
+    title: '第一关 · 入门',
+    subtitle: '5 个问题，挑出哪些"问错了"',
+    items: [
+      { q: '我的真正自我是什么？',         isFake: true,  why: '伪命题。假设有不变的"真我"等你找——但自我是动词，不是名词。' },
+      { q: '今晚要不要去那个聚会？',       isFake: false, why: '真问题。具体的选择，有真实的权衡。' },
+      { q: '人生的意义是什么？',           isFake: true,  why: '伪命题。意义不是宇宙的属性等你发现——是你给出的。' },
+      { q: '这本书值不值得读？',           isFake: false, why: '真问题。具体的评估，可以基于你的目标判断。' },
+      { q: '为什么会发生在我身上？',       isFake: true,  why: '伪命题。假设宇宙在针对你——事情发生通常没意图。' },
+    ],
+  },
+  {
+    id: 'fc-2',
+    title: '第二关 · 进阶',
+    subtitle: '陷阱更隐蔽——警惕"应当"',
+    items: [
+      { q: '我"应该"做什么？',            isFake: true,  why: '伪命题。"应该"预设了外部权威。真问题: 我选择做什么？' },
+      { q: '这个朋友最近为什么对我冷淡？', isFake: false, why: '真问题。具体的人际探索，可以观察、问、推测。' },
+      { q: '我变了吗？',                   isFake: true,  why: '伪命题。假设有不变的"我"作参照。真问题: 我现在如何变？' },
+      { q: '这份工作适合我吗？',           isFake: false, why: '真问题。具体的匹配评估。' },
+      { q: '做这件事有用吗？',             isFake: true,  why: '伪命题。"用"预设了外部目的。真问题: 做这件事让我变成什么？' },
+    ],
+  },
+  {
+    id: 'fc-3',
+    title: '第三关 · 困难',
+    subtitle: '5 题里有 4 个陷阱——只一题是真问题',
+    items: [
+      { q: '我是不是个失败者？',           isFake: true,  why: '伪命题。把人和成败结果等同。失败是事件的属性，不是人的。' },
+      { q: '我喜欢的真的是"我"喜欢的吗？', isFake: true,  why: '伪命题。假设有未被污染的"真喜好"。真问题: 我现在选择继续这样喜欢吗？' },
+      { q: '我父母为什么这样对我？',       isFake: false, why: '真问题。具体的家庭探索，可以理解他们的历史和处境。' },
+      { q: '我配吗？',                     isFake: true,  why: '伪命题。假设有客观的"配得上"。真问题: 我在做什么？' },
+      { q: '我是好人还是坏人？',           isFake: true,  why: '伪命题。把"我"当静态实体。真问题: 这一刻我做了什么？' },
+    ],
+  },
+  {
+    id: 'fc-4',
+    title: '第四关 · 修辞迷宫',
+    subtitle: '听起来深刻——其实问错了',
+    items: [
+      { q: '什么是爱？',                   isFake: true,  why: '伪命题。"爱"在不同语境里完全不同。真问题: 在这个具体关系里"爱"该做什么？' },
+      { q: '这个决定我后悔了吗？',         isFake: false, why: '真问题。具体的内省，能给出真实回答。' },
+      { q: 'AI 会比人聪明吗？',           isFake: true,  why: '伪命题。把"聪明"当成单一标量。真问题: AI 能做什么、不能做什么？' },
+      { q: '现代社会比古代好/坏吗？',      isFake: true,  why: '伪命题。用单一"好坏"评价整个时代。真问题: 现代获得了什么、失去了什么？' },
+      { q: '我有没有自由意志？',           isFake: true,  why: '伪命题。把"自由"当成有/无的二元。真问题: 在这个具体处境里我的自由有多大？' },
+    ],
+  },
+  {
+    id: 'fc-5',
+    title: '第五关 · 最终关',
+    subtitle: '7 题混合——这一关考的是直觉',
+    boss: true,
+    items: [
+      { q: '我应该追这个 offer 吗？',          isFake: false, why: '真问题。具体的选择，可以权衡。' },
+      { q: '如果我没生在这个家庭就好了',       isFake: true,  why: '伪命题。假设"我"可以脱离被抛——但你之所以是你，恰恰因为这些处境。' },
+      { q: '这个朋友还值得继续维持吗？',       isFake: false, why: '真问题。具体的关系评估，可以基于事实回答。' },
+      { q: '我喜欢的真的是"我"喜欢的吗？',    isFake: true,  why: '伪命题。假设有"纯粹"的我——这种纯粹不存在。' },
+      { q: '我现在做的工作有意义吗？',         isFake: true,  why: '伪命题。意义不是事物的属性。真问题: 我愿意给这份工作什么意义？' },
+      { q: '今晚要不要早点睡？',               isFake: false, why: '真问题。具体的、可立即决定的事。' },
+      { q: '我配得上现在的位置吗？',           isFake: true,  why: '伪命题。"配得上"无标准。真问题: 我在做什么？' },
+    ],
   },
 ];
 
@@ -7981,6 +8298,192 @@ function renderQuotes() {
   });
 }
 
+// ═══ 识破挑战 ═══
+let currentChallenge = null;
+let challengeSelection = new Set();
+let challengeResultMode = false;
+
+function renderChallenges() {
+  const scroll = document.getElementById('challenges-scroll');
+  const cards = FAKE_CHALLENGES.map((c, idx) => {
+    const result = getChallengeResult(c.id);
+    const passed = result && result.perfect;
+    const tried = result && !result.perfect;
+    let status;
+    if (passed) status = `<span class="cc-status passed">✦ 满分通过 · ${result.score}/${result.total}</span>`;
+    else if (tried) status = `<span class="cc-status">最近: ${result.score}/${result.total} · 还差一点</span>`;
+    else status = `<span class="cc-status">未挑战</span>`;
+    const bossCls = c.boss ? ' boss' : '';
+    const perfectCls = passed ? ' perfect' : '';
+    return `
+      <button class="challenge-card${bossCls}${perfectCls}" data-c="${c.id}">
+        <div class="cc-title">${escapeHtml(c.title)}</div>
+        <div class="cc-subtitle">${escapeHtml(c.subtitle)}</div>
+        ${status}
+      </button>
+    `;
+  }).join('');
+  scroll.innerHTML = `
+    <div class="challenges-title">识破挑战</div>
+    <div class="challenges-subtitle">5 关 · 挑出"问错了"的问题——满分通过才解锁勋章</div>
+    ${cards}
+  `;
+  scroll.querySelectorAll('.challenge-card').forEach(card => {
+    card.addEventListener('click', () => {
+      haptic('light');
+      openChallenge(card.getAttribute('data-c'));
+    });
+  });
+}
+
+function openChallenge(id) {
+  const c = FAKE_CHALLENGES.find(x => x.id === id);
+  if (!c) return;
+  currentChallenge = c;
+  challengeSelection = new Set();
+  challengeResultMode = false;
+  renderChallengePlay();
+  showScreen('challenge-play');
+  window.scrollTo(0, 0);
+}
+
+function renderChallengePlay() {
+  const c = currentChallenge;
+  document.getElementById('challenge-play-label').textContent = c.title;
+  const scroll = document.getElementById('challenge-play-scroll');
+
+  if (challengeResultMode) {
+    renderChallengeResult();
+    return;
+  }
+
+  const items = c.items.map((item, idx) => {
+    const selected = challengeSelection.has(idx);
+    return `
+      <button class="cp-question${selected ? ' selected' : ''}" data-idx="${idx}">
+        <div class="cp-q-text">"${escapeHtml(item.q)}"</div>
+      </button>
+    `;
+  }).join('');
+
+  scroll.innerHTML = `
+    <div class="cp-title">${escapeHtml(c.title)}</div>
+    <div class="cp-subtitle">${escapeHtml(c.subtitle)} · 点击你认为是"问错了"的问题</div>
+    ${items}
+    <div class="cp-submit-bar">
+      <button class="cp-submit-btn" id="cp-submit-btn">提 交</button>
+    </div>
+  `;
+
+  scroll.querySelectorAll('.cp-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.getAttribute('data-idx'));
+      if (challengeSelection.has(idx)) challengeSelection.delete(idx);
+      else challengeSelection.add(idx);
+      haptic('light');
+      btn.classList.toggle('selected');
+    });
+  });
+
+  document.getElementById('cp-submit-btn').addEventListener('click', () => {
+    haptic('medium');
+    submitChallenge();
+  });
+}
+
+function submitChallenge() {
+  const c = currentChallenge;
+  let score = 0;
+  c.items.forEach((item, idx) => {
+    const userSays = challengeSelection.has(idx);
+    if (userSays === item.isFake) score++;
+  });
+  const result = saveChallengeResult(c.id, score, c.items.length);
+  if (result.perfect) {
+    showChallengePerfect(c, result);
+  } else {
+    challengeResultMode = true;
+    renderChallengeResult();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  setTimeout(checkAndShowAchievements, 1000);
+}
+
+function showChallengePerfect(c, result) {
+  const overlay = document.createElement('div');
+  overlay.className = 'boss-victory';
+  overlay.innerHTML = `
+    <div class="bv-bg"></div>
+    <div class="bv-mandala"></div>
+    <div class="bv-content">
+      <div class="bv-label">满 分 通 过</div>
+      <div class="bv-title">${escapeHtml(c.title)}</div>
+      <div class="bv-who">${result.score} / ${result.total}</div>
+      <div class="bv-divider">✦</div>
+      <div class="bv-message">"看清问题本身——<br>比回答任何问题都难。"</div>
+      <button class="bv-dismiss" id="bv-dismiss-btn">看看哪些是陷阱</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  haptic('success');
+  document.getElementById('bv-dismiss-btn').addEventListener('click', () => {
+    overlay.style.transition = 'opacity 0.5s';
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+      overlay.remove();
+      challengeResultMode = true;
+      renderChallengeResult();
+      window.scrollTo(0, 0);
+      checkAndShowAchievements();
+    }, 500);
+  });
+}
+
+function renderChallengeResult() {
+  const c = currentChallenge;
+  const result = getChallengeResult(c.id);
+  if (!result) return;
+
+  const reviews = c.items.map((item, idx) => {
+    const userSays = challengeSelection.has(idx);
+    const correct = userSays === item.isFake;
+    return `
+      <div class="cp-review-item ${correct ? 'correct' : 'wrong'}">
+        <div class="cp-review-q">"${escapeHtml(item.q)}"</div>
+        <div class="cp-review-verdict ${correct ? 'correct' : 'wrong'}">
+          ${correct ? '✓ 你答对了' : '✗ 你判断错了'} —
+          这是${item.isFake ? '伪命题' : '真问题'}
+        </div>
+        <div class="cp-review-explanation">${escapeHtml(item.why)}</div>
+      </div>
+    `;
+  }).join('');
+
+  const scroll = document.getElementById('challenge-play-scroll');
+  scroll.innerHTML = `
+    <div class="cp-result-header${result.perfect ? ' perfect' : ''}">
+      <div class="cp-result-label">${result.perfect ? '满 分' : '结 果'}</div>
+      <div class="cp-result-score">${result.score} / ${result.total}</div>
+      <div class="cp-result-text">${result.perfect ? '你识破了所有陷阱' : '差一点——看看哪些没看出来'}</div>
+    </div>
+    ${reviews}
+    <div class="cp-submit-bar" style="margin-top: 40px;">
+      <button class="cp-submit-btn" id="cp-retry-btn">${result.perfect ? '返回挑战列表' : '再 试 一 次'}</button>
+    </div>
+  `;
+  document.getElementById('cp-retry-btn').addEventListener('click', () => {
+    if (result.perfect) {
+      renderChallenges();
+      showScreen('challenges');
+    } else {
+      challengeSelection = new Set();
+      challengeResultMode = false;
+      renderChallengePlay();
+      window.scrollTo(0, 0);
+    }
+  });
+}
+
 function renderFakeQs() {
   const scroll = document.getElementById('fake-qs-scroll');
   const cards = FAKE_QUESTIONS.map((q, i) => `
@@ -9855,6 +10358,22 @@ document.getElementById('nav-quotes').addEventListener('click', () => {
 document.getElementById('quotes-back-btn').addEventListener('click', () => {
   renderHome();
   showScreen('home');
+});
+
+document.getElementById('nav-challenges').addEventListener('click', () => {
+  haptic('light');
+  renderChallenges();
+  showScreen('challenges');
+});
+
+document.getElementById('challenges-back-btn').addEventListener('click', () => {
+  renderHome();
+  showScreen('home');
+});
+
+document.getElementById('challenge-play-back-btn').addEventListener('click', () => {
+  renderChallenges();
+  showScreen('challenges');
 });
 
 document.getElementById('nav-fake-qs').addEventListener('click', () => {
