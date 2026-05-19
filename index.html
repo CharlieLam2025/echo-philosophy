@@ -198,11 +198,63 @@ body > * { position: relative; z-index: 1; }
   to { opacity: 1; transform: translateX(0); }
 }
 
-/* Journal slides up */
-#journal-screen.active { animation: slideInUp 0.45s cubic-bezier(0.16,1,0.3,1) forwards; }
-@keyframes slideInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Journal — opens as a bottom-sheet modal (78% height) over the previous screen */
+#journal-screen.active {
+  display: block;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 22%;
+  z-index: 80;
+  background: var(--bg-base);
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -12px 40px rgba(38, 38, 38, 0.18);
+  overflow-y: auto;
+  min-height: 0;
+  animation: sheetUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+#journal-screen.screen-exit {
+  animation: sheetDown 0.32s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+@keyframes sheetUp {
+  from { transform: translateY(100%); opacity: 1; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes sheetDown {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(100%); opacity: 1; }
+}
+
+/* Scrim under journal */
+.journal-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(38, 38, 38, 0.35);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 75;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.journal-scrim.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Drag handle on top of the sheet */
+#journal-screen::before {
+  content: '';
+  position: sticky;
+  top: 0;
+  display: block;
+  width: 38px;
+  height: 4px;
+  background: var(--border-faint);
+  border-radius: 2px;
+  margin: 8px auto 0;
+  z-index: 12;
 }
 
 /* ── Map (concept list) — editorial table of contents ── */
@@ -1083,19 +1135,30 @@ html[data-theme="paper"] .achievement-popup {
 @keyframes pulse { 0%,100%{ opacity:0.15 } 50%{ opacity:0.4 } }
 .loading-dots { animation: pulse 1.2s ease-in-out infinite; }
 
-/* ── Journal screen ── */
+/* ── Journal screen — sheet modal ── */
 .journal-header {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  padding: calc(16px + env(safe-area-inset-top, 32px)) 20px 16px;
-  background: linear-gradient(to bottom, var(--bg-base) 60%, transparent);
-  z-index: 10;
+  position: sticky;
+  top: 12px;
+  left: 0; right: 0;
+  padding: 6px 20px 14px;
+  background: var(--bg-base);
+  border-bottom: 1px solid var(--border-faint);
+  z-index: 11;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
 }
+.journal-header .story-concept-label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--text-tertiary);
+}
 .journal-scroll {
-  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 60px;
+  padding: 24px 24px 60px;
   max-width: 640px;
   margin: 0 auto;
 }
@@ -4353,42 +4416,341 @@ html[data-theme="paper"] .td-parable { background: var(--bg-elevated); }
 
 /* ── Archive screen ── */
 .archive-scroll {
-  padding: calc(68px + env(safe-area-inset-top, 32px)) 28px 80px;
+  padding: calc(68px + env(safe-area-inset-top, 32px)) 0 80px;
   max-width: 640px;
   margin: 0 auto;
 }
+
+/* Legacy archive styles retained for screens (settings, achievements) that use them */
 .archive-name {
+  font-family: var(--font-display);
   font-size: 28px;
-  opacity: 0.9;
-  margin-bottom: 4px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  padding: 0 24px;
 }
 .archive-orig {
+  font-family: var(--font-display);
   font-size: 13px;
-  opacity: 0.4;
   font-style: italic;
+  font-weight: 300;
+  color: var(--text-tertiary);
   margin-bottom: 6px;
+  padding: 0 24px;
 }
 .archive-dates {
-  font-size: 11px;
-  opacity: 0.25;
-  margin-bottom: 28px;
-  letter-spacing: 0.1em;
+  font-family: var(--font-display);
+  font-size: 10.5px;
+  color: var(--text-tertiary);
+  margin-bottom: 24px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0 24px;
 }
 .archive-bio {
-  font-size: 15px;
-  line-height: 1.85;
-  opacity: 0.75;
-  padding: 20px 0 32px;
-  border-top: 1px solid rgba(237,229,211,0.06);
-  border-bottom: 1px solid rgba(237,229,211,0.06);
-  margin-bottom: 40px;
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  padding: 22px 24px 28px;
+  border-top: 1px solid var(--border-faint);
+  border-bottom: 1px solid var(--border-faint);
+  margin-bottom: 32px;
 }
 .archive-section-label {
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--text-tertiary);
+  margin-bottom: 18px;
+  padding: 0 24px;
+}
+
+/* ── Archive chess-grid (main-line philosopher detail) ── */
+.arc-top-eyebrow {
+  padding: 0 24px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* Hero — full-bleed ink card */
+.arc-hero {
+  position: relative;
+  background: var(--text-primary);
+  color: #fff;
+  margin: 0 24px 14px;
+  padding: 22px 22px 20px;
+  overflow: hidden;
+  min-height: 200px;
+}
+.arc-hero-eyebrow {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 14px;
+}
+.arc-hero-name {
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: -0.018em;
+  margin-bottom: 8px;
+}
+.arc-hero-period { color: var(--crimson-tint); }
+.arc-hero-cn {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.78);
+  margin-bottom: 14px;
+}
+.arc-hero-orig {
+  font-family: var(--font-display);
   font-size: 11px;
-  letter-spacing: 0.3em;
-  opacity: 0.4;
-  margin-bottom: 24px;
-  color: var(--accent-strong);
+  font-weight: 300;
+  margin-left: 8px;
+  color: rgba(255, 255, 255, 0.45);
+}
+.arc-hero-bio {
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.82);
+  max-width: 280px;
+}
+.arc-hero-corner {
+  position: absolute;
+  top: 20px;
+  right: 22px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.78);
+  letter-spacing: 0.18em;
+  text-align: right;
+  line-height: 1.3;
+  writing-mode: vertical-rl;
+}
+
+/* Grid */
+.arc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0 24px;
+  margin-bottom: 32px;
+}
+.arc-card {
+  padding: 14px;
+  min-height: 96px;
+  position: relative;
+  overflow: hidden;
+}
+.arc-card--full { grid-column: span 2; }
+.arc-card--cream { background: var(--bg-deep); }
+.arc-card--line { border: 1px solid var(--border-faint); background: transparent; }
+.arc-card--ink { background: var(--text-primary); color: #fff; }
+.arc-card--quote {
+  background: var(--crimson);
+  color: #fff;
+}
+
+.arc-card-eyebrow {
+  font-family: var(--font-body);
+  font-size: 9.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--text-tertiary);
+  margin-bottom: 10px;
+}
+.arc-card-eyebrow--white { color: rgba(255, 255, 255, 0.7); }
+.arc-card--ink .arc-card-eyebrow { color: rgba(255, 255, 255, 0.6); }
+.arc-card--quote .arc-card-eyebrow { color: rgba(255, 255, 255, 0.7); }
+
+.arc-card-quote {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.35;
+  letter-spacing: -0.005em;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.arc-card-quote-src {
+  font-family: var(--font-body);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.06em;
+}
+
+.arc-card-stat {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+.arc-card-stat--crimson { color: var(--crimson); }
+
+.arc-card-meta {
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  line-height: 1.45;
+  color: var(--text-tertiary);
+  letter-spacing: 0.02em;
+}
+.arc-card--ink .arc-card-meta { color: rgba(255, 255, 255, 0.7); }
+
+.arc-card-lifespan {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff;
+}
+.arc-card-arrow { font-weight: 300; opacity: 0.6; }
+
+.arc-card-progress {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--crimson);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.arc-card-bar {
+  height: 1px;
+  background: var(--border-faint);
+  margin-bottom: 6px;
+  overflow: hidden;
+}
+.arc-card-bar-fill {
+  height: 100%;
+  background: var(--crimson);
+}
+
+/* Works grid */
+.arc-works-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 14px;
+}
+.arc-work {
+  padding: 6px 0;
+  border-top: 1px solid var(--border-faint);
+}
+.arc-work--current {
+  background: rgba(163, 2, 54, 0.04);
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-left: -8px;
+  margin-right: -8px;
+  border-top-color: var(--crimson);
+}
+.arc-work-year {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: var(--text-tertiary);
+  font-feature-settings: 'tnum' 1;
+  margin-bottom: 1px;
+}
+.arc-work--current .arc-work-year {
+  color: var(--crimson);
+  font-weight: 700;
+}
+.arc-work-title {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+.arc-work--current .arc-work-title {
+  color: var(--crimson);
+  font-weight: 700;
+}
+
+/* Sections (timeline + passages) */
+.arc-section {
+  padding: 24px 24px 8px;
+  border-top: 1px solid var(--border-faint);
+}
+.arc-section-eyebrow {
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--text-tertiary);
+  margin-bottom: 16px;
+}
+.arc-tl-row {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-faint);
+}
+.arc-tl-row:last-child { border-bottom: none; }
+.arc-tl-year {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--crimson);
+  letter-spacing: 0.08em;
+  font-feature-settings: 'tnum' 1;
+}
+.arc-tl-event {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+.arc-passage {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border-faint);
+}
+.arc-passage:last-child { border-bottom: none; }
+.arc-passage-src {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--crimson);
+  margin-bottom: 10px;
+}
+.arc-passage-text {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  border-left: 2px solid var(--border-faint);
+  padding-left: 14px;
 }
 
 .archive-timeline {
@@ -9000,9 +9362,42 @@ function isUnlocked(conceptId) {
 }
 
 function showScreen(name) {
+  // Journal opens as a sheet modal over the previous screen — don't hide siblings
+  if (name === 'journal') {
+    document.getElementById('journal-screen').classList.add('active');
+    ensureJournalScrim().classList.add('active');
+    document.body.style.overflow = 'hidden';
+    return;
+  }
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(name + '-screen').classList.add('active');
   window.scrollTo(0, 0);
+  closeJournalScrim();
+}
+
+function ensureJournalScrim() {
+  let scrim = document.getElementById('journal-scrim');
+  if (!scrim) {
+    scrim = document.createElement('div');
+    scrim.id = 'journal-scrim';
+    scrim.className = 'journal-scrim';
+    scrim.addEventListener('click', closeJournalSheet);
+    document.body.appendChild(scrim);
+  }
+  return scrim;
+}
+function closeJournalScrim() {
+  const scrim = document.getElementById('journal-scrim');
+  if (scrim) scrim.classList.remove('active');
+  document.body.style.overflow = '';
+}
+function closeJournalSheet() {
+  const sheet = document.getElementById('journal-screen');
+  if (!sheet.classList.contains('active')) return;
+  sheet.classList.remove('active');
+  sheet.classList.add('screen-exit');
+  closeJournalScrim();
+  setTimeout(() => { sheet.classList.remove('screen-exit'); }, 320);
 }
 
 // ═══ Home Screen ═══
@@ -10789,36 +11184,135 @@ function renderArchive() {
     scroll.innerHTML = '<div style="opacity:0.3; font-size:14px;">档案暂未整理。</div>';
     return;
   }
-  const timeline = archive.timeline.map(t => `
-    <div class="timeline-row">
-      <span class="timeline-year">${escapeHtml(t.year)}</span>
-      <span class="timeline-event">${escapeHtml(t.event)}</span>
-    </div>
-  `).join('');
-  const passages = archive.passages.map(p => `
-    <div class="passage">
-      <div class="passage-source">${escapeHtml(p.source)}</div>
-      <div class="passage-text">${escapeHtml(p.text)}</div>
-    </div>
-  `).join('');
-  scroll.innerHTML = `
-    <div class="archive-name">${currentPhilosopher.name}</div>
-    <div class="archive-orig">${currentPhilosopher.orig}</div>
-    <div class="archive-dates">${currentPhilosopher.dates}</div>
-    <div class="archive-bio">${escapeHtml(archive.bio)}</div>
+  const p = currentPhilosopher;
 
-    <div class="archive-timeline">
-      <div class="archive-section-label">年 表</div>
+  // Stats
+  let readCount = 0;
+  const total = CONCEPT_COUNTS[p.id] || 0;
+  try {
+    const prog = JSON.parse(localStorage.getItem(storageKey(p.id, 'progress'))) || {};
+    readCount = Object.keys(prog).filter(k => prog[k]).length;
+  } catch {}
+  const pct = total > 0 ? Math.round((readCount / total) * 100) : 0;
+
+  // Corner mark = initials from English header
+  const initials = (p.header || p.name).replace(/[^A-Z]/g, '').slice(0, 3).split('').join('.') + '.';
+
+  // First passage → quote card (short version of first sentence)
+  const firstPassage = archive.passages[0];
+  const quoteText = firstPassage ? firstPassage.text.split(/[\n。.!?！？]/)[0].slice(0, 56) : '';
+  const quoteSrc = firstPassage ? firstPassage.source : '';
+
+  // Era / lifespan from timeline
+  const firstTL = archive.timeline[0];
+  const lastTL = archive.timeline[archive.timeline.length - 1];
+  const birthPlace = (firstTL && /(?:于|在)([一-鿿 A-Za-z\- ]+)/.exec(firstTL.event)) ? RegExp.$1.trim() : '';
+  const deathPlace = (lastTL && /(?:于|在)([一-鿿 A-Za-z\- ]+)/.exec(lastTL.event)) ? RegExp.$1.trim() : '';
+
+  // Works grid — pick the events that mention specific works (《...》)
+  const works = archive.timeline.filter(t => /《[^》]+》/.test(t.event)).slice(0, 8).map(t => {
+    const m = t.event.match(/《([^》]+)》/);
+    return { y: t.year, title: m[1], current: false };
+  });
+  // Mark first as "current" if we're actively reading this philosopher
+  if (works.length && readCount > 0) works[0].current = true;
+
+  // Eras and concept counts
+  const conceptNames = (p.inlineConcepts || []).map(c => c.name).join(' · ');
+
+  const timeline = archive.timeline.map(t => `
+    <div class="arc-tl-row">
+      <span class="arc-tl-year">${escapeHtml(t.year)}</span>
+      <span class="arc-tl-event">${escapeHtml(t.event)}</span>
+    </div>
+  `).join('');
+
+  const passages = archive.passages.map(pg => `
+    <div class="arc-passage">
+      <div class="arc-passage-src">${escapeHtml(pg.source)}</div>
+      <div class="arc-passage-text">${escapeHtml(pg.text)}</div>
+    </div>
+  `).join('');
+
+  scroll.innerHTML = `
+    <div class="arc-top-eyebrow">
+      <span>思 想 家 · № 0${PHILOSOPHERS.findIndex(x => x.id === p.id) + 1}</span>
+    </div>
+
+    <!-- Hero -->
+    <div class="arc-hero">
+      <div class="arc-hero-eyebrow">${escapeHtml(p.dates)}</div>
+      <div class="arc-hero-name">${escapeHtml(p.header || p.name)}<span class="arc-hero-period">.</span></div>
+      <div class="arc-hero-cn">${escapeHtml(p.name)}<span class="arc-hero-orig">${escapeHtml(p.orig)}</span></div>
+      <div class="arc-hero-bio">${escapeHtml(archive.bio)}</div>
+      <div class="arc-hero-corner">${initials}</div>
+    </div>
+
+    <!-- Chess grid -->
+    <div class="arc-grid">
+      ${quoteText ? `
+      <div class="arc-card arc-card--quote arc-card--full">
+        <div class="arc-card-eyebrow arc-card-eyebrow--white">名 句 · Ⅰ</div>
+        <div class="arc-card-quote">「${escapeHtml(quoteText)}」</div>
+        <div class="arc-card-quote-src">— ${escapeHtml(quoteSrc)}</div>
+      </div>` : ''}
+
+      <div class="arc-card arc-card--cream">
+        <div class="arc-card-eyebrow">所 处 时 代</div>
+        <div class="arc-card-stat">${escapeHtml(firstTL ? firstTL.year.replace(/[^0-9]/g,'').slice(0,2) + '世纪' : '—')}</div>
+        <div class="arc-card-meta">${escapeHtml(p.question || '')}</div>
+      </div>
+
+      <div class="arc-card arc-card--cream">
+        <div class="arc-card-eyebrow">核 心 命 题</div>
+        <div class="arc-card-stat arc-card-stat--crimson">${total}</div>
+        <div class="arc-card-meta">${escapeHtml(conceptNames || '—')}</div>
+      </div>
+
+      ${works.length ? `
+      <div class="arc-card arc-card--line arc-card--full">
+        <div class="arc-card-eyebrow">主 要 著 作 · ${works.length} 部</div>
+        <div class="arc-works-grid">
+          ${works.map(w => `
+            <div class="arc-work ${w.current ? 'arc-work--current' : ''}">
+              <div class="arc-work-year">${escapeHtml(w.y)}</div>
+              <div class="arc-work-title">${escapeHtml(w.title)}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>` : ''}
+
+      <div class="arc-card arc-card--ink">
+        <div class="arc-card-eyebrow arc-card-eyebrow--white">生 卒</div>
+        <div class="arc-card-lifespan">
+          ${escapeHtml(birthPlace || '—')}<br/>
+          <span class="arc-card-arrow">↓</span><br/>
+          ${escapeHtml(deathPlace || '—')}
+        </div>
+      </div>
+
+      <div class="arc-card arc-card--line">
+        <div class="arc-card-eyebrow">你 正 在 读</div>
+        <div class="arc-card-progress">${readCount} <span style="font-size:12px;color:var(--text-tertiary);">/ ${total}</span></div>
+        <div class="arc-card-bar"><div class="arc-card-bar-fill" style="width:${pct}%"></div></div>
+        <div class="arc-card-meta">${pct}% · ${readCount === 0 ? '尚未开始' : readCount >= total ? '已读完' : '进 行 中'}</div>
+      </div>
+    </div>
+
+    <!-- Timeline section -->
+    <div class="arc-section">
+      <div class="arc-section-eyebrow">年 表 · ${archive.timeline.length} 件</div>
       ${timeline}
     </div>
 
-    <div class="archive-passages">
-      <div class="archive-section-label">原典选段</div>
+    <!-- Passages section -->
+    <div class="arc-section">
+      <div class="arc-section-eyebrow">原 典 选 段</div>
       ${passages}
     </div>
 
-    <div style="text-align:center; padding: 32px 0;">
-      <button class="chat-fab" id="archive-chat-btn">和${escapeHtml(currentPhilosopher.name)}对话 →</button>
+    <div style="padding: 32px 24px;">
+      <button class="chat-fab" id="archive-chat-btn">和${escapeHtml(p.name)}对话 →</button>
     </div>
   `;
 
@@ -10826,7 +11320,7 @@ function renderArchive() {
   if (chatBtn) {
     chatBtn.addEventListener('click', () => {
       haptic('light');
-      openChat(currentPhilosopher.id);
+      openChat(p.id);
     });
   }
 }
@@ -12294,23 +12788,16 @@ document.getElementById('mind-back-btn').addEventListener('click', () => {
 });
 
 document.getElementById('journal-back-btn').addEventListener('click', () => {
-  if (journalGlobal) {
-    renderHome();
-    showScreen('home');
-  } else {
-    showScreen('map');
-    renderMap();
-  }
+  // Journal is now a sheet modal — just close, the screen underneath is preserved
+  closeJournalSheet();
 });
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
+    const journal = document.getElementById('journal-screen');
+    if (journal && journal.classList.contains('active')) { closeJournalSheet(); return; }
     const active = document.querySelector('.screen.active');
     if (active?.id === 'story-screen') { showScreen('map'); renderMap(); }
-    else if (active?.id === 'journal-screen') {
-      if (journalGlobal) { renderHome(); showScreen('home'); }
-      else { showScreen('map'); renderMap(); }
-    }
     else if (active?.id === 'map-screen') { currentPhilosopher = null; renderHome(); showScreen('home'); }
   }
 });
