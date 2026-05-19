@@ -561,65 +561,118 @@ body > * { position: relative; z-index: 1; }
 .link-chip:hover { color: var(--crimson); border-bottom-color: var(--crimson); }
 .link-chip:focus { outline: none; }
 
-/* ── Reflect ── */
+/* ── Reflect — editorial section ── */
 .reflect-section {
-  margin-top: 60px;
-  padding: 32px 24px 28px;
-  border: 1px dashed var(--accent-soft);
-  border-radius: 4px;
+  margin-top: 56px;
+  padding: 32px 0 24px;
+  border: none;
+  border-top: 1px solid var(--border-faint);
+  border-radius: 0;
   margin-bottom: 60px;
   position: relative;
 }
 .reflect-section::before {
-  content: '✎';
-  position: absolute;
-  top: -12px;
-  left: 20px;
-  background: var(--bg-base);
-  padding: 0 8px;
-  font-size: 14px;
-  opacity: 0.4;
-  color: var(--text-primary);
+  content: '回 声';
+  display: block;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--crimson);
+  margin-bottom: 18px;
+  background: transparent;
+  position: static;
+  top: auto;
+  left: auto;
+  padding: 0;
 }
 .reflect-prompt {
+  font-family: var(--font-display);
   font-size: 15px;
-  opacity: 0.4;
-  margin-bottom: 20px;
-  line-height: 1.6;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+  max-width: 30em;
 }
 .reflect-input {
   width: 100%;
-  min-height: 120px;
-  background: transparent;
+  min-height: 132px;
+  background: var(--bg-deep);
   border: none;
-  border-bottom: 1px solid rgba(237,229,211,0.06);
+  border-left: 2px solid var(--crimson);
   outline: none;
   color: var(--text-primary);
-  font-family: inherit;
-  font-size: 16px;
-  line-height: 1.75;
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  line-height: 1.7;
   resize: none;
-  padding-bottom: 16px;
+  padding: 14px 16px;
 }
-.reflect-input:focus {
-  border-bottom-color: rgba(237,229,211,0.15);
-}
-.reflect-input::placeholder { color: rgba(237,229,211,0.12); }
+.reflect-input:focus { background: rgba(163, 2, 54, 0.04); }
+.reflect-input::placeholder { color: var(--text-faint); font-style: italic; }
 .reflect-save {
-  display: block;
-  margin-top: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
   margin-left: auto;
-  background: transparent;
+  background: var(--text-primary);
   border: none;
-  color: var(--text-primary);
-  font-family: inherit;
-  font-size: 16px;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   cursor: pointer;
-  padding: 8px 4px;
-  opacity: 0.5;
+  padding: 10px 18px;
+  border-radius: 0;
+  transition: background 0.2s;
 }
-.reflect-save:hover { opacity: 0.8; }
+.reflect-save:hover { background: var(--crimson); }
 .reflect-save:focus { outline: none; }
+
+/* Modal sheet variant — pulled up from bottom 78% */
+.reflect-modal-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(2px);
+  z-index: 60;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.reflect-modal-scrim.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.reflect-modal-sheet {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  height: 78%;
+  max-height: 78vh;
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.18);
+  z-index: 70;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.reflect-modal-sheet.active { transform: translateY(0); }
+.reflect-modal-handle {
+  width: 38px;
+  height: 4px;
+  background: var(--border-faint);
+  border-radius: 2px;
+  margin: 8px auto 4px;
+}
 
 /* ── Markdown-like rendering ── */
 .rendered strong { font-weight: 600; }
@@ -1167,77 +1220,95 @@ html[data-theme="paper"] .achievement-popup {
   transition: width 0.6s ease;
 }
 
-/* ── 心智之灯 — 干净版 ── */
+/* ── 心智之灯 — editorial 雷达图 ── */
 .brain-light {
-  margin: 0 28px 32px;
-  padding: 24px 22px 22px;
-  border-radius: 16px;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border-faint);
+  margin: 0 24px 32px;
+  padding: 24px 0 18px;
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--border-faint);
+  border-bottom: 1px solid var(--border-faint);
+  border-radius: 0;
   position: relative;
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
+  overflow: visible;
+  box-shadow: none;
 }
 .bl-header {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+  padding: 0 4px;
 }
 .bl-label {
-  font-size: 13px;
-  letter-spacing: 0.18em;
-  opacity: 0.95;
-  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 11px;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--text-tertiary);
 }
 .bl-level {
-  font-size: 12px;
-  opacity: 0.7;
-  letter-spacing: 0.05em;
-  color: var(--gold);
-  font-weight: 500;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--crimson);
 }
 .bl-visual {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 150px;
+  padding: 22px 12px 8px;
   position: relative;
+  min-height: 280px;
 }
 .bl-svg { width: 100%; max-width: 320px; height: auto; }
 .bl-meta {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  font-size: 13px;
-  opacity: 0.7;
-  margin-top: 10px;
-  letter-spacing: 0;
-  font-weight: 500;
+  margin-top: 8px;
+  padding: 0 4px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  letter-spacing: 0.04em;
 }
 .bl-meta .bl-readcount-num {
-  font-size: 18px;
-  color: var(--gold-bright);
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--crimson);
   margin-right: 4px;
+  letter-spacing: 0;
 }
 .bl-streak {
-  font-size: 12px;
-  opacity: 0.7;
-  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 .bl-streak-flame {
-  color: var(--gold-bright);
-  margin-right: 4px;
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--crimson);
+  margin-right: 6px;
+  vertical-align: middle;
 }
 .bl-desc {
-  font-size: 13px;
-  opacity: 0.55;
-  font-style: normal;
-  margin-top: 4px;
-  text-align: center;
-  letter-spacing: 0.02em;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  color: var(--text-tertiary);
+  margin-top: 8px;
+  text-align: left;
+  padding: 0 4px;
+  font-style: italic;
+  max-width: 30em;
+  line-height: 1.5;
 }
 
 /* ── 每日挑战 — 简洁卡片 ── */
@@ -2516,48 +2587,74 @@ html[data-theme="paper"] .achievement-popup {
   width: 100%;
   background: transparent;
   border: none;
-  border-bottom: 1px solid rgba(237,229,211,0.05);
+  border-top: 1px solid var(--border-faint);
   color: var(--text-primary);
   font-family: inherit;
   text-align: left;
-  padding: 22px 0;
+  padding: 20px 18px 18px;
   cursor: pointer;
-  transition: opacity 0.2s, transform 0.2s;
+  transition: background 0.2s;
   position: relative;
+  overflow: hidden;
 }
-.practice-card:active { opacity: 0.7; transform: translateX(3px); }
+.practice-card:last-of-type { border-bottom: 1px solid var(--border-faint); }
+.practice-card:active { background: rgba(163, 2, 54, 0.03); }
+.practice-card:hover { background: rgba(163, 2, 54, 0.025); }
 .practice-card:focus { outline: none; }
+
+/* Big numeral watermark, top-right */
 .practice-card::before {
-  content: '';
+  content: attr(data-numeral);
   position: absolute;
-  left: 0; top: 50%;
-  width: 2px; height: 28px;
-  margin-top: -14px;
-  opacity: 0.6;
+  top: 8px;
+  right: 18px;
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-weight: 300;
+  line-height: 0.85;
+  letter-spacing: -0.03em;
+  color: var(--crimson);
+  opacity: 0.85;
+  pointer-events: none;
 }
-.practice-card[data-color="nietzsche"]::before { background: rgba(196,164,105,0.6); }
-.practice-card[data-color="stoic"]::before     { background: rgba(150,170,180,0.6); }
-.practice-card[data-color="camus"]::before     { background: rgba(200,130,100,0.6); }
-.practice-card[data-color="foucault"]::before  { background: rgba(165,140,185,0.6); }
+.practice-card[data-color="stoic"]::before     { color: var(--navy); }
+.practice-card[data-color="camus"]::before     { color: var(--text-primary); }
+.practice-card[data-color="foucault"]::before  { color: var(--navy); }
+
 .pr-card-who {
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  opacity: 0.4;
-  margin-bottom: 4px;
-  padding-left: 14px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--crimson);
+  margin-bottom: 12px;
+  padding-left: 0;
+  max-width: calc(100% - 60px);
 }
+.practice-card[data-color="stoic"] .pr-card-who    { color: var(--navy); }
+.practice-card[data-color="camus"] .pr-card-who    { color: var(--text-primary); }
+.practice-card[data-color="foucault"] .pr-card-who { color: var(--navy); }
+
 .pr-card-title {
-  font-size: 19px;
-  opacity: 0.95;
-  margin-bottom: 6px;
-  padding-left: 14px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  padding-left: 0;
+  max-width: calc(100% - 60px);
 }
 .pr-card-intro {
-  font-size: 13px;
-  opacity: 0.55;
-  font-style: italic;
-  line-height: 1.6;
-  padding-left: 14px;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  padding-left: 0;
+  font-style: normal;
+  max-width: 32em;
 }
 
 /* Detail */
@@ -9291,7 +9388,7 @@ function openForgotten(id) {
 
 function renderPractices() {
   const scroll = document.getElementById('practices-scroll');
-  const cards = PRACTICES.map(p => {
+  const cards = PRACTICES.map((p, idx) => {
     const progress = getPracticeProgress(p.id);
     const done = progress.length;
     const status = done === 0 ? '未开始'
@@ -9299,7 +9396,7 @@ function renderPractices() {
                  : 'Day ' + done + ' / 7';
     const statusClass = done === 0 ? '' : done >= 7 ? ' completed' : ' in-progress';
     return `
-      <button class="practice-card${statusClass}" data-pr="${p.id}" data-color="${p.color}">
+      <button class="practice-card${statusClass}" data-pr="${p.id}" data-color="${p.color}" data-numeral="${toRomanNumeral(idx + 1)}">
         <div class="pr-card-status">${status}</div>
         <div class="pr-card-who">${escapeHtml(p.philosopher)}</div>
         <div class="pr-card-title">${escapeHtml(p.title)}</div>
@@ -10551,76 +10648,70 @@ function renderArchive() {
   }
 }
 
-// ═══ 心智之灯 (脑子养成系统的视觉中心) ═══
+// ═══ 心智之灯 — editorial hairline 五维雷达 ═══
 function buildBrainLightSVG(readCount, maxConcepts = 57) {
-  // 炼金术圆盘 — 同心圆 + 等分弦 + 节点 + 符号
-  const w = 320, h = 140, cx = w/2, cy = h/2;
-  const progress = Math.min(1, readCount / maxConcepts);
-  const stage = Math.floor(progress * 5); // 0..5
+  const stats = calculateOverallStats();
+  const dims = DIMENSIONS.map(d => ({
+    id: d.id,
+    label: d.name,
+    sub: d.subtitle,
+    v: Math.min(1, (stats.dims[d.id] || 0) / 30),
+  }));
 
-  const elements = [];
+  const size = 280;
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = size / 2 - 56;
+  const n = dims.length;
+  const angleFor = (i) => -Math.PI/2 + (i * 2 * Math.PI / n);
 
-  // ── Outer ring (always present, fades in) ──
-  const outerRadius = 60;
-  elements.push(`<circle cx="${cx}" cy="${cy}" r="${outerRadius}" fill="none" stroke="var(--gold)" stroke-width="0.8" opacity="0.6"/>`);
-  elements.push(`<circle cx="${cx}" cy="${cy}" r="${outerRadius - 2}" fill="none" stroke="var(--gold)" stroke-width="0.3" opacity="0.4"/>`);
+  const ringPts = (factor) =>
+    dims.map((_, i) => {
+      const a = angleFor(i);
+      return [cx + r * factor * Math.cos(a), cy + r * factor * Math.sin(a)];
+    });
 
-  // ── Tick marks at cardinal points ──
-  for (let i = 0; i < 12; i++) {
-    const a = (i / 12) * Math.PI * 2 - Math.PI/2;
-    const r1 = outerRadius;
-    const r2 = i % 3 === 0 ? outerRadius + 6 : outerRadius + 3;
-    const x1 = cx + Math.cos(a) * r1, y1 = cy + Math.sin(a) * r1;
-    const x2 = cx + Math.cos(a) * r2, y2 = cy + Math.sin(a) * r2;
-    const op = i % 3 === 0 ? 0.85 : 0.45;
-    elements.push(`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="var(--gold)" stroke-width="0.8" opacity="${op}"/>`);
+  const valuePts = dims.map((d, i) => {
+    const a = angleFor(i);
+    const v = Math.max(d.v, 0.02);
+    return [cx + r * v * Math.cos(a), cy + r * v * Math.sin(a)];
+  });
+  const poly = (pts) => pts.map(p => p.map(c => c.toFixed(1)).join(',')).join(' ');
+
+  const el = [];
+
+  // Concentric ring polygons — hairline
+  [0.25, 0.5, 0.75, 1.0].forEach((f, idx) => {
+    el.push(`<polygon points="${poly(ringPts(f))}" fill="none" stroke="var(--border-faint)" stroke-width="${idx===3?1:0.5}"/>`);
+  });
+  // Spokes
+  ringPts(1).forEach(([x, y]) => {
+    el.push(`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--border-faint)" stroke-width="0.5"/>`);
+  });
+  // Value polygon
+  if (readCount > 0) {
+    el.push(`<polygon points="${poly(valuePts)}" fill="rgba(163,2,54,0.08)" stroke="var(--crimson)" stroke-width="1.5"/>`);
+    // Value dots
+    valuePts.forEach(([x, y]) => {
+      el.push(`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3" fill="#fff" stroke="var(--crimson)" stroke-width="1.5"/>`);
+    });
   }
+  // Center dot
+  el.push(`<circle cx="${cx}" cy="${cy}" r="1.5" fill="var(--text-primary)"/>`);
 
-  // ── Inner ring at radius based on progress ──
-  const innerR = 18 + progress * 25;
-  elements.push(`<circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="var(--accent-strong)" stroke-width="0.6" opacity="${0.4 + progress * 0.4}"/>`);
+  // Labels
+  dims.forEach((d, i) => {
+    const a = angleFor(i);
+    const lr = r + 26;
+    const x = cx + lr * Math.cos(a);
+    const y = cy + lr * Math.sin(a);
+    const anchor = Math.abs(Math.cos(a)) < 0.3 ? 'middle' : (Math.cos(a) > 0 ? 'start' : 'end');
+    const pct = Math.round(d.v * 100);
+    el.push(`<text x="${x.toFixed(1)}" y="${(y-4).toFixed(1)}" text-anchor="${anchor}" style="font-family: var(--font-display); font-size: 11px; font-weight: 700; fill: var(--text-primary); letter-spacing: 0.04em;">${d.label}</text>`);
+    el.push(`<text x="${x.toFixed(1)}" y="${(y+9).toFixed(1)}" text-anchor="${anchor}" style="font-family: var(--font-display); font-size: 9px; font-style: italic; fill: var(--text-tertiary); letter-spacing: 0.04em;">${pct}%</text>`);
+  });
 
-  // ── Center sigil ──
-  if (readCount === 0) {
-    // Empty state — faint center point
-    elements.push(`<circle cx="${cx}" cy="${cy}" r="3" fill="var(--gold)" opacity="0.6"/>`);
-  } else {
-    // Active core
-    elements.push(`<circle cx="${cx}" cy="${cy}" r="${3 + progress * 2}" fill="var(--gold-bright)" opacity="0.9"/>`);
-    elements.push(`<circle cx="${cx}" cy="${cy}" r="${5 + progress * 3}" fill="none" stroke="var(--gold)" stroke-width="0.5" opacity="0.5"/>`);
-
-    // Radial spokes from center
-    const spokeCount = Math.min(readCount, 12);
-    for (let i = 0; i < spokeCount; i++) {
-      const a = (i / 12) * Math.PI * 2 - Math.PI/2;
-      const x2 = cx + Math.cos(a) * innerR;
-      const y2 = cy + Math.sin(a) * innerR;
-      const op = 0.35 + (i / 12) * 0.3;
-      elements.push(`<line x1="${cx}" y1="${cy}" x2="${x2}" y2="${y2}" stroke="var(--accent-strong)" stroke-width="0.5" opacity="${op}"/>`);
-      elements.push(`<circle cx="${x2}" cy="${y2}" r="1.5" fill="var(--gold-bright)" opacity="${op + 0.2}"/>`);
-    }
-
-    // Outer constellation stars at higher stages
-    if (stage >= 2) {
-      const starCount = Math.min(readCount - 10, 24);
-      for (let i = 0; i < starCount; i++) {
-        const a = (i / 24) * Math.PI * 2 + 0.13;
-        const r = outerRadius - 8 + (Math.sin(i * 1.7) * 4);
-        const sx = cx + Math.cos(a) * r;
-        const sy = cy + Math.sin(a) * r;
-        elements.push(`<circle cx="${sx}" cy="${sy}" r="0.9" fill="var(--gold)" opacity="${0.4 + (i/starCount)*0.4}"/>`);
-      }
-    }
-
-    // Diagonal cross at top stages (alchemy symbol)
-    if (stage >= 4) {
-      const d = innerR * 0.7;
-      elements.push(`<line x1="${cx-d}" y1="${cy-d}" x2="${cx+d}" y2="${cy+d}" stroke="var(--gold)" stroke-width="0.4" opacity="0.5"/>`);
-      elements.push(`<line x1="${cx-d}" y1="${cy+d}" x2="${cx+d}" y2="${cy-d}" stroke="var(--gold)" stroke-width="0.4" opacity="0.5"/>`);
-    }
-  }
-
-  return `<svg class="bl-svg" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">${elements.join('')}</svg>`;
+  return `<svg class="bl-svg" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg" style="overflow: visible; width: 100%; max-width: 320px;">${el.join('')}</svg>`;
 }
 
 function renderInProgressPractice() {
