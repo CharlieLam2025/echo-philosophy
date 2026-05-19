@@ -674,16 +674,44 @@ body > * { position: relative; z-index: 1; }
   margin: 8px auto 4px;
 }
 
-/* ── Markdown-like rendering ── */
-.rendered strong { font-weight: 600; }
-.rendered em { font-style: italic; }
-.rendered blockquote {
-  border-left: 2px solid var(--accent);
-  padding-left: 18px;
-  margin: 20px 0;
-  opacity: 0.78;
-  font-style: italic;
+/* ── Markdown rendering — editorial ── */
+.rendered strong {
+  font-weight: 700;
+  color: var(--text-primary);
 }
+.rendered em { font-style: italic; }
+
+/* Quote callout — crimson left border + faint tint */
+.rendered blockquote {
+  position: relative;
+  margin: 18px -10px;
+  padding: 12px 16px 14px 20px;
+  background: rgba(163, 2, 54, 0.04);
+  border-left: 2px solid var(--crimson);
+  border-radius: 0;
+  opacity: 1;
+  font-style: normal;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+.rendered blockquote::before {
+  content: '已 标 记';
+  position: absolute;
+  right: 6px;
+  top: -8px;
+  background: var(--bg-deep);
+  padding: 0 6px;
+  font-family: var(--font-body);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--crimson);
+  line-height: 16px;
+}
+.rendered blockquote p { margin: 0; }
+.rendered blockquote strong { color: var(--crimson); }
+
 .rendered ul {
   list-style: none;
   padding-left: 0;
@@ -691,22 +719,33 @@ body > * { position: relative; z-index: 1; }
 }
 .rendered li {
   position: relative;
-  padding-left: 16px;
+  padding-left: 18px;
   margin-bottom: 6px;
-  line-height: 1.8;
+  line-height: 1.75;
 }
 .rendered li::before {
-  content: '\B7';
+  content: '·';
   position: absolute;
-  left: 2px;
-  opacity: 0.35;
+  left: 4px;
+  color: var(--crimson);
+  font-weight: 700;
 }
 
-/* ── Horizontal rule ── */
+/* ── Horizontal rule — editorial dot ornament ── */
 .rendered hr {
   border: none;
-  border-top: 1px solid rgba(237,229,211,0.08);
-  margin: 28px 0;
+  height: 0;
+  text-align: center;
+  position: relative;
+  margin: 32px 0;
+}
+.rendered hr::before {
+  content: '⋯';
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--text-tertiary);
+  letter-spacing: 0.4em;
 }
 
 /* ── Section ornament ── */
@@ -1788,58 +1827,94 @@ html[data-theme="paper"] .achievement-popup {
   font-style: normal;
 }
 
-/* ── Settings screen ── */
-.settings-section { margin-bottom: 32px; }
+/* ── Settings screen — editorial list ── */
+.settings-section {
+  margin-bottom: 32px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border-faint);
+}
+.settings-section:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
 .settings-label {
-  font-size: 11px;
-  letter-spacing: 0.3em;
-  opacity: 0.45;
-  margin-bottom: 12px;
-  color: rgba(237,229,211,0.55);
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+.settings-label::before {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 1px;
+  background: var(--text-primary);
+  vertical-align: middle;
 }
 .settings-row {
-  padding: 14px 0;
-  border-bottom: 1px solid rgba(237,229,211,0.05);
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-faint);
+  display: block;
 }
+.settings-row:last-of-type { border-bottom: none; }
 .settings-input {
   width: 100%;
-  background: transparent;
-  border: 1px solid var(--accent-soft);
-  border-radius: 4px;
+  background: var(--bg-deep);
+  border: none;
+  border-left: 2px solid var(--border-faint);
+  border-radius: 0;
   color: var(--text-primary);
-  font-family: inherit;
+  font-family: var(--font-body);
   font-size: 14px;
   padding: 12px 14px;
   outline: none;
+  transition: border-color 0.2s, background 0.2s;
 }
-.settings-input:focus { border-color: var(--accent); }
+.settings-input:focus {
+  border-left-color: var(--crimson);
+  background: rgba(163, 2, 54, 0.04);
+}
 .settings-help {
+  font-family: var(--font-body);
   font-size: 12px;
-  opacity: 0.4;
-  margin-top: 8px;
-  line-height: 1.7;
-}
-.settings-btn {
-  background: transparent;
-  border: 1px solid var(--accent);
-  color: var(--text-primary);
-  font-family: inherit;
-  font-size: 13px;
-  padding: 10px 22px;
-  border-radius: 22px;
-  cursor: pointer;
-  margin-top: 12px;
-  opacity: 0.85;
-}
-.settings-btn:hover { background: var(--accent-soft); opacity: 1; }
-.settings-btn:focus { outline: none; }
-.settings-status {
-  font-size: 12px;
-  margin-top: 12px;
+  color: var(--text-tertiary);
+  margin-top: 10px;
+  line-height: 1.6;
   font-style: italic;
 }
-.settings-status.ok { color: rgba(150,200,160,0.7); }
-.settings-status.err { color: rgba(220,140,120,0.7); }
+.settings-btn {
+  background: var(--text-primary);
+  border: none;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 11px 22px;
+  border-radius: 0;
+  cursor: pointer;
+  margin-top: 14px;
+  transition: background 0.2s;
+}
+.settings-btn:hover { background: var(--crimson); }
+.settings-btn:focus { outline: none; }
+.settings-status {
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  margin-top: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  font-style: normal;
+}
+.settings-status.ok { color: var(--navy); }
+.settings-status.err { color: var(--crimson); }
 
 /* ── Chat screen ── */
 .chat-scroll {
@@ -4364,58 +4439,158 @@ html[data-theme="paper"] .td-parable { background: var(--bg-elevated); }
   font-style: italic;
 }
 
-/* ── Onboarding ── */
+/* ── Onboarding — RANEPA crimson hero ── */
 .onboarding {
   position: fixed;
   inset: 0;
-  background: var(--bg-base);
+  background: var(--crimson);
+  color: #fff;
   z-index: 300;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  padding: calc(54px + env(safe-area-inset-top, 0px)) 28px 36px;
   animation: fadeIn 0.6s ease-out;
+  overflow: hidden;
 }
-.onboarding-content {
-  text-align: center;
-  padding: 40px;
-  max-width: 480px;
+
+/* Ghost watermark crest in upper-right */
+.onboarding::before {
+  content: '';
+  position: absolute;
+  top: 64px;
+  right: -60px;
+  width: 320px;
+  height: 320px;
+  opacity: 0.06;
+  pointer-events: none;
+  background: radial-gradient(circle, transparent 60%, #fff 60%, #fff 61%, transparent 61%);
+  border-radius: 50%;
 }
-.onboarding-text {
-  font-size: 22px;
-  line-height: 1.7;
-  opacity: 0.8;
-  margin-bottom: 80px;
-  min-height: 100px;
-  transition: opacity 0.4s;
-}
-.onboarding-text.fade { opacity: 0; }
+
+/* Step indicator at top */
 .onboarding-dots {
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 40px;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 0;
+  align-items: stretch;
+  flex: none;
 }
 .onboarding-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: rgba(237,229,211,0.15);
+  flex: 1;
+  height: 2px;
+  width: auto;
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.25);
   transition: background 0.3s;
 }
-.onboarding-dot.active { background: rgba(237,229,211,0.5); }
-.onboarding-next {
-  background: transparent;
-  border: 1px solid rgba(237,229,211,0.2);
-  color: var(--text-primary);
-  font-family: inherit;
-  font-size: 14px;
-  padding: 12px 28px;
-  border-radius: 24px;
-  cursor: pointer;
-  opacity: 0.6;
-  transition: opacity 0.3s, border-color 0.3s;
+.onboarding-dot.active { background: #fff; }
+
+/* Eyebrow row */
+.onboarding-eyebrow {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
 }
-.onboarding-next:hover { opacity: 1; border-color: rgba(237,229,211,0.4); }
+.onboarding-skip {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  padding: 4px 0;
+}
+.onboarding-skip:focus { outline: none; }
+
+.onboarding-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+  position: relative;
+}
+
+/* Short rule before headline */
+.onboarding-content::before {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 1px;
+  background: #fff;
+  margin-bottom: 22px;
+}
+
+.onboarding-text {
+  font-family: var(--font-display);
+  font-size: 32px;
+  line-height: 1.1;
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  min-height: 200px;
+  color: #fff;
+  transition: opacity 0.4s;
+  white-space: pre-line;
+}
+.onboarding-text.fade { opacity: 0; }
+.onboarding-text strong {
+  font-weight: 700;
+  color: #fff;
+}
+
+/* Continue button — solid white with crimson text */
+.onboarding-next {
+  background: #fff;
+  border: none;
+  color: var(--crimson);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 15px 22px;
+  border-radius: 0;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  margin-top: 24px;
+}
+.onboarding-next:hover { background: rgba(255, 255, 255, 0.92); }
 .onboarding-next:focus { outline: none; }
+.onboarding-next::after {
+  content: '→';
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* Bottom brand strip */
+.onboarding-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 16px;
+  margin-top: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+}
 
 /* ── Continue card ── */
 .continue-card {
@@ -4730,14 +4905,22 @@ html[data-theme="paper"] .td-parable { background: var(--bg-elevated); }
 
 <!-- ═══ Onboarding ═══ -->
 <div id="onboarding" class="onboarding" style="display:none;">
+  <div class="onboarding-dots">
+    <span class="onboarding-dot active"></span>
+    <span class="onboarding-dot"></span>
+    <span class="onboarding-dot"></span>
+  </div>
+  <div class="onboarding-eyebrow">
+    <span id="onboarding-step-label">№ 01 · 03</span>
+    <button class="onboarding-skip" id="onboarding-skip">跳 过 ›</button>
+  </div>
   <div class="onboarding-content">
     <div class="onboarding-text" id="onboarding-text"></div>
-    <div class="onboarding-dots">
-      <span class="onboarding-dot active"></span>
-      <span class="onboarding-dot"></span>
-      <span class="onboarding-dot"></span>
-    </div>
-    <button class="onboarding-next" id="onboarding-next">继续 →</button>
+  </div>
+  <button class="onboarding-next" id="onboarding-next">继 续</button>
+  <div class="onboarding-footer">
+    <span>ECHO · 哲 学</span>
+    <span>v 1 . 0</span>
   </div>
 </div>
 
@@ -12188,40 +12371,48 @@ document.addEventListener('touchend', (e) => {
 
 // ═══ Onboarding ═══
 const ONBOARDING_SLIDES = [
-  '这不是教科书。',
-  '每一个概念，是一个故事。',
-  '读完，写下你想到的——\n它会成为你自己的回响。',
+  '这不是<strong>教科书</strong>。\n这是一种<strong>慢读</strong>——\n每个哲学家给你<strong>一个晚上</strong>。',
+  '每个概念，<strong>是一个故事</strong>。\n你不背术语——\n你看见某个人在某一刻\n突然<strong>明白了</strong>什么。',
+  '读完，<strong>写下你想到的</strong>。\n它不是作业。\n它会成为你自己的<strong>回响</strong>。',
 ];
 let onbIdx = 0;
+function finishOnboarding(ob) {
+  localStorage.setItem('echo/onboarded', 'true');
+  ob.style.transition = 'opacity 0.6s';
+  ob.style.opacity = '0';
+  setTimeout(() => { ob.style.display = 'none'; ob.style.opacity = '1'; }, 600);
+}
 function showOnboarding() {
   const ob = document.getElementById('onboarding');
   const textEl = document.getElementById('onboarding-text');
+  const stepLabel = document.getElementById('onboarding-step-label');
+  const skipBtn = document.getElementById('onboarding-skip');
   const dots = document.querySelectorAll('.onboarding-dot');
   const nextBtn = document.getElementById('onboarding-next');
   onbIdx = 0;
-  textEl.textContent = ONBOARDING_SLIDES[0];
+  textEl.innerHTML = ONBOARDING_SLIDES[0];
   dots.forEach((d, i) => d.classList.toggle('active', i === 0));
-  nextBtn.textContent = '继续 →';
+  if (stepLabel) stepLabel.textContent = '№ 01 · 03';
+  nextBtn.textContent = '继 续';
   ob.style.display = 'flex';
 
   nextBtn.onclick = () => {
     haptic('light');
     onbIdx++;
     if (onbIdx >= ONBOARDING_SLIDES.length) {
-      localStorage.setItem('echo/onboarded', 'true');
-      ob.style.transition = 'opacity 0.6s';
-      ob.style.opacity = '0';
-      setTimeout(() => { ob.style.display = 'none'; ob.style.opacity = '1'; }, 600);
+      finishOnboarding(ob);
       return;
     }
     textEl.classList.add('fade');
     setTimeout(() => {
-      textEl.textContent = ONBOARDING_SLIDES[onbIdx];
+      textEl.innerHTML = ONBOARDING_SLIDES[onbIdx];
       textEl.classList.remove('fade');
       dots.forEach((d, i) => d.classList.toggle('active', i === onbIdx));
-      if (onbIdx === ONBOARDING_SLIDES.length - 1) nextBtn.textContent = '开始 →';
+      if (stepLabel) stepLabel.textContent = '№ 0' + (onbIdx + 1) + ' · 03';
+      if (onbIdx === ONBOARDING_SLIDES.length - 1) nextBtn.textContent = '开 始 第 一 日';
     }, 400);
   };
+  if (skipBtn) skipBtn.onclick = () => { haptic('light'); finishOnboarding(ob); };
 }
 
 // ═══ Keyboard shortcuts ═══
