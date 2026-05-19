@@ -1,4 +1,4 @@
-const CACHE_NAME = 'echo-v2';
+const CACHE_NAME = 'echo-v3-editorial';
 const ASSETS = [
   '/',
   '/index.html',
@@ -13,6 +13,15 @@ const ASSETS = [
   '/manifest.json',
   '/icon-192.png',
   '/icon-512.png',
+  '/fonts/YandexSansDisplay-Thin.woff2',
+  '/fonts/YandexSansDisplay-Regular.woff2',
+  '/fonts/YandexSansDisplay-RegularItalic.woff2',
+  '/fonts/YandexSansDisplay-Bold.woff2',
+  '/fonts/YandexSansText-Light.woff2',
+  '/fonts/YandexSansText-Regular.woff2',
+  '/fonts/YandexSansText-RegularItalic.woff2',
+  '/fonts/YandexSansText-Medium.woff2',
+  '/fonts/YandexSansText-Bold.woff2',
 ];
 
 self.addEventListener('install', (e) => {
