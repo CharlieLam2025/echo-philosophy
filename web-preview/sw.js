@@ -1,4 +1,4 @@
-const CACHE_NAME = 'echo-v4-12philosophers';
+const CACHE_NAME = 'echo-v5-portraits-tutorial';
 const ASSETS = [
   '/',
   '/index.html',

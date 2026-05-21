@@ -1007,11 +1007,11 @@ html[data-theme="paper"] .achievement-popup {
 }
 .philosopher-card {
   display: grid;
-  grid-template-columns: 32px 1fr auto;
-  gap: 16px;
+  grid-template-columns: 28px 64px 1fr auto;
+  gap: 14px;
   align-items: start;
   width: 100%;
-  padding: 22px 24px 20px;
+  padding: 20px 22px 18px;
   background: transparent;
   border: none;
   border-top: 1px solid var(--border-faint);
@@ -1051,6 +1051,20 @@ html[data-theme="paper"] .achievement-popup {
   color: var(--crimson);
   font-weight: 700;
 }
+
+/* Portrait column — monogram SVG */
+.philosopher-portrait {
+  width: 64px;
+  height: 64px;
+  display: block;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.portrait-svg {
+  display: block;
+}
+.philosopher-card.read-completed .philosopher-portrait { opacity: 0.55; }
+.philosopher-card:hover .philosopher-portrait { transform: scale(1.02); transition: transform 0.18s ease; }
 
 .philosopher-body { min-width: 0; }
 .philosopher-name {
@@ -4893,21 +4907,115 @@ html[data-theme="paper"] .td-parable { background: var(--bg-elevated); }
 }
 
 .onboarding-text {
-  font-family: var(--font-display);
-  font-size: 32px;
-  line-height: 1.1;
-  font-weight: 400;
-  letter-spacing: -0.012em;
-  min-height: 200px;
   color: #fff;
   transition: opacity 0.4s;
-  white-space: pre-line;
 }
 .onboarding-text.fade { opacity: 0; }
 .onboarding-text strong {
   font-weight: 700;
   color: #fff;
 }
+
+/* Onboarding slide structure */
+.onb-title {
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: -0.015em;
+  margin-bottom: 22px;
+  color: #fff;
+}
+.onb-title-small {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.012em;
+  margin-bottom: 22px;
+  color: #fff;
+}
+.onb-body {
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.92);
+  white-space: normal;
+  font-weight: 400;
+}
+.onb-body em {
+  font-style: italic;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.72);
+  display: block;
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* Picker slide (slide 4) */
+.onb-picker {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.onb-pick-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 16px 14px;
+  color: #fff;
+  font-family: var(--font-body);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s, transform 0.18s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 100px;
+}
+.onb-pick-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: #fff;
+  transform: translateY(-1px);
+}
+.onb-pick-btn:active {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(0);
+}
+.onb-pick-btn:focus { outline: none; }
+.onb-pick-tag {
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: #fff;
+  text-transform: none;
+}
+.onb-pick-label {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.88);
+  font-style: italic;
+}
+.onb-skip-row {
+  text-align: center;
+  margin-top: 8px;
+}
+.onb-pick-later {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.65);
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  padding: 6px;
+}
+.onb-pick-later:focus { outline: none; }
+.onb-pick-later:hover { color: #fff; }
 
 /* Continue button — solid white with crimson text */
 .onboarding-next {
@@ -5271,9 +5379,10 @@ html[data-theme="paper"] .td-parable { background: var(--bg-elevated); }
     <span class="onboarding-dot active"></span>
     <span class="onboarding-dot"></span>
     <span class="onboarding-dot"></span>
+    <span class="onboarding-dot"></span>
   </div>
   <div class="onboarding-eyebrow">
-    <span id="onboarding-step-label">№ 01 · 03</span>
+    <span id="onboarding-step-label">№ 01 · 04</span>
     <button class="onboarding-skip" id="onboarding-skip">跳 过 ›</button>
   </div>
   <div class="onboarding-content">
@@ -10614,6 +10723,7 @@ function renderHome() {
 
     card.innerHTML = `
       <div class="philosopher-numeral ${numeralClass}">${toRomanNumeral(idx + 1)}</div>
+      <div class="philosopher-portrait">${getPhilosopherPortrait(p.id, 64)}</div>
       <div class="philosopher-body">
         <div class="philosopher-name">${p.name}<span class="philosopher-orig">${p.orig}</span></div>
         <div class="philosopher-dates">${p.dates}</div>
@@ -10644,6 +10754,40 @@ function toRomanNumeral(n) {
   let s = '', x = n;
   for (const [r, v] of map) while (x >= v) { s += r; x -= v; }
   return s;
+}
+
+// ═══ Philosopher Portraits (monogram SVG, Penguin-Classics-inspired) ═══
+// 每位哲学家一个独特 monogram: 主字符 + 装饰符号 + 单色 (crimson 或 ink) 框
+const PORTRAIT_DATA = {
+  nietzsche:      { chars: 'F·N', sub: 'NIETZSCHE', orn: '☉', bg: 'crimson' }, // 太阳 (Apollo/Dionysus)
+  stoic:          { chars: 'STOA', sub: 'STOICISM', orn: '◯', bg: 'ink' },     // 圆 (Logos)
+  camus:          { chars: 'A·C', sub: 'CAMUS', orn: '∞', bg: 'crimson' },     // 无限 (Sisyphus)
+  foucault:       { chars: 'M·F', sub: 'FOUCAULT', orn: '◉', bg: 'navy' },     // 眼睛 (panopticon)
+  'zhuangzi-main':{ chars: '莊', sub: 'ZHUANGZI', orn: '蝶', bg: 'ink' },       // 蝴蝶
+  wittgenstein:   { chars: 'L·W', sub: 'WITTGENSTEIN', orn: '梯', bg: 'crimson' }, // 梯子
+  heidegger:      { chars: 'M·H', sub: 'HEIDEGGER', orn: '○', bg: 'ink' },     // 此在 (空圆)
+  sartre:         { chars: 'J·S', sub: 'SARTRE', orn: '⊘', bg: 'crimson' },    // 否定 (虚无)
+  kant:           { chars: 'I·K', sub: 'KANT', orn: '✦', bg: 'navy' },         // 星 (绝对命令)
+  socrates:       { chars: 'Σ', sub: 'SOCRATES', orn: '?', bg: 'ink' },        // 提问
+  plato:          { chars: 'Π', sub: 'PLATO', orn: '△', bg: 'crimson' },       // 三角 (形式)
+  aristotle:      { chars: 'A', sub: 'ARISTOTLE', orn: 'ɸ', bg: 'navy' },      // 黄金分割
+};
+
+function getPhilosopherPortrait(philosopherId, size = 64) {
+  const d = PORTRAIT_DATA[philosopherId] || { chars: '?', sub: 'UNKNOWN', orn: '·', bg: 'ink' };
+  const bgColor = d.bg === 'crimson' ? 'var(--crimson)' : (d.bg === 'navy' ? 'var(--navy)' : 'var(--text-primary)');
+  const charsLen = d.chars.replace(/·/g,'').length;
+  // Font size scales with char count: 1 char big, 2-3 chars smaller
+  const mainSize = charsLen <= 1 ? size * 0.55 : (charsLen <= 2 ? size * 0.42 : size * 0.32);
+  const subSize = Math.max(7, size * 0.10);
+  const ornSize = size * 0.16;
+  return `<svg class="portrait-svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="flex-shrink:0;">
+    <rect x="0.5" y="0.5" width="${size-1}" height="${size-1}" fill="${bgColor}" stroke="${bgColor}" stroke-width="1"/>
+    <rect x="3" y="3" width="${size-6}" height="${size-6}" fill="none" stroke="#fff" stroke-width="0.5" opacity="0.45"/>
+    <text x="${size/2}" y="${size*0.56}" text-anchor="middle" style="font-family: var(--font-display); font-size: ${mainSize}px; font-weight: 700; fill: #fff; letter-spacing: ${charsLen<=1?0:'-0.02em'};">${d.chars}</text>
+    <text x="${size/2}" y="${size*0.82}" text-anchor="middle" style="font-family: var(--font-body); font-size: ${subSize}px; font-weight: 600; fill: rgba(255,255,255,0.6); letter-spacing: 0.18em;">${d.sub.slice(0, 11)}</text>
+    <text x="${size-7}" y="${size*0.22}" text-anchor="end" style="font-family: var(--font-display); font-size: ${ornSize}px; font-weight: 400; fill: rgba(255,255,255,0.5);">${d.orn}</text>
+  </svg>`;
 }
 
 // ═══ Radar chart ═══
@@ -14023,50 +14167,139 @@ document.addEventListener('touchend', (e) => {
   }
 });
 
-// ═══ Onboarding ═══
+// ═══ Onboarding — 4 屏 ——为 20+ 岁迷茫青年量身设计 ═══
 const ONBOARDING_SLIDES = [
-  '这不是<strong>教科书</strong>。\n这是一种<strong>慢读</strong>——\n每个哲学家给你<strong>一个晚上</strong>。',
-  '每个概念，<strong>是一个故事</strong>。\n你不背术语——\n你看见某个人在某一刻\n突然<strong>明白了</strong>什么。',
-  '读完，<strong>写下你想到的</strong>。\n它不是作业。\n它会成为你自己的<strong>回响</strong>。',
+  // Slide 1 — 共情 / Empathy
+  {
+    eyebrow: '№ 01 · 04',
+    title: '你 20 几岁。',
+    body: '<strong>这些问题</strong> 困住你 ——\n\n· 我应该做什么才<strong>对</strong>？\n· 我是不是<strong>没意义</strong>？\n· 别人怎么看我 ——我能<strong>不在乎</strong>吗？\n· 我做不到我<strong>想做</strong>的事 ——为什么？\n\n<em>教科书 不回答 这些。\n搜索引擎 不回答 这些。\n父母 答 错了 ——\n但 ——总 得 ——有人 想过 吧 ？</em>',
+    button: '继 续',
+  },
+  // Slide 2 — 方式 / Method
+  {
+    eyebrow: '№ 02 · 04',
+    title: '12 个 晚上。',
+    body: '这里 ——<strong>12 位 哲学家</strong> ——\n\n他们 不是 老师。\n他们 ——是 ——\n2000 年里 ——\n<strong>被同样的 问题 困住</strong>\n然后 ——\n<strong>真的 想明白 了 一些</strong>\n——的 人。\n\n每位 ——给你 <strong>一个 晚上</strong>。\n\n你 <em>不背 术语</em>。\n你 <em>读 故事</em> ——\n看一个 ——和你 一样 ——\n被卡住 的 人 ——\n<strong>在 某一 刻 ——突然 ——明白 了 什么</strong>。',
+    button: '继 续',
+  },
+  // Slide 3 — 节奏 / Loop
+  {
+    eyebrow: '№ 03 · 04',
+    title: '一 个 循 环。',
+    body: '<strong>读</strong>: 一个 故事 ——10 分钟。\n\n<strong>写</strong>: 一句 回响 ——你 想到 的 ——任何 ——一句话。\n\n<strong>心智 之 灯</strong> ——\n亮 一点。\n\n· · ·\n\n100 个 概念 ——就是 ——\n100 次 ——这个 循环。\n\n3 个月 ——\n你 不一样 ——\n不是因为 你 ——背了 100 个 定义 ——\n是因为 你 ——\n<strong>看见了 100 次 ——一个人 在 想明白 的 瞬间</strong>。',
+    button: '继 续',
+  },
+  // Slide 4 — 选起点 / Pick first concept (interactive)
+  {
+    eyebrow: '№ 04 · 04',
+    title: '今 晚 ——你 想 先 看 哪个？',
+    body: 'pick',  // sentinel — renders the picker
+    button: null,  // no continue button
+  },
 ];
+
+// 4 个 starter 概念 ——根据 20+ 岁最常见 的 困 ——直接 跳到 对应 故事
+const STARTER_CHOICES = [
+  { tag: '迷 茫', label: '我 不知道 ——\n做 什么 才对', phId: 'nietzsche', conceptId: 'god-is-dead' },
+  { tag: '焦 虑', label: '我 一直 想 ——\n别人 怎么 看 我', phId: 'sartre', conceptId: 'the-look' },
+  { tag: '卡 住', label: '我 知道 不该 ——\n但 我 还在 做', phId: 'socrates', conceptId: 'akrasia' },
+  { tag: '空 心', label: '一切 ——好像 ——\n没有 意义', phId: 'camus', conceptId: 'absurd' },
+];
+
 let onbIdx = 0;
-function finishOnboarding(ob) {
+function finishOnboarding(ob, jumpTo) {
   localStorage.setItem('echo/onboarded', 'true');
   ob.style.transition = 'opacity 0.6s';
   ob.style.opacity = '0';
-  setTimeout(() => { ob.style.display = 'none'; ob.style.opacity = '1'; }, 600);
+  setTimeout(() => {
+    ob.style.display = 'none';
+    ob.style.opacity = '1';
+    if (jumpTo) {
+      // Jump directly to the chosen concept
+      const ph = PHILOSOPHERS.find(p => p.id === jumpTo.phId);
+      if (ph) {
+        enterPhilosopher(ph).then(() => {
+          setTimeout(() => openStory(jumpTo.conceptId), 400);
+        });
+      }
+    }
+  }, 600);
 }
-function showOnboarding() {
+function renderOnboardingSlide(idx) {
   const ob = document.getElementById('onboarding');
   const textEl = document.getElementById('onboarding-text');
   const stepLabel = document.getElementById('onboarding-step-label');
-  const skipBtn = document.getElementById('onboarding-skip');
+  const nextBtn = document.getElementById('onboarding-next');
   const dots = document.querySelectorAll('.onboarding-dot');
+  const slide = ONBOARDING_SLIDES[idx];
+  if (stepLabel) stepLabel.textContent = slide.eyebrow;
+  dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+
+  if (slide.body === 'pick') {
+    // Render interactive starter picker
+    const pickerHtml = `
+      <div class="onb-title-small">${slide.title}</div>
+      <div class="onb-picker">
+        ${STARTER_CHOICES.map((c, i) => `
+          <button class="onb-pick-btn" data-pick="${i}">
+            <span class="onb-pick-tag">${c.tag}</span>
+            <span class="onb-pick-label">${c.label.replace(/\n/g, '<br/>')}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="onb-skip-row">
+        <button class="onb-pick-later" id="onb-pick-later">先 看 看 全部 ›</button>
+      </div>
+    `;
+    textEl.innerHTML = pickerHtml;
+    // Hide continue button on picker slide
+    if (nextBtn) nextBtn.style.display = 'none';
+    // Wire up choices
+    textEl.querySelectorAll('.onb-pick-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        haptic('light');
+        const choice = STARTER_CHOICES[parseInt(btn.getAttribute('data-pick'), 10)];
+        finishOnboarding(ob, choice);
+      });
+    });
+    const later = textEl.querySelector('#onb-pick-later');
+    if (later) later.addEventListener('click', () => { haptic('light'); finishOnboarding(ob, null); });
+  } else {
+    // Standard slide
+    textEl.innerHTML = `
+      <div class="onb-title">${slide.title}</div>
+      <div class="onb-body">${slide.body.replace(/\n/g, '<br/>')}</div>
+    `;
+    if (nextBtn) {
+      nextBtn.style.display = 'inline-flex';
+      nextBtn.textContent = slide.button;
+    }
+  }
+}
+function showOnboarding() {
+  const ob = document.getElementById('onboarding');
+  const skipBtn = document.getElementById('onboarding-skip');
   const nextBtn = document.getElementById('onboarding-next');
   onbIdx = 0;
-  textEl.innerHTML = ONBOARDING_SLIDES[0];
-  dots.forEach((d, i) => d.classList.toggle('active', i === 0));
-  if (stepLabel) stepLabel.textContent = '№ 01 · 03';
-  nextBtn.textContent = '继 续';
   ob.style.display = 'flex';
+  renderOnboardingSlide(0);
 
-  nextBtn.onclick = () => {
+  if (nextBtn) nextBtn.onclick = () => {
     haptic('light');
     onbIdx++;
     if (onbIdx >= ONBOARDING_SLIDES.length) {
-      finishOnboarding(ob);
+      finishOnboarding(ob, null);
       return;
     }
+    const textEl = document.getElementById('onboarding-text');
     textEl.classList.add('fade');
     setTimeout(() => {
-      textEl.innerHTML = ONBOARDING_SLIDES[onbIdx];
+      renderOnboardingSlide(onbIdx);
       textEl.classList.remove('fade');
-      dots.forEach((d, i) => d.classList.toggle('active', i === onbIdx));
-      if (stepLabel) stepLabel.textContent = '№ 0' + (onbIdx + 1) + ' · 03';
-      if (onbIdx === ONBOARDING_SLIDES.length - 1) nextBtn.textContent = '开 始 第 一 日';
     }, 400);
   };
-  if (skipBtn) skipBtn.onclick = () => { haptic('light'); finishOnboarding(ob); };
+  if (skipBtn) skipBtn.onclick = () => { haptic('light'); finishOnboarding(ob, null); };
 }
 
 // ═══ Keyboard shortcuts ═══
